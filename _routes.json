@@ -1,5 +1,10 @@
 {
   "version": 1,
-  "include": ["/functions/*"],
-  "exclude": []
+  "include": [
+    "/*"
+  ],
+  "exclude": [],
+  "routes": [
+    { "pattern": "/*", "serve": "/index.html" }
+  ]
 }
