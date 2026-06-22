@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LegalShield AI – UK Tenancy Rights</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── DESIGN TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --navy:      #0f1e35;
+      --navy-mid:  #162a47;
+      --navy-soft: #1e3a5f;
+      --slate:     #4a6080;
+      --slate-lt:  #7a94b0;
+      --amber:     #e8a020;
+      --amber-lt:  #f5c75a;
+      --off-white: #f0f4f9;
+      --white:     #ffffff;
+      --muted:     #d0dae8;
+      --success:   #2ecc8a;
+      --danger:    #e85050;
+      --text-body: #2c3e58;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', system-ui, sans-serif;
+      --radius:    10px;
+      --shadow:    0 4px 24px rgba(15,30,53,0.12);
+      --shadow-lg: 0 12px 48px rgba(15,30,53,0.18);
+    }
+
+    /* ── RESET & BASE ───────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--off-white);
+      color: var(--text-body);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── LAYOUT ─────────────────────────────────────────────────────── */
+    .app-shell { display: flex; flex-direction: column; min-height: 100vh; }
+    .main-content { flex: 1; }
+
+    /* ── NAVIGATION ─────────────────────────────────────────────────── */
+    .nav {
+      background: var(--navy);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .nav-shield {
+      width: 32px; height: 36px;
+      background: var(--amber);
+      clip-path: polygon(50% 0%, 100% 15%, 100% 65%, 50% 100%, 0% 65%, 0% 15%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+      color: var(--navy);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .nav-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--white);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .nav-title span { color: var(--amber); }
+    .nav-disclaimer {
+      font-size: 0.72rem;
+      color: var(--slate-lt);
+      max-width: 320px;
+      text-align: right;
+      display: none;
+    }
+    @media (min-width: 768px) { .nav-disclaimer { display: block; } }
+
+    /* ── HERO ───────────────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(145deg, var(--navy) 0%, var(--navy-soft) 60%, #1b3d6e 100%);
+      color: var(--white);
+      padding: 5rem 2rem 6rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(232,160,32,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 50%, rgba(30,58,95,0.6) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      position: relative;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.15;
+      max-width: 720px;
+      margin: 0 auto 1.2rem;
+      position: relative;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--amber);
+      border-bottom: 2px solid var(--amber);
+    }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+      position: relative;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2rem;
+      position: relative;
+    }
+    .hero-badge::before {
+      content: '●';
+      color: var(--success);
+      font-size: 0.5rem;
+    }
+
+    /* ── BUTTONS ────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.6rem;
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.18s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary {
+      background: var(--amber);
+      color: var(--navy);
+    }
+    .btn-primary:hover { background: var(--amber-lt); box-shadow: 0 4px 20px rgba(232,160,32,0.4); }
+    .btn-secondary {
+      background: rgba(255,255,255,0.12);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+    .btn-outline {
+      background: transparent;
+      color: var(--navy);
+      border: 2px solid var(--navy);
+    }
+    .btn-outline:hover { background: var(--navy); color: var(--white); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--slate);
+      padding: 0.5rem 1rem;
+    }
+    .btn-ghost:hover { color: var(--navy); background: var(--off-white); }
+    .btn-danger-outline {
+      background: transparent;
+      color: var(--danger);
+      border: 2px solid var(--danger);
+    }
+    .btn-success {
+      background: var(--success);
+      color: var(--navy);
+    }
+    .btn-success:hover { opacity: 0.9; }
+    .btn-navy {
+      background: var(--navy);
+      color: var(--white);
+    }
+    .btn-navy:hover { background: var(--navy-soft); }
+    .btn-lg { padding: 1rem 2.2rem; font-size: 1.05rem; border-radius: 12px; }
+    .btn-sm { padding: 0.5rem 1rem; font-size: 0.85rem; }
+    .btn-block { width: 100%; justify-content: center; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* ── DASHBOARD ──────────────────────────────────────────────────── */
+    .dashboard {
+      max-width: 860px;
+      margin: -2.5rem auto 0;
+      padding: 0 1.5rem 4rem;
+      position: relative;
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 600px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+    .dash-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .dash-card:hover {
+      border-color: var(--amber);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    .dash-card-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--navy-mid), var(--navy-soft));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+    }
+    .dash-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--navy);
+    }
+    .dash-card p { font-size: 0.88rem; color: var(--slate); line-height: 1.5; }
+    .dash-card .arrow {
+      margin-top: auto;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--amber);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── SECTION ────────────────────────────────────────────────────── */
+    .section { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .section-sm { max-width: 640px; }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      color: var(--navy);
+      margin-bottom: 0.4rem;
+    }
+    .section-sub { color: var(--slate); font-size: 0.92rem; margin-bottom: 2rem; }
+
+    /* ── ISSUE SELECTOR ─────────────────────────────────────────────── */
+    .issue-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .issue-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 1.4rem;
+      cursor: pointer;
+      border: 2px solid var(--muted);
+      transition: all 0.18s ease;
+      text-align: center;
+    }
+    .issue-card:hover, .issue-card.selected {
+      border-color: var(--amber);
+      background: #fffbf2;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(232,160,32,0.15);
+    }
+    .issue-card .issue-icon { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
+    .issue-card h4 { font-size: 0.92rem; font-weight: 600; color: var(--navy); }
+
+    /* ── QUESTION FLOW ──────────────────────────────────────────────── */
+    .question-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .question-progress {
+      height: 4px;
+      background: var(--muted);
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+    .question-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--amber), var(--amber-lt));
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+    .question-label {
+      font-size: 0.78rem;
+      color: var(--slate);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 0.7rem;
+    }
+    .question-text {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+    .question-hint { font-size: 0.83rem; color: var(--slate); margin-bottom: 1.5rem; }
+
+    .answer-options { display: flex; flex-direction: column; gap: 0.7rem; }
+    .answer-option {
+      padding: 0.9rem 1.2rem;
+      border: 2px solid var(--muted);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--text-body);
+      background: var(--white);
+      text-align: left;
+    }
+    .answer-option:hover {
+      border-color: var(--amber);
+      background: #fffbf2;
+    }
+    .answer-option.selected {
+      border-color: var(--navy);
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .form-group { margin-bottom: 1.2rem; }
+    .form-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--navy); margin-bottom: 0.4rem; }
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--muted);
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      color: var(--text-body);
+      background: var(--white);
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--amber); }
+    .form-textarea { min-height: 90px; resize: vertical; }
+
+    /* ── RESULTS ────────────────────────────────────────────────────── */
+    .results-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+      color: var(--white);
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .results-header::after {
+      content: '';
+      position: absolute;
+      right: -20px; top: -20px;
+      width: 140px; height: 160px;
+      background: var(--amber);
+      opacity: 0.06;
+      clip-path: polygon(50% 0%, 100% 15%, 100% 65%, 50% 100%, 0% 65%, 0% 15%);
+    }
+    .results-badge {
+      display: inline-block;
+      background: rgba(46,204,138,0.2);
+      color: var(--success);
+      border: 1px solid rgba(46,204,138,0.4);
+      border-radius: 999px;
+      padding: 0.25rem 0.8rem;
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+    .results-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      margin-bottom: 0.4rem;
+    }
+    .results-sub { font-size: 0.88rem; color: var(--muted); }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 640px) { .results-grid { grid-template-columns: 1fr; } }
+
+    .result-panel {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    .result-panel.full { grid-column: 1 / -1; }
+    .panel-title {
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .rights-summary { font-size: 0.9rem; line-height: 1.7; color: var(--text-body); }
+    .rights-summary strong { color: var(--navy); }
+
+    /* ── ACTION PLAN ────────────────────────────────────────────────── */
+    .action-list { list-style: none; }
+    .action-item {
+      display: flex;
+      gap: 0.9rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid var(--off-white);
+      font-size: 0.88rem;
+      align-items: flex-start;
+    }
+    .action-item:last-child { border-bottom: none; }
+    .action-step {
+      width: 24px; height: 24px;
+      background: var(--navy);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .action-urgent .action-step { background: var(--danger); }
+    .action-text { line-height: 1.5; }
+    .action-text strong { color: var(--navy); display: block; margin-bottom: 0.1rem; }
+
+    /* ── EVIDENCE CHECKLIST ─────────────────────────────────────────── */
+    .checklist { list-style: none; }
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--off-white);
+      font-size: 0.87rem;
+    }
+    .checklist-item:last-child { border-bottom: none; }
+    .checklist-check {
+      width: 20px; height: 20px;
+      border: 2px solid var(--muted);
+      border-radius: 4px;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+      margin-top: 1px;
+    }
+    .checklist-check.checked {
+      background: var(--success);
+      border-color: var(--success);
+      color: white;
+      font-size: 0.65rem;
+    }
+
+    /* ── LETTER PREVIEW ─────────────────────────────────────────────── */
+    .letter-preview {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+    .letter-toolbar {
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .letter-toolbar-title {
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--amber);
+      margin-right: auto;
+    }
+    .letter-body {
+      font-family: Georgia, serif;
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: var(--text-body);
+      white-space: pre-wrap;
+      background: var(--off-white);
+      border-radius: 8px;
+      padding: 1.5rem;
+      border-left: 3px solid var(--amber);
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    /* ── AI GENERATION ──────────────────────────────────────────────── */
+    .ai-status {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      color: var(--slate);
+      padding: 0.6rem 1rem;
+      background: var(--off-white);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    .ai-spinner {
+      width: 16px; height: 16px;
+      border: 2px solid var(--muted);
+      border-top-color: var(--amber);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── STRIPE PLACEHOLDER ─────────────────────────────────────────── */
+    .stripe-section {
+      background: linear-gradient(135deg, #1a1040 0%, #2d1b69 100%);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      color: var(--white);
+      margin-top: 2rem;
+    }
+    .stripe-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.1);
+      border-radius: 999px;
+      padding: 0.25rem 0.8rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #a78bfa;
+      margin-bottom: 0.8rem;
+    }
+    .stripe-section h3 { font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.4rem; }
+    .stripe-section p { font-size: 0.85rem; color: rgba(255,255,255,0.65); margin-bottom: 1.5rem; }
+    .stripe-features {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .stripe-feature { font-size: 0.8rem; color: rgba(255,255,255,0.8); display: flex; align-items: center; gap: 0.3rem; }
+
+    /* ── FOOTER ─────────────────────────────────────────────────────── */
+    .footer {
+      background: var(--navy);
+      color: var(--slate-lt);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+    .footer strong { color: var(--muted); }
+
+    /* ── TAGS / PILLS ───────────────────────────────────────────────── */
+    .tag {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .tag-amber { background: rgba(232,160,32,0.15); color: #a06010; }
+    .tag-danger { background: rgba(232,80,80,0.12); color: var(--danger); }
+    .tag-success { background: rgba(46,204,138,0.12); color: #1a8a5a; }
+
+    /* ── BREADCRUMB ─────────────────────────────────────────────────── */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--slate);
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb-sep { color: var(--muted); }
+    .breadcrumb-link { cursor: pointer; color: var(--amber); font-weight: 500; }
+    .breadcrumb-link:hover { text-decoration: underline; }
+
+    /* ── DISCLAIMER BOX ─────────────────────────────────────────────── */
+    .disclaimer {
+      background: rgba(232,160,32,0.08);
+      border: 1px solid rgba(232,160,32,0.3);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      font-size: 0.8rem;
+      color: #6b4400;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+    .disclaimer strong { color: #4a2e00; }
+
+    /* ── HOW IT WORKS (home) ────────────────────────────────────────── */
+    .how-section { background: var(--white); padding: 4rem 2rem; }
+    .how-inner { max-width: 800px; margin: 0 auto; }
+    .how-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--navy);
+      text-align: center;
+      margin-bottom: 0.3rem;
+    }
+    .how-sub { text-align: center; color: var(--slate); font-size: 0.9rem; margin-bottom: 2.5rem; }
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+    }
+    .how-step { text-align: center; }
+    .how-num {
+      width: 44px; height: 44px;
+      background: var(--navy);
+      color: var(--amber);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0 auto 0.8rem;
+    }
+    .how-step h4 { font-size: 0.95rem; color: var(--navy); margin-bottom: 0.3rem; font-weight: 600; }
+    .how-step p { font-size: 0.82rem; color: var(--slate); line-height: 1.5; }
+
+    /* ── UTILITIES ──────────────────────────────────────────────────── */
+    .text-center { text-align: center; }
+    .mt-1 { margin-top: 0.5rem; }
+    .mt-2 { margin-top: 1rem; }
+    .mt-3 { margin-top: 1.5rem; }
+    .mb-1 { margin-bottom: 0.5rem; }
+    .mb-2 { margin-bottom: 1rem; }
+    .flex { display: flex; }
+    .gap-1 { gap: 0.5rem; }
+    .gap-2 { gap: 1rem; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .flex-wrap { flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+
+// ═══════════════════════════════════════════════════════════════════════
+//  LEGAL DATA — UK TENANCY LAW
+//  All legal logic is embedded here. No external API needed for core
+//  rights information. Sources: Housing Act 1988, Protection from
+//  Eviction Act 1977, Tenant Fees Act 2019, Landlord & Tenant Act 1985.
+// ═══════════════════════════════════════════════════════════════════════
+
+const ISSUES = [
+  { id: 'deposit',   icon: '💷', label: 'Deposit Not Returned',  tag: 'Money' },
+  { id: 'repairs',   icon: '🔧', label: 'Repairs Ignored',        tag: 'Property' },
+  { id: 'harassment',icon: '🚨', label: 'Landlord Harassment',    tag: 'Urgent' },
+  { id: 'eviction',  icon: '🏠', label: 'Illegal Eviction',       tag: 'Urgent' },
+];
+
+// Decision trees per issue — each node has a question and child nodes by answer key
+const DECISION_TREES = {
+  deposit: [
+    { id: 'q1', question: 'Was your tenancy deposit registered with a government-approved scheme?', hint: 'Schemes: DPS, MyDeposits, TDS', answers: ['Yes', 'No', "I don't know"] },
+    { id: 'q2', question: 'Has your tenancy now ended?', hint: 'i.e. you have moved out or your tenancy has been formally ended', answers: ['Yes', 'No'] },
+    { id: 'q3', question: 'How long ago did your tenancy end?', hint: 'This affects which remedies are available', answers: ['Less than 3 months ago', '3–6 months ago', 'Over 6 months ago'] },
+    { id: 'q4', question: 'Has your landlord given any reason for withholding the deposit?', hint: 'e.g. cleaning, damage, unpaid rent', answers: ['Yes – and I dispute it', 'Yes – and I partly accept it', 'No reason given'] },
+  ],
+  repairs: [
+    { id: 'q1', question: 'What type of repair is needed?', hint: 'Select the most serious issue', answers: ['Heating / hot water failure', 'Damp or mould', 'Structural damage', 'Pest infestation', 'Other'] },
+    { id: 'q2', question: 'Have you notified your landlord about this repair?', hint: 'Written notice (text, email) is best', answers: ['Yes, in writing', 'Yes, verbally only', 'No'] },
+    { id: 'q3', question: 'How long have you been waiting for the repair?', hint: 'Urgency affects legal timescales', answers: ['Less than 14 days', '14–28 days', 'Over 28 days', 'Over 3 months'] },
+    { id: 'q4', question: 'Is the issue making the property uninhabitable or dangerous?', hint: 'e.g. no heating in winter, structural risk', answers: ['Yes', 'No, but it is serious', 'It is a minor inconvenience'] },
+  ],
+  harassment: [
+    { id: 'q1', question: 'What type of harassment are you experiencing?', hint: 'Select the closest description', answers: ['Entering without notice', 'Threats or intimidation', 'Cutting off utilities', 'Repeatedly contacting you at unsociable hours', 'Multiple types'] },
+    { id: 'q2', question: 'Has this happened more than once?', answers: ['Yes, multiple times', 'Once so far'] },
+    { id: 'q3', question: 'Have you reported this to anyone?', hint: 'Police, council, or documented it yourself', answers: ['Reported to police', 'Reported to council', 'Not yet', 'Documented but not reported'] },
+    { id: 'q4', question: 'Are you still living in the property?', answers: ['Yes', 'No, I left due to the harassment', 'I have been locked out'] },
+  ],
+  eviction: [
+    { id: 'q1', question: 'Have you received a formal written eviction notice?', hint: 'Section 21 or Section 8 notice', answers: ['Section 21 notice', 'Section 8 notice', 'Verbal notice only', 'No notice at all'] },
+    { id: 'q2', question: 'What is happening right now?', answers: ['I have been locked out', 'My belongings have been removed', 'I received a notice but am still inside', 'Landlord is threatening to evict me'] },
+    { id: 'q3', question: 'Is this property your only residence?', answers: ['Yes', 'No, I have another address'] },
+    { id: 'q4', question: 'Do you have an assured shorthold tenancy (AST)?', hint: 'Most private rentals in England/Wales are ASTs', answers: ['Yes', 'No / unsure'] },
+  ],
+};
+
+// Rights summaries, action plans, and evidence checklists per issue
+const LEGAL_DATA = {
+  deposit: {
+    title: 'Deposit Not Returned',
+    rights: `Under the <strong>Housing Act 2004</strong>, landlords must protect your deposit in a government-approved tenancy deposit scheme (TDS, DPS, or MyDeposits) within <strong>30 days</strong> of receiving it, and provide you with the prescribed information.\n\nIf your deposit was not protected, your landlord may owe you between <strong>1× and 3× the deposit amount</strong> as a penalty, which you can claim through the county court.\n\nWhen your tenancy ends, your landlord must return your deposit within <strong>10 days</strong> of you both agreeing the amount. If there is a dispute, the scheme's free <strong>Alternative Dispute Resolution (ADR)</strong> service can adjudicate.\n\nDeductions are only permitted for <strong>damages beyond fair wear and tear, unpaid rent, or breach of tenancy agreement</strong>. Betterment (e.g. replacing a worn carpet entirely at your cost) is not permitted.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Request deposit return in writing', detail: 'Email your landlord formally requesting return within 10 days. Keep all written communication.', urgent: false },
+      { title: 'Check scheme registration', detail: 'Visit TDS, DPS, and MyDeposits websites to check whether your deposit was registered. You can do this with your postcode and landlord name.', urgent: false },
+      { title: 'File an ADR dispute', detail: 'If your deposit is protected and the landlord disputes deductions, use the scheme\'s free ADR service. File within 3 months of your tenancy ending.', urgent: false },
+      { title: 'Issue a county court claim', detail: 'If the deposit was not protected or the landlord refuses to engage, file a small claims court application (N1 form) at gov.uk/make-court-claim-for-money. Claims up to £10,000 are handled in the small claims track.', urgent: false },
+      { title: 'Seek council help if at risk of homelessness', detail: 'If you cannot afford a new property without the deposit, contact your local council\'s housing team immediately.', urgent: false },
+    ],
+    evidence: [
+      'Tenancy agreement (signed copy)',
+      'Bank statement showing deposit payment',
+      'Any scheme protection certificate received',
+      'Inventory / check-in report',
+      'Check-out report or photos of property condition',
+      'All written communication with landlord',
+      'Photographs of property at end of tenancy',
+      'Receipts for any cleaning or repairs done by you',
+    ],
+    letterType: 'deposit_demand',
+  },
+  repairs: {
+    title: 'Repairs Ignored',
+    rights: `Under <strong>Section 11 of the Landlord and Tenant Act 1985</strong>, your landlord has a legal duty to keep the structure, exterior, and essential services (heating, hot water, plumbing, sanitation) of your property in good repair.\n\nThe <strong>Homes (Fitness for Human Habitation) Act 2018</strong> also requires your home to be fit to live in throughout the tenancy, covering serious issues such as damp, mould, cold, and structural instability.\n\nYour landlord must carry out repairs <strong>within a reasonable time</strong> after being notified. For emergencies (no heating in winter, dangerous electrics), this may be 24–48 hours. For non-urgent repairs, 28 days is generally considered reasonable.\n\nYou may be able to use the council's <strong>Environmental Health department</strong> to issue a legal improvement notice if your landlord fails to act, which carries fines and legal obligations.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Send formal repair notice', detail: 'Write a letter/email to your landlord specifying the repair needed, the date you first reported it, and a 14-day deadline to respond. This creates a legal paper trail.', urgent: false },
+      { title: 'Contact Environmental Health', detail: 'If the landlord does not respond within 14 days, report to your local council\'s Environmental Health team. They can inspect and issue a Hazard Awareness Notice or Improvement Notice.', urgent: false },
+      { title: 'Document everything', detail: 'Photograph and video the issue. Keep a log of every contact with your landlord about the repair.', urgent: false },
+      { title: 'Consider rent withholding (with caution)', detail: 'You cannot simply withhold rent — this will put you in arrears. However, you may be able to apply to court to pay rent into a "repair fund" account. Seek legal advice first.', urgent: false },
+      { title: 'Claim compensation', detail: 'If the disrepair has affected your health or caused damage to your possessions, you may be able to claim damages through the county court or a disrepair specialist solicitor (many work on no-win no-fee).', urgent: false },
+    ],
+    evidence: [
+      'Tenancy agreement (to establish landlord\'s repairing obligations)',
+      'Written notice of repair sent to landlord (email/letter)',
+      'Photographs and videos of the issue with timestamps',
+      'Any landlord responses (or lack thereof)',
+      'Medical records if health has been affected',
+      'Reports from tradespeople (independent quote)',
+      'Council inspection reports (if applicable)',
+      'Diary log with dates and descriptions of the problem',
+    ],
+    letterType: 'repair_demand',
+  },
+  harassment: {
+    title: 'Landlord Harassment',
+    rights: `Under the <strong>Protection from Eviction Act 1977</strong>, it is a criminal offence for a landlord to harass a tenant with the intention of making them leave the property. This includes:\n\n• Entering the property without 24 hours' written notice (except in genuine emergencies)\n• Threats, intimidation, or abusive behaviour\n• Interfering with your peace or comfort\n• Cutting off utilities such as gas, electricity, or water\n\nYour landlord does <strong>not</strong> have the right to enter the property whenever they wish — this is your home, and you have the right to quiet enjoyment under <strong>Section 1(3) of the Landlord and Tenant Act 1985</strong>.\n\nHarassment and illegal eviction are <strong>criminal offences</strong> — your landlord could face an unlimited fine and/or imprisonment. You can also claim civil damages.`,
+    urgency: 'high',
+    actions: [
+      { title: 'Contact the police immediately if you feel unsafe', detail: 'Harassment and threats may constitute criminal offences. Call 999 in emergencies or 101 for non-emergency reports. Always get a crime reference number.', urgent: true },
+      { title: 'Report to your local council', detail: 'Council\'s tenancy relations officer or private sector housing team can investigate and take action against landlords who harass tenants. This is free.', urgent: true },
+      { title: 'Seek an emergency injunction', detail: 'If the harassment is severe, you can apply to a county court for an emergency injunction to stop the landlord\'s behaviour. Seek a solicitor or contact Shelter immediately.', urgent: true },
+      { title: 'Document all incidents', detail: 'Keep a detailed log with dates, times, and descriptions. Save text messages, voicemails, and emails. Ask witnesses to provide statements.', urgent: false },
+      { title: 'Contact Shelter or CAB', detail: 'Shelter (0808 800 4444) and Citizens Advice offer free, expert guidance on tenant harassment. They can also help you find local legal support.', urgent: false },
+    ],
+    evidence: [
+      'Log of all incidents (dates, times, what happened)',
+      'Text messages, emails, and voicemails from landlord',
+      'Photographs of forced entry, damaged locks, removed belongings',
+      'Witness statements from neighbours or others',
+      'Police crime reference number(s)',
+      'Your tenancy agreement (right to quiet enjoyment)',
+      'Screenshots of social media messages if applicable',
+      'Any medical or counselling records (if stress-related)',
+    ],
+    letterType: 'harassment_warning',
+  },
+  eviction: {
+    title: 'Illegal Eviction',
+    rights: `Under the <strong>Protection from Eviction Act 1977</strong>, it is a criminal offence to evict a residential occupier without a court order, regardless of the reason. Your landlord cannot legally remove you by:\n\n• Changing the locks\n• Removing your belongings\n• Cutting off your utilities\n• Physical force or threats\n\nEven with a valid <strong>Section 21</strong> or <strong>Section 8</strong> notice, your landlord <strong>must obtain a court possession order</strong> and enforce it through an authorised court officer (bailiff). You do not have to leave until a court orders it.\n\nNote: Section 21 "no fault" eviction notices require at least <strong>2 months' notice</strong> and cannot be served in the first 4 months of a tenancy. Several procedural requirements must be met or the notice is invalid.`,
+    urgency: 'critical',
+    actions: [
+      { title: 'Do not leave the property', detail: 'If you have been illegally locked out, you have the right to re-enter your home. Do not abandon the property as this may affect your legal position.', urgent: true },
+      { title: 'Call the police immediately', detail: 'Illegal eviction is a criminal offence. Contact police (999 or 101) and explain you have been illegally evicted. They can attend and require the landlord to let you back in.', urgent: true },
+      { title: 'Contact your council emergency housing team', detail: 'Council tenancy relations officers can act urgently in cases of illegal eviction, including out-of-hours emergency lines in many areas.', urgent: true },
+      { title: 'Apply for emergency injunction', detail: 'You can apply to a county court on an emergency basis (even without a solicitor using Form N16A) to be reinstated to the property.', urgent: true },
+      { title: 'Check the validity of any Section 21 notice', detail: 'Many Section 21 notices are invalid. Check: Was your deposit protected? Were you given a Gas Safety Certificate and EPC? Is the notice properly dated and signed? Seek advice from Shelter.', urgent: false },
+    ],
+    evidence: [
+      'Your tenancy agreement',
+      'Any eviction notice received (keep the original)',
+      'Photographs of changed locks or removed belongings',
+      'Evidence you were living at the property (mail, bank statements)',
+      'Witness accounts of the eviction',
+      'Police crime reference number',
+      'Copies of any documents served (or not served) by landlord',
+      'Communication from landlord regarding eviction',
+    ],
+    letterType: 'eviction_warning',
+  },
+};
+
+// Letter templates — personalised with user details
+const LETTER_TEMPLATES = {
+  deposit_demand: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName}
+${data.landlordAddress}
+
+Re: Formal Demand for Return of Tenancy Deposit — ${data.propertyAddress}
+
+Dear ${data.landlordName},
+
+I write to formally request the immediate return of my tenancy deposit of £${data.depositAmount || '[AMOUNT]'}, held in respect of the above property, where my tenancy ended on ${data.tenancyEndDate || '[DATE]'}.
+
+Under Section 213 of the Housing Act 2004, you were required to protect my deposit in a government-approved tenancy deposit scheme and to return it within 10 days of the end of the tenancy, or within 10 days of agreement on any deductions.
+
+${data.depositAnswers?.includes('No') ? 'I have been unable to find evidence that my deposit was protected in an approved scheme. If this is the case, you may be liable to pay me a penalty of between one and three times the deposit amount under Section 214 of the Housing Act 2004.\n\n' : ''}I have not received my deposit or any written breakdown of proposed deductions as required. I therefore request that you return my deposit of £${data.depositAmount || '[AMOUNT]'} in full within 10 days of the date of this letter.
+
+If you believe deductions are justified, please provide a written, itemised breakdown of each deduction with supporting evidence within the same 10-day period.
+
+If I do not receive my deposit or a satisfactory written response within 10 days, I intend to:
+
+1. Raise a formal dispute through the tenancy deposit scheme's Alternative Dispute Resolution (ADR) service; and/or
+2. Issue proceedings in the county court without further notice.
+
+Please note that the court may award me between one and three times the deposit amount if I am successful.
+
+I trust this matter can be resolved without legal proceedings.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  repair_demand: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName}
+${data.landlordAddress}
+
+Re: Formal Notice — Failure to Carry Out Repairs at ${data.propertyAddress}
+
+Dear ${data.landlordName},
+
+I write to formally notify you of outstanding repairs at the above property, and to demand that these are carried out within a reasonable period.
+
+I first notified you of these issues on ${data.firstReportDate || '[DATE]'}. To date, no remedial action has been taken. The outstanding repairs are:
+
+${data.repairDetails || '• [Describe the repairs needed]'}
+
+Your Legal Obligations
+
+Under Section 11 of the Landlord and Tenant Act 1985, you are legally required to keep in repair and proper working order the structure and exterior of the dwelling and its installations for the supply of water, gas, electricity, sanitation, and space heating.
+
+Under the Homes (Fitness for Human Habitation) Act 2018, the property must be fit for human habitation throughout the tenancy. The disrepair described above may render the property unfit.
+
+Demand for Action
+
+I require you to inspect the property and provide a written schedule of works within 14 days of the date of this letter, and to complete all necessary repairs within a further 28 days (or sooner in the event of emergency matters).
+
+Consequences of Non-Compliance
+
+If you fail to act within the timescale above, I intend to:
+
+1. Report the matter to the local council's Environmental Health department, who may issue a formal Improvement Notice under the Housing Act 2004;
+2. Seek an order from the county court requiring you to carry out the repairs and/or award me damages for the discomfort, inconvenience, and any personal loss caused; and/or
+3. Pursue a claim under the Homes (Fitness for Human Habitation) Act 2018.
+
+Please confirm receipt of this letter and your proposed plan of action.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  harassment_warning: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName}
+${data.landlordAddress}
+
+Re: FORMAL WARNING — Harassment and Breach of Quiet Enjoyment — ${data.propertyAddress}
+
+Dear ${data.landlordName},
+
+TAKE NOTICE that I am formally warning you that your recent conduct constitutes unlawful harassment of a residential occupier and is in breach of my legal rights as your tenant.
+
+Specific Incidents
+
+The following incidents have occurred, which I have documented and am prepared to rely upon in legal proceedings:
+
+${data.harassmentDetails || '• [Describe each incident with date and time]'}
+
+Your conduct constitutes a breach of my right to quiet enjoyment of the property under Section 1(3) of the Landlord and Tenant Act 1985 and may also constitute a criminal offence under Section 1 of the Protection from Eviction Act 1977.
+
+Entering the property without giving at least 24 hours' written notice (except in genuine emergency) is unlawful. Threats, intimidation, or actions designed to pressure me to vacate the property are criminal offences under the 1977 Act.
+
+My Demands
+
+I require you to:
+1. Immediately cease all harassing behaviour;
+2. Provide at least 24 hours' written notice before any visit to the property;
+3. Confirm in writing within 7 days that you will comply with the above.
+
+Warning
+
+I have reported / intend to report this matter to:
+• The Police (Protection from Eviction Act 1977 — criminal offence)
+• The Local Authority Tenancy Relations Officer
+• Shelter
+
+If your conduct continues, I will apply to the county court for an injunction to restrain your behaviour and for damages, including aggravated damages for distress and inconvenience.
+
+This letter is written without prejudice to any other rights and remedies available to me.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  eviction_warning: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName}
+${data.landlordAddress}
+
+Re: URGENT — Illegal Eviction / Unlawful Interference with Tenancy — ${data.propertyAddress}
+
+Dear ${data.landlordName},
+
+TAKE IMMEDIATE NOTICE that the actions you have taken or threatened to take in respect of the above property constitute an illegal eviction and/or unlawful interference with my tenancy, which is a criminal offence.
+
+Current Situation
+
+${data.evictionDetails || '[Describe what has happened — changed locks, removed belongings, threats, etc.]'}
+
+The Law
+
+Under the Protection from Eviction Act 1977, it is a criminal offence, punishable by an unlimited fine and/or imprisonment, to evict a residential occupier without a court order, or to take any steps intended to cause me to give up occupation of the property.
+
+I have an assured shorthold tenancy at the above address. Any possession proceedings must be conducted through the county court. You have no right to:
+• Change the locks without a court order
+• Remove my belongings
+• Cut off utilities
+• Threaten or intimidate me to leave
+
+My Rights and Intended Action
+
+I have an immediate right to re-enter and remain in the property.
+
+Unless my access to the property is restored and you confirm in writing that you will comply with the law, I will, without further notice:
+
+1. Apply to the county court for an emergency injunction (Form N16A) requiring immediate reinstatement;
+2. Report the matter to the Police as a criminal offence under the Protection from Eviction Act 1977;
+3. Report the matter to the Local Authority Tenancy Relations Officer;
+4. Pursue a claim for civil damages including damages for distress, inconvenience, and any losses arising from my illegal displacement.
+
+Please respond within 24 hours.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+};
+
+// ═══════════════════════════════════════════════════════════════════════
+//  AI LETTER GENERATION via Anthropic API
+//  Personalises letters using the Claude API if user provides details.
+// ═══════════════════════════════════════════════════════════════════════
+
+async function generateAILetter(issueId, userData, answers) {
+  const issueLabels = { deposit: 'deposit not returned', repairs: 'repairs ignored', harassment: 'landlord harassment', eviction: 'illegal eviction' };
+  const prompt = `You are a UK legal letter writing assistant specialising in tenant rights.
+
+Write a formal, professional legal letter for the following tenant situation:
+
+Issue: ${issueLabels[issueId]}
+Tenant name: ${userData.yourName || 'the tenant'}
+Property address: ${userData.propertyAddress || 'the property'}
+Landlord name: ${userData.landlordName || 'the landlord'}
+Landlord address: ${userData.landlordAddress || '[Landlord Address]'}
+Additional details: ${userData.extraDetails || 'None provided'}
+Questionnaire answers: ${JSON.stringify(answers)}
+
+Write the letter in the style of a formal legal letter from a UK solicitor. Include:
+- Relevant UK legislation (Housing Act 1988/2004, Protection from Eviction Act 1977, Landlord and Tenant Act 1985, etc.)
+- Specific demands with clear deadlines
+- Consequences if demands are not met
+- Professional closing
+
+Today's date: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+Reply with ONLY the letter text, no preamble or explanation.`;
+
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }],
+    }),
+  });
+  const data = await response.json();
+  if (data.content && data.content[0]) return data.content[0].text;
+  throw new Error('No response from AI');
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  PDF EXPORT (jsPDF)
+// ═══════════════════════════════════════════════════════════════════════
+
+function exportLetterPDF(letterText, issueTitle) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+
+  const pageW = doc.internal.pageSize.getWidth();
+  const margin = 22;
+  const lineW = pageW - margin * 2;
+
+  // Header bar
+  doc.setFillColor(15, 30, 53);
+  doc.rect(0, 0, pageW, 18, 'F');
+  doc.setTextColor(232, 160, 32);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.text('LegalShield AI — UK Tenant Rights', margin, 12);
+  doc.setTextColor(160, 180, 200);
+  doc.setFontSize(7.5);
+  doc.setFont('helvetica', 'normal');
+  doc.text('NOT LEGAL ADVICE — For guidance only. Consult a qualified solicitor for your specific situation.', pageW - margin, 12, { align: 'right' });
+
+  // Title
+  doc.setTextColor(15, 30, 53);
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.text(issueTitle, margin, 32);
+  doc.setDrawColor(232, 160, 32);
+  doc.setLineWidth(0.8);
+  doc.line(margin, 35, margin + 60, 35);
+
+  // Letter body
+  doc.setFont('times', 'normal');
+  doc.setFontSize(10.5);
+  doc.setTextColor(44, 62, 88);
+
+  const lines = doc.splitTextToSize(letterText, lineW);
+  let y = 44;
+  const pageH = doc.internal.pageSize.getHeight();
+
+  lines.forEach(line => {
+    if (y > pageH - 25) {
+      doc.addPage();
+      // Small header on new pages
+      doc.setFillColor(15, 30, 53);
+      doc.rect(0, 0, pageW, 10, 'F');
+      y = 20;
+      doc.setFont('times', 'normal');
+      doc.setFontSize(10.5);
+      doc.setTextColor(44, 62, 88);
+    }
+    doc.text(line, margin, y);
+    y += 5.5;
+  });
+
+  // Footer
+  const fY = pageH - 12;
+  doc.setDrawColor(200, 210, 220);
+  doc.setLineWidth(0.3);
+  doc.line(margin, fY - 4, pageW - margin, fY - 4);
+  doc.setFontSize(7.5);
+  doc.setTextColor(120, 140, 160);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Generated ${new Date().toLocaleDateString('en-GB')} by LegalShield AI`, margin, fY);
+  doc.text('legalshield.ai', pageW - margin, fY, { align: 'right' });
+
+  doc.save(`LegalShield_Letter_${issueTitle.replace(/\s+/g, '_')}.pdf`);
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  STRIPE CHECKOUT (live)
+//  Calls the Netlify Function at netlify/functions/create-checkout.js,
+//  which creates a Stripe Checkout Session server-side and returns its
+//  URL. The Stripe secret key never touches the browser.
+// ═══════════════════════════════════════════════════════════════════════
+
+async function handleStripeCheckout(planName) {
+  try {
+    const response = await fetch('/functions/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plan: planName }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Checkout session request failed');
+    }
+
+    const { url } = await response.json();
+
+    if (url) {
+      window.location.href = url; // redirect to Stripe Checkout
+    } else {
+      throw new Error('No checkout URL returned');
+    }
+  } catch (err) {
+    console.error('Stripe checkout error:', err);
+    alert('Sorry, something went wrong starting checkout. Please try again.');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  COMPONENTS
+// ═══════════════════════════════════════════════════════════════════════
+
+// Shield icon for nav
+function ShieldIcon() {
+  return <div className="nav-shield">⚖</div>;
+}
+
+// Navigation
+function Nav({ onHome }) {
+  return (
+    <nav className="nav">
+      <div className="nav-brand" onClick={onHome}>
+        <ShieldIcon />
+        <span className="nav-title">Legal<span>Shield</span> AI</span>
+      </div>
+      <p className="nav-disclaimer">
+        For guidance only — not a substitute for legal advice. UK law only.
+      </p>
+    </nav>
+  );
+}
+
+// ── HOME PAGE ──────────────────────────────────────────────────────────
+function HomePage({ onStart }) {
+  return (
+    <>
+      <div className="hero">
+        <p className="hero-eyebrow">🇬🇧 UK Tenant Rights — Free Guidance</p>
+        <h1>Know your rights.<br/><em>Fight back</em> with the law.</h1>
+        <p className="hero-sub">
+          LegalShield AI helps UK private tenants understand their rights, generate
+          formal legal letters, and build evidence packs — in minutes, not months.
+        </p>
+        <div className="hero-actions">
+          <button className="btn btn-primary btn-lg" onClick={() => onStart('rights')}>
+            ⚖ Check My Rights
+          </button>
+          <button className="btn btn-secondary btn-lg" onClick={() => onStart('letter')}>
+            ✉ Generate a Letter
+          </button>
+        </div>
+        <div className="hero-badge">Free to use · No signup required · AI-powered letters</div>
+      </div>
+
+      <div className="dashboard">
+        <div className="dashboard-grid">
+          <div className="dash-card" onClick={() => onStart('rights')}>
+            <div className="dash-card-icon">⚖</div>
+            <h3>Check My Rights</h3>
+            <p>Answer a few questions about your situation and get a personalised rights summary based on current UK law.</p>
+            <span className="arrow">Start now →</span>
+          </div>
+          <div className="dash-card" onClick={() => onStart('letter')}>
+            <div className="dash-card-icon">✉</div>
+            <h3>Generate a Letter</h3>
+            <p>Produce a formal, AI-personalised legal letter ready to send to your landlord or agent. Download as PDF.</p>
+            <span className="arrow">Create letter →</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="how-section">
+        <div className="how-inner">
+          <h2 className="how-title">How it works</h2>
+          <p className="how-sub">Three steps to protect your tenancy rights</p>
+          <div className="how-steps">
+            {[
+              { n: '1', title: 'Choose your issue', body: 'Select from deposit disputes, repairs, harassment, or illegal eviction.' },
+              { n: '2', title: 'Answer questions', body: 'A short decision tree tailors the guidance to your exact situation.' },
+              { n: '3', title: 'Get your pack', body: 'Receive a rights summary, action plan, evidence checklist, and legal letter — all in one click.' },
+            ].map(s => (
+              <div className="how-step" key={s.n}>
+                <div className="how-num">{s.n}</div>
+                <h4>{s.title}</h4>
+                <p>{s.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── ISSUE SELECTOR ─────────────────────────────────────────────────────
+function IssueSelector({ onSelect, mode }) {
+  const [selected, setSelected] = useState(null);
+  return (
+    <div className="section section-sm" style={{ margin: '0 auto', paddingTop: '2.5rem' }}>
+      <div className="breadcrumb">
+        <span className="breadcrumb-link" onClick={() => onSelect(null, 'home')}>Home</span>
+        <span className="breadcrumb-sep">›</span>
+        <span>{mode === 'rights' ? 'Check My Rights' : 'Generate a Letter'}</span>
+      </div>
+      <h2 className="section-title">{mode === 'rights' ? 'What is your issue?' : 'What letter do you need?'}</h2>
+      <p className="section-sub">Select the issue that best describes your situation.</p>
+      <div className="issue-grid">
+        {ISSUES.map(issue => (
+          <div
+            key={issue.id}
+            className={`issue-card${selected === issue.id ? ' selected' : ''}`}
+            onClick={() => setSelected(issue.id)}
+          >
+            <span className="issue-icon">{issue.icon}</span>
+            <h4>{issue.label}</h4>
+            <span className={`tag ${issue.tag === 'Urgent' ? 'tag-danger' : issue.tag === 'Money' ? 'tag-success' : 'tag-amber'} mt-1`}>{issue.tag}</span>
+          </div>
+        ))}
+      </div>
+      <button
+        className="btn btn-primary btn-lg btn-block"
+        disabled={!selected}
+        onClick={() => onSelect(selected)}
+      >
+        Continue →
+      </button>
+    </div>
+  );
+}
+
+// ── QUESTION FLOW ──────────────────────────────────────────────────────
+function QuestionFlow({ issueId, mode, onComplete, onBack }) {
+  const questions = DECISION_TREES[issueId];
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [selected, setSelected] = useState(null);
+
+  const current = questions[step];
+  const progress = ((step + 1) / (questions.length + 1)) * 100;
+
+  function handleAnswer(answer) {
+    setSelected(answer);
+  }
+
+  function handleNext() {
+    const newAnswers = { ...answers, [current.id]: selected };
+    setAnswers(newAnswers);
+    setSelected(null);
+    if (step < questions.length - 1) {
+      setStep(step + 1);
+    } else {
+      onComplete(newAnswers);
+    }
+  }
+
+  return (
+    <div className="section section-sm" style={{ margin: '0 auto', paddingTop: '2.5rem' }}>
+      <div className="breadcrumb">
+        <span className="breadcrumb-link" onClick={onBack}>← Back</span>
+        <span className="breadcrumb-sep">›</span>
+        <span>{LEGAL_DATA[issueId].title}</span>
+      </div>
+      <div className="question-card">
+        <div className="question-progress">
+          <div className="question-progress-bar" style={{ width: `${progress}%` }} />
+        </div>
+        <p className="question-label">Question {step + 1} of {questions.length}</p>
+        <h3 className="question-text">{current.question}</h3>
+        {current.hint && <p className="question-hint">{current.hint}</p>}
+        <div className="answer-options">
+          {current.answers.map(ans => (
+            <button
+              key={ans}
+              className={`answer-option${selected === ans ? ' selected' : ''}`}
+              onClick={() => handleAnswer(ans)}
+            >
+              {ans}
+            </button>
+          ))}
+        </div>
+        <div style={{ marginTop: '1.5rem', display: 'flex', gap: '0.8rem', justifyContent: 'flex-end' }}>
+          {step > 0 && <button className="btn btn-ghost" onClick={() => setStep(s => s - 1)}>Back</button>}
+          <button className="btn btn-primary" disabled={!selected} onClick={handleNext}>
+            {step < questions.length - 1 ? 'Next →' : mode === 'rights' ? 'See My Rights →' : 'Continue to Letter →'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── DETAILS FORM ───────────────────────────────────────────────────────
+function DetailsForm({ issueId, answers, onComplete, onBack }) {
+  const [form, setForm] = useState({
+    yourName: '', yourAddress: '', yourEmail: '',
+    landlordName: '', landlordAddress: '',
+    propertyAddress: '', depositAmount: '', tenancyEndDate: '',
+    firstReportDate: '', repairDetails: '', harassmentDetails: '',
+    evictionDetails: '', extraDetails: '',
+  });
+
+  const issue = LEGAL_DATA[issueId];
+
+  function set(key, val) { setForm(f => ({ ...f, [key]: val })); }
+
+  const isValid = form.yourName && form.yourAddress && form.landlordName && form.landlordAddress && form.propertyAddress;
+
+  return (
+    <div className="section section-sm" style={{ margin: '0 auto', paddingTop: '2rem' }}>
+      <div className="breadcrumb">
+        <span className="breadcrumb-link" onClick={onBack}>← Back</span>
+        <span className="breadcrumb-sep">›</span>
+        <span>Your Details</span>
+      </div>
+      <h2 className="section-title">Personalise your letter</h2>
+      <p className="section-sub">These details will appear in your legal letter. Fields marked * are required.</p>
+
+      <div className="question-card">
+        <p style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--amber)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Your Details</p>
+        <div className="form-group">
+          <label className="form-label">Your Full Name *</label>
+          <input className="form-input" value={form.yourName} onChange={e => set('yourName', e.target.value)} placeholder="e.g. Sarah Johnson" />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Your Address *</label>
+          <textarea className="form-textarea" style={{ minHeight: 60 }} value={form.yourAddress} onChange={e => set('yourAddress', e.target.value)} placeholder="Your current address (if different from property)" />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Your Email (optional)</label>
+          <input className="form-input" value={form.yourEmail} onChange={e => set('yourEmail', e.target.value)} placeholder="your@email.com" />
+        </div>
+
+        <p style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--amber)', margin: '1.2rem 0 1rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Property & Landlord</p>
+        <div className="form-group">
+          <label className="form-label">Property Address (rented) *</label>
+          <textarea className="form-textarea" style={{ minHeight: 60 }} value={form.propertyAddress} onChange={e => set('propertyAddress', e.target.value)} placeholder="Full address of the rented property" />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Landlord's Name *</label>
+          <input className="form-input" value={form.landlordName} onChange={e => set('landlordName', e.target.value)} placeholder="e.g. John Smith or ABC Lettings Ltd" />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Landlord's Address *</label>
+          <textarea className="form-textarea" style={{ minHeight: 60 }} value={form.landlordAddress} onChange={e => set('landlordAddress', e.target.value)} placeholder="Landlord or letting agent address" />
+        </div>
+
+        {/* Issue-specific fields */}
+        {issueId === 'deposit' && (
+          <>
+            <div className="form-group">
+              <label className="form-label">Deposit Amount (£)</label>
+              <input className="form-input" value={form.depositAmount} onChange={e => set('depositAmount', e.target.value)} placeholder="e.g. 1200" />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Date Tenancy Ended</label>
+              <input className="form-input" type="date" value={form.tenancyEndDate} onChange={e => set('tenancyEndDate', e.target.value)} />
+            </div>
+          </>
+        )}
+        {issueId === 'repairs' && (
+          <>
+            <div className="form-group">
+              <label className="form-label">Date You First Reported the Repair</label>
+              <input className="form-input" type="date" value={form.firstReportDate} onChange={e => set('firstReportDate', e.target.value)} />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Describe the Repairs Needed</label>
+              <textarea className="form-textarea" value={form.repairDetails} onChange={e => set('repairDetails', e.target.value)} placeholder="e.g. Boiler has been broken since 1 October. No heating or hot water..." />
+            </div>
+          </>
+        )}
+        {issueId === 'harassment' && (
+          <div className="form-group">
+            <label className="form-label">Describe the Harassment Incidents</label>
+            <textarea className="form-textarea" value={form.harassmentDetails} onChange={e => set('harassmentDetails', e.target.value)} placeholder="e.g. On 5 November at 9pm, landlord entered without notice..." />
+          </div>
+        )}
+        {issueId === 'eviction' && (
+          <div className="form-group">
+            <label className="form-label">Describe What Has Happened</label>
+            <textarea className="form-textarea" value={form.evictionDetails} onChange={e => set('evictionDetails', e.target.value)} placeholder="e.g. Landlord changed the locks on 10 November without a court order..." />
+          </div>
+        )}
+
+        <div className="form-group">
+          <label className="form-label">Any other relevant details (optional)</label>
+          <textarea className="form-textarea" value={form.extraDetails} onChange={e => set('extraDetails', e.target.value)} placeholder="Any other context you would like included..." />
+        </div>
+
+        <button className="btn btn-primary btn-block btn-lg" disabled={!isValid} onClick={() => onComplete(form)} style={{ marginTop: '0.5rem' }}>
+          Generate Letter & Rights Summary →
+        </button>
+        {!isValid && <p style={{ fontSize: '0.78rem', color: 'var(--slate)', textAlign: 'center', marginTop: '0.6rem' }}>Please fill in all required (*) fields to continue.</p>}
+      </div>
+    </div>
+  );
+}
+
+// ── CHECKLIST ITEM ─────────────────────────────────────────────────────
+function ChecklistItem({ item }) {
+  const [checked, setChecked] = useState(false);
+  return (
+    <li className="checklist-item">
+      <div className={`checklist-check${checked ? ' checked' : ''}`} onClick={() => setChecked(c => !c)}>
+        {checked && '✓'}
+      </div>
+      <span style={{ textDecoration: checked ? 'line-through' : 'none', color: checked ? 'var(--slate)' : 'inherit' }}>{item}</span>
+    </li>
+  );
+}
+
+// ── RESULTS PAGE ───────────────────────────────────────────────────────
+function ResultsPage({ issueId, answers, userData, mode, onBack, onNewIssue }) {
+  const issue = LEGAL_DATA[issueId];
+  const [letterText, setLetterText] = useState('');
+  const [aiStatus, setAiStatus] = useState('idle'); // idle | loading | done | error | template
+  const [activeTab, setActiveTab] = useState(mode === 'rights' ? 'rights' : 'letter');
+
+  // Generate letter on mount
+  useEffect(() => {
+    if (mode === 'letter' || activeTab === 'letter') {
+      generateLetter();
+    }
+  }, []);
+
+  async function generateLetter() {
+    // First show template immediately
+    const template = LETTER_TEMPLATES[issue.letterType](userData || {});
+    setLetterText(template);
+    setAiStatus('template');
+
+    // Then try to enhance with AI if user provided details
+    if (userData && userData.yourName) {
+      setAiStatus('loading');
+      try {
+        const aiLetter = await generateAILetter(issueId, userData, answers);
+        setLetterText(aiLetter);
+        setAiStatus('done');
+      } catch (e) {
+        // Fall back to template gracefully
+        setAiStatus('template');
+      }
+    }
+  }
+
+  const tabs = [
+    { id: 'rights', label: '⚖ Rights & Law' },
+    { id: 'plan', label: '📋 Action Plan' },
+    { id: 'evidence', label: '📁 Evidence' },
+    { id: 'letter', label: '✉ Your Letter' },
+  ];
+
+  const urgencyColor = { low: 'tag-success', medium: 'tag-amber', high: 'tag-danger', critical: 'tag-danger' };
+
+  return (
+    <div className="section" style={{ paddingTop: '2rem' }}>
+      <div className="breadcrumb">
+        <span className="breadcrumb-link" onClick={onNewIssue}>Home</span>
+        <span className="breadcrumb-sep">›</span>
+        <span className="breadcrumb-link" onClick={onBack}>Select Issue</span>
+        <span className="breadcrumb-sep">›</span>
+        <span>{issue.title}</span>
+      </div>
+
+      <div className="results-header">
+        <div className="results-badge">✓ Analysis Complete</div>
+        <h2 className="results-title">{issue.title}</h2>
+        <p className="results-sub">Your personalised rights summary, action plan, and legal letter are ready.</p>
+      </div>
+
+      <div className="disclaimer">
+        <strong>⚠ Important:</strong> This tool provides general guidance based on UK law and is <strong>not legal advice</strong>.
+        For complex situations, always consult a qualified solicitor or contact <strong>Shelter (0808 800 4444)</strong> or <strong>Citizens Advice</strong>.
+      </div>
+
+      {/* Tab navigation */}
+      <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+        {tabs.map(t => (
+          <button
+            key={t.id}
+            className={`btn btn-sm ${activeTab === t.id ? 'btn-navy' : 'btn-ghost'}`}
+            onClick={() => { setActiveTab(t.id); if (t.id === 'letter' && !letterText) generateLetter(); }}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* ── RIGHTS TAB ── */}
+      {activeTab === 'rights' && (
+        <div className="results-grid">
+          <div className="result-panel full">
+            <p className="panel-title">⚖ Your Rights Under UK Law</p>
+            <div className="rights-summary" dangerouslySetInnerHTML={{ __html: issue.rights.replace(/\n/g, '<br/>') }} />
+          </div>
+        </div>
+      )}
+
+      {/* ── ACTION PLAN TAB ── */}
+      {activeTab === 'plan' && (
+        <div className="result-panel">
+          <p className="panel-title">📋 Recommended Action Plan</p>
+          <ul className="action-list">
+            {issue.actions.map((action, i) => (
+              <li key={i} className={`action-item${action.urgent ? ' action-urgent' : ''}`}>
+                <div className="action-step">{i + 1}</div>
+                <div className="action-text">
+                  <strong>{action.title}{action.urgent && <span className="tag tag-danger" style={{ marginLeft: '0.5rem' }}>Urgent</span>}</strong>
+                  {action.detail}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* ── EVIDENCE TAB ── */}
+      {activeTab === 'evidence' && (
+        <div className="result-panel">
+          <p className="panel-title">📁 Evidence Checklist</p>
+          <p style={{ fontSize: '0.85rem', color: 'var(--slate)', marginBottom: '1rem' }}>Tick items as you gather them. Having this evidence strengthens your case significantly.</p>
+          <ul className="checklist">
+            {issue.evidence.map((item, i) => (
+              <ChecklistItem key={i} item={item} />
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* ── LETTER TAB ── */}
+      {activeTab === 'letter' && (
+        <div className="letter-preview">
+          <div className="letter-toolbar">
+            <span className="letter-toolbar-title">✉ Your Legal Letter</span>
+            {aiStatus === 'loading' && (
+              <div className="ai-status">
+                <div className="ai-spinner" />
+                AI is personalising your letter…
+              </div>
+            )}
+            {aiStatus === 'done' && <span className="tag tag-success">✓ AI-personalised</span>}
+            {aiStatus === 'template' && <span className="tag tag-amber">Template — add your details to personalise</span>}
+            <button
+              className="btn btn-success btn-sm"
+              onClick={() => exportLetterPDF(letterText, issue.title)}
+              disabled={!letterText}
+            >
+              ⬇ Download PDF
+            </button>
+          </div>
+          <pre className="letter-body">{letterText || 'Loading your letter…'}</pre>
+        </div>
+      )}
+
+      {/* Action bar */}
+      <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+        <button className="btn btn-outline" onClick={onNewIssue}>← Start a New Issue</button>
+        <button className="btn btn-primary" onClick={() => { setActiveTab('letter'); if (!letterText) generateLetter(); }}>
+          ✉ View / Download Letter
+        </button>
+      </div>
+
+      {/* Stripe upsell */}
+      <StripeSection />
+    </div>
+  );
+}
+
+// ── STRIPE SECTION ─────────────────────────────────────────────────────
+function StripeSection() {
+  return (
+    <div className="stripe-section">
+      <div className="stripe-badge">⭐ LegalShield Pro</div>
+      <h3>Need more support?</h3>
+      <p>Upgrade for unlimited letters, solicitor review, court form templates, and priority guidance.</p>
+      <div className="stripe-features">
+        {['Unlimited letters', 'Solicitor review', 'Court form templates', 'Priority support'].map(f => (
+          <span className="stripe-feature" key={f}>✓ {f}</span>
+        ))}
+      </div>
+      <button className="btn btn-primary btn-lg" onClick={() => handleStripeCheckout('pro_monthly')}>
+        Upgrade to Pro — £9.99/mo
+      </button>
+    </div>
+  );
+}
+
+// ── FOOTER ─────────────────────────────────────────────────────────────
+function Footer() {
+  return (
+    <footer className="footer">
+      <p><strong>LegalShield AI</strong> — Free UK tenant rights guidance</p>
+      <p style={{ marginTop: '0.3rem' }}>
+        Not legal advice. For urgent matters: <strong>Shelter 0808 800 4444</strong> · <strong>Citizens Advice 0800 144 8848</strong>
+      </p>
+      <p style={{ marginTop: '0.3rem' }}>
+        Based on: Housing Act 1988/2004 · Protection from Eviction Act 1977 · Landlord & Tenant Act 1985 · Homes (Fitness for Human Habitation) Act 2018 · Tenant Fees Act 2019
+      </p>
+    </footer>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  MAIN APP — ROUTING STATE MACHINE
+// ═══════════════════════════════════════════════════════════════════════
+
+function App() {
+  // screen: home | select | questions | details | results
+  const [screen, setScreen] = useState('home');
+  const [mode, setMode] = useState(null);       // 'rights' | 'letter'
+  const [issueId, setIssueId] = useState(null);
+  const [answers, setAnswers] = useState({});
+  const [userData, setUserData] = useState(null);
+
+  function goHome() {
+    setScreen('home'); setMode(null); setIssueId(null);
+    setAnswers({}); setUserData(null);
+  }
+
+  function startFlow(m) {
+    setMode(m); setScreen('select');
+  }
+
+  function handleIssueSelect(id, overrideScreen) {
+    if (overrideScreen === 'home') { goHome(); return; }
+    setIssueId(id);
+    setScreen('questions');
+  }
+
+  function handleAnswersComplete(ans) {
+    setAnswers(ans);
+    if (mode === 'letter') {
+      setScreen('details');
+    } else {
+      // Rights check — show results with empty userData
+      setUserData({});
+      setScreen('results');
+    }
+  }
+
+  function handleDetailsComplete(data) {
+    setUserData(data);
+    setScreen('results');
+  }
+
+  return (
+    <div className="app-shell">
+      <Nav onHome={goHome} />
+      <main className="main-content">
+        {screen === 'home' && <HomePage onStart={startFlow} />}
+        {screen === 'select' && (
+          <IssueSelector
+            mode={mode}
+            onSelect={handleIssueSelect}
+          />
+        )}
+        {screen === 'questions' && issueId && (
+          <QuestionFlow
+            issueId={issueId}
+            mode={mode}
+            onComplete={handleAnswersComplete}
+            onBack={() => setScreen('select')}
+          />
+        )}
+        {screen === 'details' && issueId && (
+          <DetailsForm
+            issueId={issueId}
+            answers={answers}
+            onComplete={handleDetailsComplete}
+            onBack={() => setScreen('questions')}
+          />
+        )}
+        {screen === 'results' && issueId && (
+          <ResultsPage
+            issueId={issueId}
+            answers={answers}
+            userData={userData}
+            mode={mode}
+            onBack={() => setScreen(mode === 'letter' ? 'details' : 'questions')}
+            onNewIssue={goHome}
+          />
+        )}
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body>
+</html>
