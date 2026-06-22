@@ -1151,6 +1151,75 @@ function handleStripeCheckout(planName) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════
+//  PRO ACCESS SYSTEM
+//  After payment, Stripe redirects to:
+//  https://legalshield-ai.pages.dev?pro=LEGALSHIELD2024
+//  The app detects this code, saves it to localStorage, and unlocks
+//  Pro features (letter generation + PDF download) on that device.
+//
+//  To change the access code, update PRO_CODE below AND update the
+//  success URL in your Stripe Payment Link dashboard.
+// ═══════════════════════════════════════════════════════════════════════
+
+const PRO_CODE = 'LEGALSHIELD2024';
+
+function checkProAccess() {
+  // Check URL for pro code (set by Stripe success redirect)
+  const params = new URLSearchParams(window.location.search);
+  const urlCode = params.get('pro');
+  if (urlCode === PRO_CODE) {
+    // Save to localStorage so they stay Pro on this device
+    localStorage.setItem('ls_pro', PRO_CODE);
+    // Clean the URL so the code is not visible after saving
+    window.history.replaceState({}, '', window.location.pathname);
+    return true;
+  }
+  // Check localStorage for returning Pro users
+  return localStorage.getItem('ls_pro') === PRO_CODE;
+}
+
+function ProGate({ onUpgrade }) {
+  return (
+    <div style={{
+      background: 'linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%)',
+      borderRadius: 16,
+      padding: '2rem',
+      textAlign: 'center',
+      color: 'var(--white)',
+      margin: '1rem 0',
+    }}>
+      <div style={{ fontSize: '2rem', marginBottom: '0.8rem' }}>🔒</div>
+      <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', marginBottom: '0.4rem' }}>
+        Pro Feature
+      </h3>
+      <p style={{ fontSize: '0.88rem', color: 'var(--muted)', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+        Letter generation and PDF download are included in <strong style={{ color: 'var(--amber)' }}>LegalShield Pro</strong>.
+        Upgrade for £9.99/mo to unlock personalised legal letters, AI enhancement, and PDF export.
+      </p>
+      <div style={{ display: 'flex', gap: '0.8rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <button className="btn btn-primary btn-lg" onClick={onUpgrade}>
+          Upgrade to Pro — £9.99/mo
+        </button>
+      </div>
+      <p style={{ fontSize: '0.75rem', color: 'var(--slate-lt)', marginTop: '1rem' }}>
+        Already subscribed? <span
+          style={{ color: 'var(--amber)', cursor: 'pointer', textDecoration: 'underline' }}
+          onClick={() => {
+            const code = prompt('Enter your access code:');
+            if (code === PRO_CODE) {
+              localStorage.setItem('ls_pro', PRO_CODE);
+              window.location.reload();
+            } else if (code !== null) {
+              alert('Code not recognised. Please check your welcome email.');
+            }
+          }}
+        >Enter access code</span>
+      </p>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════
 //  COMPONENTS
 // ═══════════════════════════════════════════════════════════════════════
 
@@ -1459,6 +1528,7 @@ function ResultsPage({ issueId, answers, userData, mode, onBack, onNewIssue }) {
   const [letterText, setLetterText] = useState('');
   const [aiStatus, setAiStatus] = useState('idle'); // idle | loading | done | error | template
   const [activeTab, setActiveTab] = useState(mode === 'rights' ? 'rights' : 'letter');
+  const isPro = checkProAccess();
 
   // Generate letter on mount
   useEffect(() => {
@@ -1525,7 +1595,7 @@ function ResultsPage({ issueId, answers, userData, mode, onBack, onNewIssue }) {
             className={`btn btn-sm ${activeTab === t.id ? 'btn-navy' : 'btn-ghost'}`}
             onClick={() => { setActiveTab(t.id); if (t.id === 'letter' && !letterText) generateLetter(); }}
           >
-            {t.label}
+            {t.label}{t.id === 'letter' && !isPro ? ' 🔒' : ''}
           </button>
         ))}
       </div>
@@ -1573,6 +1643,7 @@ function ResultsPage({ issueId, answers, userData, mode, onBack, onNewIssue }) {
 
       {/* ── LETTER TAB ── */}
       {activeTab === 'letter' && (
+        isPro ? (
         <div className="letter-preview">
           <div className="letter-toolbar">
             <span className="letter-toolbar-title">✉ Your Legal Letter</span>
@@ -1594,14 +1665,23 @@ function ResultsPage({ issueId, answers, userData, mode, onBack, onNewIssue }) {
           </div>
           <pre className="letter-body">{letterText || 'Loading your letter…'}</pre>
         </div>
+        ) : (
+          <ProGate onUpgrade={() => handleStripeCheckout('pro_monthly')} />
+        )
       )}
 
       {/* Action bar */}
       <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', marginTop: '1rem' }}>
         <button className="btn btn-outline" onClick={onNewIssue}>← Start a New Issue</button>
-        <button className="btn btn-primary" onClick={() => { setActiveTab('letter'); if (!letterText) generateLetter(); }}>
-          ✉ View / Download Letter
-        </button>
+        {isPro ? (
+          <button className="btn btn-primary" onClick={() => { setActiveTab('letter'); if (!letterText) generateLetter(); }}>
+            ✉ View / Download Letter
+          </button>
+        ) : (
+          <button className="btn btn-primary" onClick={() => handleStripeCheckout('pro_monthly')}>
+            🔒 Unlock Letter — £9.99/mo
+          </button>
+        )}
       </div>
 
       {/* Stripe upsell */}
@@ -1612,6 +1692,13 @@ function ResultsPage({ issueId, answers, userData, mode, onBack, onNewIssue }) {
 
 // ── STRIPE SECTION ─────────────────────────────────────────────────────
 function StripeSection() {
+  const isPro = checkProAccess();
+  if (isPro) return (
+    <div style={{ textAlign: 'center', padding: '1.5rem', background: 'rgba(46,204,138,0.08)', borderRadius: 12, marginTop: '2rem', border: '1px solid rgba(46,204,138,0.2)' }}>
+      <span className="tag tag-success" style={{ fontSize: '0.85rem', padding: '0.3rem 0.9rem' }}>✓ LegalShield Pro — Active</span>
+      <p style={{ fontSize: '0.82rem', color: 'var(--slate)', marginTop: '0.6rem' }}>You have full access to all letters, PDF downloads, and AI personalisation.</p>
+    </div>
+  );
   return (
     <div className="stripe-section">
       <div className="stripe-badge">⭐ LegalShield Pro</div>
