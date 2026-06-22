@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LegalShield AI – UK Tenancy Rights</title>
+  <title>LegalShield AI – UK Legal Rights Assistant</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
@@ -717,15 +717,93 @@ const { useState, useEffect, useCallback } = React;
 //  Eviction Act 1977, Tenant Fees Act 2019, Landlord & Tenant Act 1985.
 // ═══════════════════════════════════════════════════════════════════════
 
-const ISSUES = [
-  { id: 'deposit',   icon: '💷', label: 'Deposit Not Returned',  tag: 'Money' },
-  { id: 'repairs',   icon: '🔧', label: 'Repairs Ignored',        tag: 'Property' },
-  { id: 'harassment',icon: '🚨', label: 'Landlord Harassment',    tag: 'Urgent' },
-  { id: 'eviction',  icon: '🏠', label: 'Illegal Eviction',       tag: 'Urgent' },
+// ── CATEGORIES ─────────────────────────────────────────────────────────
+// Issues are grouped by category for display on the selector screen.
+// Each issue has an id, icon, label, tag, and category.
+
+const CATEGORIES = [
+  { id: 'tenancy',    label: '🏠 Tenancy & Housing' },
+  { id: 'employment', label: '💼 Employment' },
+  { id: 'consumer',   label: '🛒 Consumer Rights' },
+  { id: 'debt',       label: '💳 Debt & Creditors' },
+  { id: 'neighbour',  label: '🏘 Neighbour Disputes' },
+  { id: 'court',      label: '⚖ Small Claims Court' },
+  { id: 'benefits',   label: '📋 Benefits & Universal Credit' },
+  { id: 'family',     label: '👨‍👩‍👧 Family & Relationships' },
+  { id: 'medical',    label: '🏥 Medical & NHS Complaints' },
+  { id: 'education',  label: '🎓 School & Education' },
+  { id: 'travel',     label: '✈ Travel & Holiday Disputes' },
+  { id: 'vehicle',    label: '🚗 Vehicle & Insurance' },
+  { id: 'data',       label: '🔒 Data Protection & Privacy' },
+  { id: 'harassment_sexual', label: '🛡 Sexual Harassment & Misconduct' },
 ];
 
-// Decision trees per issue — each node has a question and child nodes by answer key
+const ISSUES = [
+  // Tenancy
+  { id: 'deposit',        icon: '💷', label: 'Deposit Not Returned',        tag: 'Money',    category: 'tenancy' },
+  { id: 'repairs',        icon: '🔧', label: 'Repairs Ignored',              tag: 'Property', category: 'tenancy' },
+  { id: 'harassment',     icon: '🚨', label: 'Landlord Harassment',          tag: 'Urgent',   category: 'tenancy' },
+  { id: 'eviction',       icon: '🏠', label: 'Illegal Eviction',             tag: 'Urgent',   category: 'tenancy' },
+  // Employment
+  { id: 'unfair_dismissal',icon: '📋', label: 'Unfair Dismissal',            tag: 'Urgent',   category: 'employment' },
+  { id: 'unpaid_wages',   icon: '💰', label: 'Unpaid Wages',                 tag: 'Money',    category: 'employment' },
+  { id: 'discrimination', icon: '⚖',  label: 'Workplace Discrimination',     tag: 'Urgent',   category: 'employment' },
+  // Consumer
+  { id: 'faulty_goods',   icon: '📦', label: 'Faulty Goods / Refund',        tag: 'Money',    category: 'consumer' },
+  { id: 'scam',           icon: '🚫', label: 'Scam or Fraud',                tag: 'Urgent',   category: 'consumer' },
+  // Debt
+  { id: 'debt_harassment',icon: '📞', label: 'Debt Collector Harassment',    tag: 'Urgent',   category: 'debt' },
+  { id: 'bailiffs',       icon: '🚪', label: 'Bailiff Action',               tag: 'Urgent',   category: 'debt' },
+  // Neighbour
+  { id: 'noise',          icon: '🔊', label: 'Noise Nuisance',               tag: 'Property', category: 'neighbour' },
+  { id: 'boundary',       icon: '📐', label: 'Boundary Dispute',             tag: 'Property', category: 'neighbour' },
+  // Court
+  { id: 'small_claims',   icon: '🏛', label: 'Small Claims Court',           tag: 'Legal',    category: 'court' },
+  // Benefits
+  { id: 'uc_dispute',     icon: '📋', label: 'Universal Credit Dispute',     tag: 'Money',    category: 'benefits' },
+  { id: 'benefits_appeal',icon: '📝', label: 'Benefits Appeal',              tag: 'Money',    category: 'benefits' },
+  // Family
+  { id: 'child_contact',  icon: '👶', label: 'Child Contact Dispute',        tag: 'Family',   category: 'family' },
+  { id: 'coparenting',    icon: '🤝', label: 'Co-parenting Agreement',       tag: 'Family',   category: 'family' },
+  { id: 'ex_harassment',  icon: '🚨', label: 'Harassment from Ex-Partner',   tag: 'Urgent',   category: 'family' },
+  { id: 'separation_letter', icon: '✉', label: 'Separation Communication',  tag: 'Family',   category: 'family' },
+  // Medical
+  { id: 'gp_complaint',   icon: '🏥', label: 'GP Complaint',                 tag: 'Health',   category: 'medical' },
+  { id: 'hospital_complaint', icon: '🏨', label: 'Hospital Complaint',       tag: 'Health',   category: 'medical' },
+  { id: 'misdiagnosis',   icon: '⚕',  label: 'Misdiagnosis Concern',         tag: 'Urgent',   category: 'medical' },
+  { id: 'medical_records',icon: '📁', label: 'Access to Medical Records',    tag: 'Legal',    category: 'medical' },
+  // Education
+  { id: 'school_bullying',icon: '🎒', label: 'Bullying Incident Report',     tag: 'Urgent',   category: 'education' },
+  { id: 'headteacher_complaint', icon: '📝', label: 'Complaint to Headteacher', tag: 'Education', category: 'education' },
+  { id: 'sen_support',    icon: '📚', label: 'SEN Support Request',          tag: 'Education', category: 'education' },
+  { id: 'exclusion_appeal', icon: '🏫', label: 'Exclusion Appeal',           tag: 'Urgent',   category: 'education' },
+  // Travel
+  { id: 'flight_delay',   icon: '✈',  label: 'Flight Delay Compensation',    tag: 'Money',    category: 'travel' },
+  { id: 'hotel_complaint',icon: '🏨', label: 'Hotel Complaint',              tag: 'Consumer', category: 'travel' },
+  { id: 'holiday_cancel', icon: '🌍', label: 'Holiday Cancellation Refund',  tag: 'Money',    category: 'travel' },
+  { id: 'lost_luggage',   icon: '🧳', label: 'Lost Luggage Claim',           tag: 'Money',    category: 'travel' },
+  // Vehicle
+  { id: 'faulty_car',     icon: '🚗', label: 'Faulty Car Rejection',         tag: 'Money',    category: 'vehicle' },
+  { id: 'insurance_complaint', icon: '📋', label: 'Insurance Complaint',     tag: 'Money',    category: 'vehicle' },
+  { id: 'parking_charge', icon: '🅿',  label: 'Parking Charge Appeal',       tag: 'Money',    category: 'vehicle' },
+  { id: 'mechanic_dispute', icon: '🔧', label: 'Mechanic Dispute',           tag: 'Money',    category: 'vehicle' },
+  // Data
+  { id: 'sar_request',    icon: '📂', label: 'Subject Access Request',       tag: 'Legal',    category: 'data' },
+  { id: 'right_erasure',  icon: '🗑', label: 'Right to Erasure',             tag: 'Legal',    category: 'data' },
+  { id: 'data_breach',    icon: '⚠',  label: 'Data Breach Complaint',        tag: 'Urgent',   category: 'data' },
+  { id: 'data_correction',icon: '✏', label: 'Incorrect Data Correction',    tag: 'Legal',    category: 'data' },
+  // Sexual Harassment
+  { id: 'workplace_sexual_harassment', icon: '🛡', label: 'Workplace Sexual Harassment', tag: 'Urgent', category: 'harassment_sexual' },
+  { id: 'ex_sexual_harassment', icon: '🛡', label: 'Harassment from Ex-Partner', tag: 'Urgent', category: 'harassment_sexual' },
+  { id: 'online_harassment', icon: '💻', label: 'Online Sexual Harassment',  tag: 'Urgent',   category: 'harassment_sexual' },
+  { id: 'public_harassment', icon: '🚶', label: 'Public Sexual Harassment',  tag: 'Urgent',   category: 'harassment_sexual' },
+  { id: 'school_harassment', icon: '🎓', label: 'School / College Harassment', tag: 'Urgent', category: 'harassment_sexual' },
+  { id: 'stalking',       icon: '🔍', label: 'Stalking & Unwanted Contact',  tag: 'Urgent',   category: 'harassment_sexual' },
+];
+
+// Decision trees per issue
 const DECISION_TREES = {
+  // ── TENANCY ────────────────────────────────────────────────────────
   deposit: [
     { id: 'q1', question: 'Was your tenancy deposit registered with a government-approved scheme?', hint: 'Schemes: DPS, MyDeposits, TDS', answers: ['Yes', 'No', "I don't know"] },
     { id: 'q2', question: 'Has your tenancy now ended?', hint: 'i.e. you have moved out or your tenancy has been formally ended', answers: ['Yes', 'No'] },
@@ -750,10 +828,136 @@ const DECISION_TREES = {
     { id: 'q3', question: 'Is this property your only residence?', answers: ['Yes', 'No, I have another address'] },
     { id: 'q4', question: 'Do you have an assured shorthold tenancy (AST)?', hint: 'Most private rentals in England/Wales are ASTs', answers: ['Yes', 'No / unsure'] },
   ],
-};
+  // ── EMPLOYMENT ─────────────────────────────────────────────────────
+  unfair_dismissal: [
+    { id: 'q1', question: 'How long had you been employed when you were dismissed?', hint: 'You generally need 2 years of continuous employment to claim unfair dismissal', answers: ['Less than 2 years', '2 years or more'] },
+    { id: 'q2', question: 'What reason did your employer give for dismissing you?', answers: ['Redundancy', 'Misconduct', 'Performance', 'No reason given', 'Other'] },
+    { id: 'q3', question: 'Did your employer follow a formal disciplinary process?', hint: 'e.g. written warnings, meetings, right of appeal', answers: ['Yes, fully', 'Partially', 'No process was followed'] },
+    { id: 'q4', question: 'When were you dismissed?', hint: 'Employment tribunal claims must be made within 3 months minus 1 day', answers: ['Within the last month', '1–2 months ago', '2–3 months ago', 'Over 3 months ago'] },
+  ],
+  unpaid_wages: [
+    { id: 'q1', question: 'What type of unpaid wages are you owed?', answers: ['Regular salary or wages', 'Holiday pay', 'Notice pay', 'Commission or bonus', 'Multiple types'] },
+    { id: 'q2', question: 'Are you still employed or have you left?', answers: ['Still employed', 'I have left / been dismissed'] },
+    { id: 'q3', question: 'Have you raised this with your employer in writing?', answers: ['Yes, in writing', 'Yes, verbally only', 'Not yet'] },
+    { id: 'q4', question: 'How much do you believe you are owed?', hint: 'This affects which route to take', answers: ['Under £500', '£500–£2,500', '£2,500–£10,000', 'Over £10,000'] },
+  ],
+  discrimination: [
+    { id: 'q1', question: 'What is the basis of the discrimination?', hint: 'Protected characteristics under the Equality Act 2010', answers: ['Age', 'Disability', 'Race or ethnicity', 'Sex or gender', 'Religion or belief', 'Sexual orientation', 'Pregnancy or maternity', 'Other'] },
+    { id: 'q2', question: 'What type of discrimination occurred?', answers: ['Direct discrimination', 'Harassment', 'Victimisation', 'Failure to make reasonable adjustments', 'Unsure'] },
+    { id: 'q3', question: 'Where did the discrimination take place?', answers: ['In the workplace', 'During a recruitment process', 'After I left / was dismissed'] },
+    { id: 'q4', question: 'Have you raised a formal grievance with your employer?', answers: ['Yes', 'No', 'In progress'] },
+  ],
+  // ── CONSUMER ───────────────────────────────────────────────────────
+  faulty_goods: [
+    { id: 'q1', question: 'What did you purchase?', answers: ['Physical goods / product', 'Digital product or download', 'Service (e.g. tradesperson, salon)', 'Combination of goods and services'] },
+    { id: 'q2', question: 'How long ago did you purchase it?', hint: 'Time elapsed affects your legal rights under the Consumer Rights Act 2015', answers: ['Within 30 days', '30 days – 6 months', '6 months – 6 years', 'Over 6 years'] },
+    { id: 'q3', question: 'What is the problem?', answers: ['Item is faulty or broken', 'Item does not match description', 'Service was not carried out with reasonable care', 'Item was never delivered'] },
+    { id: 'q4', question: 'Has the seller refused to help?', answers: ['Yes, refused a refund or repair', 'They offered a repair but I want a refund', 'They have not responded', 'Not yet contacted them'] },
+  ],
+  scam: [
+    { id: 'q1', question: 'What type of scam or fraud occurred?', answers: ['Online purchase scam', 'Impersonation / identity theft', 'Investment or crypto fraud', 'Romance fraud', 'Phone or email phishing', 'Fake trader / rogue tradesperson'] },
+    { id: 'q2', question: 'How did you pay?', hint: 'Payment method significantly affects your chance of recovering money', answers: ['Bank transfer', 'Credit card', 'Debit card', 'Cash', 'Cryptocurrency', 'PayPal or similar'] },
+    { id: 'q3', question: 'Have you reported it to anyone?', answers: ['Reported to police / Action Fraud', 'Reported to my bank', 'Not yet reported', 'Reported to multiple agencies'] },
+    { id: 'q4', question: 'How much money did you lose?', answers: ['Under £500', '£500–£5,000', '£5,000–£25,000', 'Over £25,000'] },
+  ],
+  // ── DEBT ───────────────────────────────────────────────────────────
+  debt_harassment: [
+    { id: 'q1', question: 'Who is contacting you about the debt?', answers: ['Original creditor (e.g. bank, utility)', 'Debt collection agency', 'Bailiffs / enforcement agents', 'Unsure'] },
+    { id: 'q2', question: 'What type of contact are you experiencing?', answers: ['Excessive phone calls', 'Calling at unreasonable hours', 'Threatening or intimidating language', 'Contacting family or employer', 'Multiple types'] },
+    { id: 'q3', question: 'Do you acknowledge that you owe this debt?', answers: ['Yes, I owe it', 'I dispute the debt', 'The debt may be statute-barred (over 6 years old)', 'Unsure'] },
+    { id: 'q4', question: 'Have you asked them to stop contacting you in writing?', answers: ['Yes', 'No'] },
+  ],
+  bailiffs: [
+    { id: 'q1', question: 'What type of debt has led to the bailiff action?', answers: ['Council tax', 'County court judgment (CCJ)', 'Parking fines / road traffic', 'Child maintenance', 'Business debt', 'Unsure'] },
+    { id: 'q2', question: 'What stage is the bailiff action at?', answers: ['I received a Notice of Enforcement', 'A bailiff has visited but not taken goods', 'A bailiff has taken or is threatening to take goods', 'Goods have already been taken'] },
+    { id: 'q3', question: 'Did you receive proper notice before the bailiff visited?', hint: 'Bailiffs must give at least 7 days notice before a first visit', answers: ['Yes, 7+ days notice', 'Less than 7 days notice', 'No notice at all'] },
+    { id: 'q4', question: 'Are there any vulnerable people in the household?', hint: 'e.g. children, elderly, disabled, mental health conditions — this affects bailiff rules', answers: ['Yes', 'No'] },
+  ],
+  // ── NEIGHBOUR ──────────────────────────────────────────────────────
+  noise: [
+    { id: 'q1', question: 'What type of noise is causing the problem?', answers: ['Music or parties', 'Dogs barking', 'DIY or construction', 'Footsteps / impact noise (flats)', 'Shouting or antisocial behaviour'] },
+    { id: 'q2', question: 'How often does it occur?', answers: ['Daily', 'Several times a week', 'Occasional but severe', 'Ongoing low-level noise'] },
+    { id: 'q3', question: 'Have you spoken to your neighbour about it?', answers: ['Yes, and it has not helped', 'Yes, and it made things worse', 'Not yet'] },
+    { id: 'q4', question: 'Have you reported it to anyone?', answers: ['Reported to council / environmental health', 'Reported to police', 'Not yet reported', 'Reported but no action taken'] },
+  ],
+  boundary: [
+    { id: 'q1', question: 'What is the nature of the boundary dispute?', answers: ['Fence or wall in wrong position', 'Neighbour building on my land', 'Access / right of way dispute', 'Overhanging trees or roots', 'Other encroachment'] },
+    { id: 'q2', question: 'Do you have a copy of your title deeds or Land Registry plan?', answers: ['Yes', 'No', 'Unsure'] },
+    { id: 'q3', question: 'Have you attempted to resolve this with your neighbour?', answers: ['Yes, in writing', 'Yes, verbally', 'Not yet'] },
+    { id: 'q4', question: 'How long has the dispute been ongoing?', answers: ['Just started', 'A few months', 'Over a year', 'Many years'] },
+  ],
+  // ── SMALL CLAIMS ───────────────────────────────────────────────────
+  small_claims: [
+    { id: 'q1', question: 'What is your claim about?', answers: ['Money owed to me', 'Faulty goods or services', 'Property damage caused by someone', 'Personal injury', 'Other'] },
+    { id: 'q2', question: 'How much are you claiming?', hint: 'Small claims track handles claims up to £10,000 in England and Wales', answers: ['Under £1,000', '£1,000–£5,000', '£5,000–£10,000', 'Over £10,000'] },
+    { id: 'q3', question: 'Have you sent a formal letter before action?', hint: 'This is required before issuing a court claim', answers: ['Yes', 'No'] },
+    { id: 'q4', question: 'Has the other party responded to your letter?', answers: ['Yes and refused to pay', 'No response received', 'They acknowledged but are delaying', 'I have not sent a letter yet'] },
+  ],
+  // ── BENEFITS ───────────────────────────────────────────────────────
+  uc_dispute: [
+    { id: 'q1', question: 'What is the nature of your Universal Credit dispute?', answers: ['Payment reduced or stopped', 'Sanction applied', 'Overpayment demand', 'Wrong amount being paid', 'Claim rejected'] },
+    { id: 'q2', question: 'Have you received a written decision from DWP?', answers: ['Yes', 'No, only a message in my journal', 'Unsure'] },
+    { id: 'q3', question: 'How long ago was the decision made?', hint: 'You have 1 month to request a mandatory reconsideration', answers: ['Within the last month', '1–3 months ago', 'Over 3 months ago'] },
+    { id: 'q4', question: 'Have you requested a mandatory reconsideration?', answers: ['Yes, and it was refused', 'Yes, still waiting', 'Not yet'] },
+  ],
+  benefits_appeal: [
+    { id: 'q1', question: 'Which benefit decision are you appealing?', answers: ['Universal Credit', 'PIP (Personal Independence Payment)', 'ESA (Employment Support Allowance)', 'Housing Benefit', 'Other'] },
+    { id: 'q2', question: 'Have you completed the mandatory reconsideration stage?', hint: 'You must request a mandatory reconsideration before you can appeal to tribunal', answers: ['Yes, and it was refused', 'Yes, still waiting', 'Not yet started'] },
+    { id: 'q3', question: 'How long ago did you receive the mandatory reconsideration notice?', hint: 'You have 1 month from the MR notice to appeal to tribunal', answers: ['Within the last month', '1–3 months ago', 'Over 3 months ago'] },
+    { id: 'q4', question: 'Do you have medical evidence or supporting documents?', answers: ['Yes, substantial evidence', 'Some evidence', 'Little or no evidence yet'] },
+  ],
 
-// Rights summaries, action plans, and evidence checklists per issue
-const LEGAL_DATA = {
+  // ── FAMILY ─────────────────────────────────────────────────────────
+  child_contact: [
+    { id: 'q1', question: 'What is the current child contact arrangement?', answers: ['No arrangement in place', 'Informal agreement being broken', 'Court order in place being breached', 'I am trying to establish contact for the first time'] },
+    { id: 'q2', question: 'Are the children currently safe?', hint: 'If you believe children are at immediate risk, contact police or social services', answers: ['Yes, they are safe', 'I have concerns about their safety'] },
+    { id: 'q3', question: 'Have you attempted mediation?', hint: 'Mediation is required before most court applications for child arrangements', answers: ['Yes, mediation failed', 'Yes, other party refused mediation', 'Not yet attempted', 'Exempt (domestic abuse etc.)'] },
+    { id: 'q4', question: 'What outcome are you seeking?', answers: ['Regular contact / visitation', 'Shared custody arrangement', 'Enforcement of existing court order', 'Modification of existing order'] },
+  ],
+  coparenting: [
+    { id: 'q1', question: 'Are you and the other parent currently communicating?', answers: ['Yes, reasonably well', 'With difficulty', 'Barely or not at all'] },
+    { id: 'q2', question: 'Do you have any existing written agreement?', answers: ['No agreement exists', 'Informal written agreement', 'Formal court order'] },
+    { id: 'q3', question: 'What areas do you need to agree on?', answers: ['Contact schedule / holidays', 'Education and school decisions', 'Medical decisions', 'Financial arrangements', 'Multiple areas'] },
+    { id: 'q4', question: 'Have you considered or tried mediation?', answers: ['Yes and it helped', 'Yes but it failed', 'Not yet', 'We want to avoid court entirely'] },
+  ],
+  ex_harassment: [
+    { id: 'q1', question: 'What type of behaviour are you experiencing?', answers: ['Excessive unwanted contact (calls, texts, emails)', 'Turning up uninvited at home or work', 'Threats or intimidation', 'Abuse via social media', 'Multiple types'] },
+    { id: 'q2', question: 'How long has this been happening?', answers: ['It just started', 'A few weeks', 'Several months', 'Over a year'] },
+    { id: 'q3', question: 'Have you told them clearly to stop contacting you?', answers: ['Yes, in writing', 'Yes, verbally', 'Not yet — I am worried about their reaction'] },
+    { id: 'q4', question: 'Have you reported this to the police?', answers: ['Yes — I have a crime reference number', 'Not yet', 'I reported it but police did not act'] },
+  ],
+  separation_letter: [
+    { id: 'q1', question: 'What is the purpose of the letter?', answers: ['Formally communicate separation', 'Set boundaries on communication', 'Confirm arrangements for children', 'Confirm arrangements for shared property or finances'] },
+    { id: 'q2', question: 'Are you using a solicitor?', answers: ['Yes', 'No — handling this myself', 'Not yet but considering it'] },
+    { id: 'q3', question: 'Is there a risk of conflict or harassment?', answers: ['Yes — I need to be careful about contact', 'No — communication is civil', 'Unsure'] },
+    { id: 'q4', question: 'Do you have children together?', answers: ['Yes', 'No'] },
+  ],
+
+  // ── MEDICAL ────────────────────────────────────────────────────────
+  gp_complaint: [
+    { id: 'q1', question: 'What is the nature of your complaint?', answers: ['Misdiagnosis or delayed diagnosis', 'Poor treatment or care', 'Rude or unprofessional behaviour', 'Failure to refer or act on symptoms', 'Administrative error (records, prescriptions)'] },
+    { id: 'q2', question: 'When did the incident occur?', hint: 'NHS complaints should generally be made within 12 months', answers: ['Within the last 3 months', '3–12 months ago', 'Over 12 months ago'] },
+    { id: 'q3', question: 'Have you raised this with the GP practice already?', answers: ['Yes, verbally — not resolved', 'Yes, in writing — not resolved', 'Not yet'] },
+    { id: 'q4', question: 'What outcome are you seeking?', answers: ['Apology and explanation', 'Change in practice procedure', 'Financial compensation', 'Referral to regulatory body'] },
+  ],
+  hospital_complaint: [
+    { id: 'q1', question: 'What type of complaint do you have?', answers: ['Quality of clinical care', 'Staff behaviour or attitude', 'Waiting times or delays', 'Discharge process', 'Hospital-acquired infection or injury'] },
+    { id: 'q2', question: 'Was the treatment provided by an NHS or private hospital?', answers: ['NHS hospital', 'Private hospital', 'Both (e.g. NHS-funded private treatment)'] },
+    { id: 'q3', question: 'Have you already complained to the hospital\'s PALS (Patient Advice and Liaison Service)?', answers: ['Yes — not satisfied with response', 'Yes — no response received', 'Not yet'] },
+    { id: 'q4', question: 'When did the incident occur?', hint: 'NHS complaints must generally be made within 12 months of the incident', answers: ['Within the last 3 months', '3–12 months ago', 'Over 12 months ago'] },
+  ],
+  misdiagnosis: [
+    { id: 'q1', question: 'What happened?', answers: ['Wrong diagnosis given', 'Diagnosis significantly delayed', 'Symptoms dismissed without investigation', 'Incorrect treatment given as a result'] },
+    { id: 'q2', question: 'Has the misdiagnosis caused you harm?', hint: 'Harm includes worsened condition, unnecessary treatment, or lasting injury', answers: ['Yes — significant harm', 'Yes — some harm', 'I am concerned but harm is unclear'] },
+    { id: 'q3', question: 'Do you have another medical opinion confirming the misdiagnosis?', answers: ['Yes — second opinion obtained', 'In progress', 'Not yet'] },
+    { id: 'q4', question: 'Are you considering a clinical negligence claim?', hint: 'Clinical negligence requires proving duty of care, breach, and causation of harm', answers: ['Yes', 'Possibly — I want more information', 'No — I just want answers and an apology'] },
+  ],
+  medical_records: [
+    { id: 'q1', question: 'What records are you requesting?', answers: ['GP records', 'Hospital records', 'Mental health records', 'Records held by another provider', 'All records held about me'] },
+    { id: 'q2', question: 'Why do you need the records?', hint: 'You do not have to give a reason for a Subject Access Request', answers: ['Personal review', 'Legal or insurance purposes', 'Complaint or negligence investigation', 'Second medical opinion'] },
+    { id: 'q3', question: 'Have you previously requested these records?', answers: ['Yes — request was ignored', 'Yes — records were incomplete', 'Yes — request was refused', 'No — this is my first request'] },
+    { id: 'q4', question: 'How long ago did you make any previous request?', hint: 'Organisations must respond to a SAR within 1 month', answers: ['Less than 1 month ago', '1–3 months ago', 'Over 3 months ago', 'N/A — first request'] },
+  ],
   deposit: {
     title: 'Deposit Not Returned',
     rights: `Under the <strong>Housing Act 2004</strong>, landlords must protect your deposit in a government-approved tenancy deposit scheme (TDS, DPS, or MyDeposits) within <strong>30 days</strong> of receiving it, and provide you with the prescribed information.\n\nIf your deposit was not protected, your landlord may owe you between <strong>1× and 3× the deposit amount</strong> as a penalty, which you can claim through the county court.\n\nWhen your tenancy ends, your landlord must return your deposit within <strong>10 days</strong> of you both agreeing the amount. If there is a dispute, the scheme's free <strong>Alternative Dispute Resolution (ADR)</strong> service can adjudicate.\n\nDeductions are only permitted for <strong>damages beyond fair wear and tear, unpaid rent, or breach of tenancy agreement</strong>. Betterment (e.g. replacing a worn carpet entirely at your cost) is not permitted.`,
@@ -846,10 +1050,478 @@ const LEGAL_DATA = {
     ],
     letterType: 'eviction_warning',
   },
-};
 
-// Letter templates — personalised with user details
-const LETTER_TEMPLATES = {
+  // ── EMPLOYMENT ───────────────────────────────────────────────────────
+  unfair_dismissal: {
+    title: 'Unfair Dismissal',
+    rights: `Under the <strong>Employment Rights Act 1996</strong>, employees with 2 or more years of continuous employment have the right not to be unfairly dismissed.\n\nYour employer must have a <strong>fair reason</strong> for dismissal (capability, conduct, redundancy, statutory illegality, or some other substantial reason) and must follow a <strong>fair procedure</strong> — including written warnings, a formal meeting, and the right of appeal.\n\nIf your employer failed to follow the <strong>ACAS Code of Practice on Disciplinary and Grievance Procedures</strong>, any tribunal award can be increased by up to <strong>25%</strong>.\n\nYou must contact <strong>ACAS for Early Conciliation</strong> before submitting an Employment Tribunal claim. Claims must be made within <strong>3 months minus 1 day</strong> from the date of dismissal. This deadline is strict.`,
+    urgency: 'high',
+    actions: [
+      { title: 'Note the 3-month deadline immediately', detail: 'You have 3 months minus 1 day from your dismissal date to start the ACAS Early Conciliation process. Missing this deadline means you lose your right to claim.', urgent: true },
+      { title: 'Contact ACAS for Early Conciliation', detail: 'Visit acas.org.uk or call 0300 123 1100. Early Conciliation is free, confidential, and mandatory before you can bring a tribunal claim. ACAS will attempt to negotiate a settlement.', urgent: true },
+      { title: 'Submit a formal grievance appeal', detail: 'Write to your employer appealing the dismissal decision within any timescale stated in your contract. This shows you followed proper procedure and strengthens your tribunal case.', urgent: false },
+      { title: 'Gather your employment documents', detail: 'Collect your contract, payslips, any disciplinary letters, meeting notes, and correspondence. Subject access requests (GDPR) can retrieve employer records.', urgent: false },
+      { title: 'Consider an Employment Tribunal claim', detail: 'If ACAS conciliation fails, you can submit an ET1 form at employmenttribunals.service.gov.uk. Claims are free to submit. You may be able to claim up to 1 year\'s salary (capped at £93,878 for 2024/25).', urgent: false },
+    ],
+    evidence: [
+      'Employment contract and any amendments',
+      'Dismissal letter or written notice',
+      'Any disciplinary letters or warnings received',
+      'Notes or recordings of disciplinary meetings',
+      'Payslips (last 3 months minimum)',
+      'Any HR correspondence',
+      'ACAS Early Conciliation certificate',
+      'Witness statements from colleagues if applicable',
+    ],
+    letterType: 'unfair_dismissal_grievance',
+  },
+
+  unpaid_wages: {
+    title: 'Unpaid Wages',
+    rights: `Under the <strong>Employment Rights Act 1996</strong>, your employer must pay you all wages owed on the agreed pay date. Unauthorised deductions from wages are unlawful.\n\nThis includes <strong>regular salary, holiday pay, notice pay, commission, and bonuses</strong> that are contractually due.\n\nFor holiday pay, the <strong>Working Time Regulations 1998</strong> entitle all workers (not just employees) to at least 5.6 weeks paid holiday per year.\n\nYou can bring an <strong>unlawful deduction of wages claim</strong> to an Employment Tribunal within 3 months minus 1 day of the deduction. For larger amounts, you can also use the <strong>county court</strong> (small claims for under £10,000), which has a 6-year limitation period.\n\nIf your employer is insolvent, you may be able to claim unpaid wages from the <strong>Insolvency Service</strong>.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Write a formal demand for payment', detail: 'Email or write to your employer (or HR) specifying exactly what is owed, the pay period it relates to, and a deadline of 7 days to pay. Keep all written evidence.', urgent: false },
+      { title: 'Submit a grievance', detail: 'If your employer does not respond, submit a formal written grievance under your employer\'s grievance procedure. This creates a paper trail and is important if you later go to tribunal.', urgent: false },
+      { title: 'Contact ACAS for Early Conciliation', detail: 'Before bringing an Employment Tribunal claim, you must notify ACAS. Visit acas.org.uk. The 3-month minus 1 day deadline applies from the date of the unlawful deduction.', urgent: false },
+      { title: 'Consider small claims court for larger amounts', detail: 'For debts up to £10,000, the county court small claims track is an alternative with a 6-year limitation period — useful if the 3-month tribunal deadline has passed.', urgent: false },
+      { title: 'Report to HMRC if National Minimum Wage is not being paid', detail: 'If your employer is paying below the National Minimum Wage, report to HMRC at gov.uk/report-employer-minimum-wage. HMRC can investigate and enforce payment.', urgent: false },
+    ],
+    evidence: [
+      'Employment contract (confirming pay rate and pay dates)',
+      'Payslips for the relevant period',
+      'Bank statements showing what was actually paid',
+      'Any written communication about the pay dispute',
+      'Timesheets or records of hours worked',
+      'Holiday entitlement records',
+      'Email or letter demanding payment',
+      'Employer\'s response (or lack thereof)',
+    ],
+    letterType: 'unpaid_wages_demand',
+  },
+
+  discrimination: {
+    title: 'Workplace Discrimination',
+    rights: `Under the <strong>Equality Act 2010</strong>, it is unlawful to discriminate against someone at work because of a <strong>protected characteristic</strong>. These are: age, disability, gender reassignment, marriage and civil partnership, pregnancy and maternity, race, religion or belief, sex, and sexual orientation.\n\nForms of prohibited conduct include:\n• <strong>Direct discrimination</strong> — treating someone less favourably because of a protected characteristic\n• <strong>Indirect discrimination</strong> — a policy that disadvantages a group sharing a protected characteristic\n• <strong>Harassment</strong> — unwanted conduct related to a protected characteristic that violates dignity\n• <strong>Victimisation</strong> — treating someone badly because they made or supported a discrimination complaint\n\nClaims must be brought to the <strong>Employment Tribunal within 3 months minus 1 day</strong> of the discriminatory act. There is no cap on discrimination awards.`,
+    urgency: 'high',
+    actions: [
+      { title: 'Document every incident immediately', detail: 'Write down what happened, when, where, who was present, and any witnesses. Save any emails, messages, or documents. Contemporaneous notes are powerful evidence.', urgent: true },
+      { title: 'Submit a formal grievance to your employer', detail: 'Write a formal grievance letter to HR or your line manager\'s manager specifying the discriminatory acts, the protected characteristic involved, and what you want to happen. Your employer must investigate.', urgent: false },
+      { title: 'Contact ACAS for Early Conciliation', detail: 'Before bringing a tribunal claim you must notify ACAS. Do this before the 3-month deadline from the most recent discriminatory act. Call 0300 123 1100 or visit acas.org.uk.', urgent: false },
+      { title: 'Consider an Employment Tribunal claim', detail: 'Discrimination claims have no financial cap on compensation. Awards can include injury to feelings (Vento scale: £1,100–£44,000+), lost earnings, and aggravated damages.', urgent: false },
+      { title: 'Contact the Equality Advisory Support Service', detail: 'EASS (0808 800 0082) provides free advice on discrimination law and can help you understand your options before you decide to take formal action.', urgent: false },
+    ],
+    evidence: [
+      'Written log of every discriminatory incident (date, time, what was said/done)',
+      'Emails, messages, or notes containing discriminatory content',
+      'Witness names and contact details',
+      'Your formal grievance letter and employer\'s response',
+      'HR policies on equality and diversity',
+      'Comparator examples (how others without your characteristic were treated)',
+      'Medical evidence if disability discrimination is involved',
+      'ACAS Early Conciliation certificate',
+    ],
+    letterType: 'discrimination_grievance',
+  },
+
+  // ── CONSUMER ─────────────────────────────────────────────────────────
+  faulty_goods: {
+    title: 'Faulty Goods / Refund Refused',
+    rights: `Under the <strong>Consumer Rights Act 2015</strong>, goods must be of satisfactory quality, fit for purpose, and as described. Services must be carried out with reasonable care and skill.\n\n<strong>Within 30 days</strong> of purchase: you have an automatic right to a full refund — this is the "short-term right to reject."\n\n<strong>30 days to 6 months</strong>: the seller must repair or replace the goods. If this fails, you are entitled to a refund (which may be reduced for use).\n\n<strong>6 months to 6 years</strong>: you can still claim but must prove the fault existed at the time of sale.\n\nFor <strong>credit card purchases over £100</strong>, Section 75 of the Consumer Credit Act 1974 makes your credit card company jointly liable — you can claim against them directly.\n\nFor <strong>debit card purchases</strong>, chargeback through your bank may be available.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Contact the seller in writing', detail: 'Email or write to the seller specifying the fault, when you purchased the item, and whether you want a refund, repair, or replacement. Keep proof of delivery.', urgent: false },
+      { title: 'Exercise your short-term right to reject (within 30 days)', detail: 'If within 30 days, you are entitled to a full refund. State this clearly in your letter citing the Consumer Rights Act 2015, Section 20.', urgent: false },
+      { title: 'Try Section 75 or chargeback', detail: 'For credit card purchases over £100, contact your card provider and request a Section 75 claim. For debit cards, request a chargeback within 120 days of the transaction.', urgent: false },
+      { title: 'Use Alternative Dispute Resolution', detail: 'Many retailers are members of an ADR scheme. Check the retailer\'s website for their ADR provider — this is free and can resolve disputes without court.', urgent: false },
+      { title: 'Small claims court', detail: 'For amounts up to £10,000, file a claim at gov.uk/make-court-claim-for-money. The fee is proportional to the claim amount and is recoverable if you win.', urgent: false },
+    ],
+    evidence: [
+      'Proof of purchase (receipt, order confirmation, bank statement)',
+      'Photographs or video of the fault',
+      'Product description from website or packaging (if "not as described")',
+      'Written communication with the seller',
+      'Any repair or replacement attempts and their outcome',
+      'Independent assessment or quote if relevant',
+      'Credit card or bank statement showing payment method',
+    ],
+    letterType: 'faulty_goods_demand',
+  },
+
+  scam: {
+    title: 'Scam or Fraud',
+    rights: `If you have been the victim of a scam or fraud, you have several potential routes to recover your money depending on how you paid:\n\n<strong>Bank transfer (Authorised Push Payment fraud)</strong>: Under the <strong>PSR APP Fraud Reimbursement Scheme</strong> (mandatory from October 2024), banks must reimburse victims of authorised push payment fraud up to £85,000 in most cases, unless the victim was grossly negligent.\n\n<strong>Credit card</strong>: Section 75 of the Consumer Credit Act 1974 gives you a claim against your credit card provider for purchases between £100 and £30,000.\n\n<strong>Debit card</strong>: Chargeback may be available within 120 days.\n\nReport all fraud to <strong>Action Fraud (0300 123 2040 or actionfraud.police.uk)</strong> — you will receive a crime reference number which is essential for bank claims.\n\nThe <strong>Financial Ombudsman Service</strong> can adjudicate if your bank refuses to reimburse you.`,
+    urgency: 'high',
+    actions: [
+      { title: 'Contact your bank immediately', detail: 'Call your bank\'s fraud line (usually on the back of your card) as soon as possible. The sooner you report, the better the chance of stopping or recovering the payment.', urgent: true },
+      { title: 'Report to Action Fraud', detail: 'Report online at actionfraud.police.uk or call 0300 123 2040. Keep your crime reference number — your bank will require it for any reimbursement claim.', urgent: true },
+      { title: 'Request reimbursement from your bank in writing', detail: 'Submit a formal written complaint to your bank citing the PSR APP Fraud Reimbursement Scheme (for bank transfers) or Section 75 (for credit cards). Include your crime reference number.', urgent: false },
+      { title: 'Complain to the Financial Ombudsman if the bank refuses', detail: 'If your bank rejects your claim or does not respond within 8 weeks, escalate to the Financial Ombudsman Service (financial-ombudsman.org.uk). This is free.', urgent: false },
+      { title: 'Report to Trading Standards if a trader was involved', detail: 'Report rogue traders to Citizens Advice Consumer Helpline (0808 223 1133) who will pass it to Trading Standards for investigation.', urgent: false },
+    ],
+    evidence: [
+      'Bank statements showing the fraudulent transaction(s)',
+      'Any communications from the scammer (emails, texts, social media)',
+      'Screenshots of any fake websites or adverts',
+      'Action Fraud crime reference number',
+      'Your formal complaint letter to the bank',
+      'Bank\'s response (or lack of response)',
+      'Any receipts, invoices, or order confirmations from the scammer',
+    ],
+    letterType: 'scam_bank_complaint',
+  },
+
+  // ── DEBT ─────────────────────────────────────────────────────────────
+  debt_harassment: {
+    title: 'Debt Collector Harassment',
+    rights: `Debt collectors must follow strict rules set out in the <strong>Financial Conduct Authority (FCA) Consumer Credit Sourcebook (CONC)</strong> and the <strong>FCA Principles for Businesses</strong>.\n\nDebt collectors cannot:\n• Contact you at unreasonable hours (generally before 8am or after 9pm)\n• Contact you excessively or in a way designed to intimidate\n• Use threatening, false, or misleading language\n• Contact your employer or family without your consent\n• Claim to be a court official or use official-looking documents to intimidate\n• Add charges that are not permitted under your original agreement\n\nIf the debt is over <strong>6 years old</strong> (5 in Scotland) and you have not made payment or acknowledged it in writing, it may be <strong>statute-barred</strong> and unenforceable in court under the <strong>Limitation Act 1980</strong>.\n\nYou can request the debt collector <strong>cease contact</strong> — they must only contact you to confirm they are taking legal action.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Send a cease contact letter', detail: 'Write to the debt collector instructing them to communicate only in writing and to cease phone calls. They must comply or only contact you to confirm legal action. Send by recorded post.', urgent: false },
+      { title: 'Request a copy of the original credit agreement', detail: 'Under Section 78 of the Consumer Credit Act 1974, you can request a copy of your original credit agreement for £1. If they cannot provide it, they cannot enforce the debt while it is outstanding.', urgent: false },
+      { title: 'Check whether the debt is statute-barred', detail: 'If no payment or written acknowledgment has been made for 6 years (England/Wales), the debt may be unenforceable. Seek advice from StepChange (0800 138 1111) or National Debtline (0808 808 4000).', urgent: false },
+      { title: 'Complain to the FCA and Financial Ombudsman', detail: 'If the collector is breaking FCA rules, complain directly to the firm. If unsatisfied, escalate to the Financial Ombudsman Service (financial-ombudsman.org.uk).', urgent: false },
+      { title: 'Get free debt advice', detail: 'StepChange (stepchange.org), National Debtline (0808 808 4000), and Citizens Advice all provide free, confidential debt advice including options like Debt Relief Orders and IVAs.', urgent: false },
+    ],
+    evidence: [
+      'Log of all contact attempts (dates, times, what was said)',
+      'Recordings or transcripts of phone calls if available',
+      'Any written communications from the debt collector',
+      'Original credit agreement if you have it',
+      'Proof of any payments made (bank statements)',
+      'Your cease contact letter and proof of postage',
+      'Any misleading or threatening correspondence',
+    ],
+    letterType: 'debt_cease_contact',
+  },
+
+  bailiffs: {
+    title: 'Bailiff Action',
+    rights: `Bailiffs (also called enforcement agents) must follow strict rules under the <strong>Taking Control of Goods Regulations 2013</strong>.\n\nKey rights:\n• Bailiffs must give you at least <strong>7 clear days written notice</strong> (a Notice of Enforcement) before their first visit\n• They can only visit between <strong>6am and 9pm</strong>\n• They <strong>cannot force entry</strong> to your home for most debts (council tax, CCJs) — they can only enter peacefully through an unlocked door\n• They cannot take <strong>essential items</strong> such as clothing, bedding, a cooker, fridge, or tools needed for work up to £1,350\n• They cannot take goods belonging to someone else or goods on hire purchase\n• <strong>Vulnerable people</strong> (disabled, seriously ill, elderly, children under 18 at home, recently bereaved) have additional protections\n\nIf a bailiff breaks these rules, their action may be unlawful and you may be able to apply to court to have it set aside.`,
+    urgency: 'high',
+    actions: [
+      { title: 'Do not let the bailiff in if you are unsure of their authority', detail: 'Ask for their name, the company they work for, and the enforcement authority order. Check their credentials. You do not have to open the door.', urgent: true },
+      { title: 'Contact the bailiff company in writing immediately', detail: 'If you are vulnerable, dispute the debt, or the bailiff has acted unlawfully, write to the company immediately with evidence. This can pause action.', urgent: true },
+      { title: 'Contact the original creditor', detail: 'Sometimes paying the creditor directly (before goods are taken) can halt bailiff action. Ask if a payment plan can be arranged.', urgent: false },
+      { title: 'Apply to court to set aside the judgment', detail: 'If you were unaware of the original court judgment (e.g. it was sent to an old address), you may be able to apply to have it set aside using Form N244 at your local county court.', urgent: false },
+      { title: 'Get free specialist debt advice', detail: 'Contact National Debtline (0808 808 4000) or StepChange (0800 138 1111) urgently. They can advise on whether bailiff action can be challenged and what alternatives exist.', urgent: false },
+    ],
+    evidence: [
+      'Notice of Enforcement letter (if received)',
+      'Any correspondence from the bailiff company',
+      'Original court order or CCJ documentation',
+      'Evidence of vulnerability (medical letters, benefit award letters)',
+      'Log of bailiff visits (dates, times, what happened)',
+      'Evidence of any goods removed',
+      'Photographs of any damage caused during entry',
+      'Proof of payments already made',
+    ],
+    letterType: 'bailiff_complaint',
+  },
+
+  // ── NEIGHBOUR ────────────────────────────────────────────────────────
+  noise: {
+    title: 'Noise Nuisance',
+    rights: `Excessive noise from neighbours can constitute a <strong>statutory nuisance</strong> under the <strong>Environmental Protection Act 1990</strong>. Your local council's Environmental Health team has powers to investigate and serve an <strong>Abatement Notice</strong> on the person causing the noise.\n\nBreaching an Abatement Notice is a criminal offence carrying a fine of up to <strong>£5,000</strong> for domestic premises.\n\nUnder the <strong>Noise Act 1996</strong>, councils have additional powers to deal with excessive noise from dwellings at night (11pm–7am).\n\nIf you are a tenant, your landlord may also have obligations to deal with noise caused by other tenants in the same building. Persistent noise nuisance can entitle a tenant to a rent reduction.\n\nAs a last resort, you can bring a <strong>private nuisance claim</strong> in the county court for damages and an injunction, but this is expensive and should follow all other avenues.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Keep a detailed noise diary', detail: 'Record every incident — date, time, duration, type of noise, and how it affected you. This is essential evidence for council action or court proceedings.', urgent: false },
+      { title: 'Speak to your neighbour (if safe to do so)', detail: 'A polite conversation or note often resolves noise issues without escalation. Your neighbour may not realise the impact.', urgent: false },
+      { title: 'Report to Environmental Health', detail: 'Contact your local council\'s Environmental Health team. They can investigate, install noise monitoring equipment, and serve an Abatement Notice. This is free.', urgent: false },
+      { title: 'Try mediation', detail: 'Community mediation services (often free through your council) can resolve neighbour disputes without legal action. Many councils offer this as a first step.', urgent: false },
+      { title: 'Apply for an injunction as a last resort', detail: 'If all else fails, you can apply to the county court for an injunction to stop the noise. Seek legal advice first — this involves costs.', urgent: false },
+    ],
+    evidence: [
+      'Noise diary (dates, times, duration, type, impact on you)',
+      'Audio or video recordings of the noise',
+      'Witness statements from other neighbours affected',
+      'Any previous communication with the neighbour about the issue',
+      'Council noise monitoring reports if applicable',
+      'Medical evidence if health has been affected (e.g. sleep deprivation)',
+      'Correspondence with your landlord if relevant',
+    ],
+    letterType: 'noise_complaint',
+  },
+
+  boundary: {
+    title: 'Boundary Dispute',
+    rights: `Boundary disputes are governed by general property law and the documents registered with <strong>HM Land Registry</strong>. The definitive boundary is determined by your <strong>title deeds</strong> and the Land Registry title plan, though these often show only general boundaries.\n\nKey principles:\n• The <strong>Land Registration Act 2002</strong> governs registered land — you can apply to HM Land Registry to determine a boundary precisely\n• <strong>Adverse possession</strong> (squatter's rights) may apply if someone has occupied land for 10+ years (registered land) or 12+ years (unregistered land) — this cuts both ways\n• Overhanging branches can be cut back to the boundary (but must be offered back to the neighbour)\n• Roots causing damage may give rise to a <strong>nuisance claim</strong>\n• Always check your deeds, any conveyance plans, and local Land Registry documents before taking action`,
+    urgency: 'low',
+    actions: [
+      { title: 'Get copies of your title deeds', detail: 'Download your title register and title plan from HM Land Registry (landregistry.gov.uk) for £3 each. Also request your neighbour\'s title plan to compare boundaries.', urgent: false },
+      { title: 'Write to your neighbour formally', detail: 'If informal discussion has failed, write a formal letter setting out your position with reference to the title deeds. Keep it factual and professional.', urgent: false },
+      { title: 'Instruct a boundary surveyor', detail: 'A chartered boundary surveyor can produce an expert report on where the legal boundary lies. This is useful evidence for any legal proceedings.', urgent: false },
+      { title: 'Try mediation', detail: 'The Royal Institution of Chartered Surveyors (RICS) and local mediation services can help resolve boundary disputes without court action, which is far cheaper.', urgent: false },
+      { title: 'Apply to HM Land Registry for a determined boundary', detail: 'Under the Land Registration Act 2002, you can apply to fix the exact boundary on the register. This is not a quick process but provides a definitive answer.', urgent: false },
+    ],
+    evidence: [
+      'Your title register and title plan from Land Registry',
+      'Original conveyance or transfer deeds if available',
+      'Historic photographs showing the boundary position',
+      'Any planning permissions for fences or structures',
+      'Correspondence with your neighbour about the dispute',
+      'Surveyor\'s report if obtained',
+      'Witness statements from long-standing neighbours',
+      'Photographs showing current boundary position',
+    ],
+    letterType: 'boundary_dispute',
+  },
+
+  // ── SMALL CLAIMS ─────────────────────────────────────────────────────
+  small_claims: {
+    title: 'Small Claims Court',
+    rights: `The <strong>small claims track</strong> in the county court handles most civil disputes up to <strong>£10,000</strong> in England and Wales (£5,000 in Scotland's Simple Procedure). It is designed to be used without a solicitor.\n\nKey features:\n• Court fees are proportional to your claim amount (from £35 for claims under £300)\n• Legal costs are generally not recoverable in small claims, so each party bears their own costs\n• You must send a <strong>Letter Before Action (LBA)</strong> before issuing a claim — courts expect this\n• The defendant has <strong>14 days</strong> to respond to your claim once issued\n• If they do not respond, you can apply for a <strong>default judgment</strong>\n• Claims are submitted online at <strong>gov.uk/make-court-claim-for-money</strong> (Money Claim Online / MCOL)\n\nFor personal injury claims, the limit is £1,500. For housing disrepair, it is £1,000.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Send a formal Letter Before Action (LBA)', detail: 'This is required before issuing a claim. Give the defendant 14 days to respond. State the amount you are claiming, the reason, and that you will issue court proceedings if they do not pay.', urgent: false },
+      { title: 'Gather all your evidence', detail: 'Collect contracts, invoices, photographs, correspondence, and any witness statements. The stronger your evidence pack, the more likely the defendant will settle before a hearing.', urgent: false },
+      { title: 'Submit your claim online', detail: 'Go to gov.uk/make-court-claim-for-money. You will need the defendant\'s full name and address, the amount claimed, and a brief description of why you are claiming.', urgent: false },
+      { title: 'Consider mediation', detail: 'The court will likely suggest free mediation before a hearing. Many cases settle through mediation — it is faster and less stressful than a court hearing.', urgent: false },
+      { title: 'Prepare for the hearing', detail: 'If the case goes to a hearing, organise your documents in date order, prepare a clear summary of your case, and bring three copies of everything (judge, defendant, yourself).', urgent: false },
+    ],
+    evidence: [
+      'Your Letter Before Action and proof of delivery',
+      'The defendant\'s response (or evidence of no response)',
+      'Contract, agreement, or invoice',
+      'Proof of payment made',
+      'Photographs or other evidence of the problem',
+      'Any correspondence between you and the defendant',
+      'Independent quotes or assessments if relevant',
+      'Witness statements',
+    ],
+    letterType: 'letter_before_action',
+  },
+
+  // ── BENEFITS ─────────────────────────────────────────────────────────
+  uc_dispute: {
+    title: 'Universal Credit Dispute',
+    rights: `If you disagree with a Universal Credit decision, you have the right to challenge it through a formal process:\n\n<strong>Step 1 — Mandatory Reconsideration (MR)</strong>: You must request an MR within <strong>1 month</strong> of the decision. The DWP must look at the decision again. Request this in writing through your UC journal or by calling the UC helpline (0800 328 5644).\n\n<strong>Step 2 — Appeal to Tribunal</strong>: If the MR confirms the original decision, you have <strong>1 month from the MR notice</strong> to appeal to the Social Security and Child Support Tribunal (SSCS Tribunal). Appeals are free and heard by an independent panel.\n\nFor <strong>sanctions</strong>, the DWP must show your behaviour was not reasonable. Many sanctions are overturned on appeal.\n\nFor <strong>overpayment recovery</strong>, you can challenge whether the overpayment was caused by official error and request a waiver.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Request a Mandatory Reconsideration within 1 month', detail: 'Write in your UC journal or call 0800 328 5644 to request an MR. Explain clearly why you think the decision is wrong and include any supporting evidence.', urgent: true },
+      { title: 'Get a written MR decision notice', detail: 'Make sure you receive the MR decision in writing — you need this to appeal to tribunal. If you only get a journal message, ask for a formal written notice.', urgent: false },
+      { title: 'Appeal to SSCS Tribunal within 1 month of MR decision', detail: 'Use form SSCS1 (available at gov.uk) or appeal online. Appeals are free. You can request a paper hearing, telephone, or face-to-face hearing.', urgent: false },
+      { title: 'Get help from Citizens Advice', detail: 'Citizens Advice (0800 144 8848) provide free, specialist benefits advice and can help you write your MR request and appeal. Many areas have specialist welfare rights advisers.', urgent: false },
+      { title: 'Request advance payment if you are in hardship', detail: 'If you are waiting for a UC decision and have no money, you can request a Hardship Payment or Budgeting Advance through your UC journal.', urgent: false },
+    ],
+    evidence: [
+      'The DWP decision letter or journal message',
+      'Your Mandatory Reconsideration request (keep a copy)',
+      'MR decision notice from DWP',
+      'Any medical evidence or fit notes',
+      'Evidence of job searching or work-related activity if sanctions are involved',
+      'Bank statements showing financial hardship',
+      'Any previous UC correspondence',
+      'SSCS1 appeal form once completed',
+    ],
+    letterType: 'uc_mandatory_reconsideration',
+  },
+
+  benefits_appeal: {
+    title: 'Benefits Appeal',
+    rights: `You have the right to appeal most DWP benefit decisions to an independent <strong>Social Security and Child Support (SSCS) Tribunal</strong>.\n\nThe appeal process:\n1. <strong>Mandatory Reconsideration</strong> — must be completed first (within 1 month of the original decision)\n2. <strong>Tribunal appeal</strong> — must be submitted within 1 month of the MR decision (using form SSCS1)\n3. <strong>Upper Tribunal</strong> — if a point of law was wrongly decided at the first tribunal\n\nTribunals are independent of the DWP and overturn a significant proportion of appeals — for PIP, around <strong>60–70% of appeals that reach a hearing are successful</strong>.\n\nYou can be represented at tribunal by a welfare rights adviser, Citizens Advice worker, or solicitor. You do not need a lawyer but specialist support significantly improves success rates.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Complete the Mandatory Reconsideration first if not done', detail: 'You cannot appeal to tribunal without an MR decision. Request this within 1 month of the original decision by contacting the benefit office in writing.', urgent: true },
+      { title: 'Submit your tribunal appeal within 1 month of the MR decision', detail: 'Use form SSCS1 (download from gov.uk/appeal-benefit-decision). Send it to HMCTS. Appeals are free. Late appeals can be accepted with good reason.', urgent: true },
+      { title: 'Gather strong supporting evidence', detail: 'Medical evidence (letters from GPs, consultants, care workers) is crucial, especially for PIP and ESA appeals. Ask your GP for a letter specifically addressing your functional ability.', urgent: false },
+      { title: 'Consider requesting an oral hearing', detail: 'You have a much higher success rate at an in-person or telephone hearing than a paper hearing. Request an oral hearing when submitting your appeal form.', urgent: false },
+      { title: 'Get specialist support for your hearing', detail: 'Contact Citizens Advice (0800 144 8848), your local welfare rights service, or a disability charity for help preparing your case. Representation at tribunal dramatically improves outcomes.', urgent: false },
+    ],
+    evidence: [
+      'Original benefit decision letter',
+      'Mandatory Reconsideration request and MR decision notice',
+      'SSCS1 appeal form',
+      'Medical evidence: GP letters, consultant reports, care plans',
+      'Personal statement describing how your condition affects daily life',
+      'Witness statements from carers or family members',
+      'Any previous assessments or reports from the DWP',
+      'Diary of how your condition varies day to day',
+    ],
+    letterType: 'benefits_appeal_letter',
+  },
+
+  // ── FAMILY ───────────────────────────────────────────────────────────
+  child_contact: {
+    title: 'Child Contact Dispute',
+    rights: `Under the <strong>Children Act 1989</strong>, the welfare of the child is the court's paramount consideration. Both parents generally have the right to maintain a relationship with their child, and courts presume that involvement of both parents is in the child's best interests unless there is evidence of risk.\n\n<strong>Child Arrangements Orders</strong> (formerly residence and contact orders) are made under Section 8 of the Children Act 1989 and set out where a child lives and the time they spend with each parent.\n\nBefore applying to court, you must usually attend a <strong>Mediation Information and Assessment Meeting (MIAM)</strong> — exemptions apply in cases involving domestic abuse, child protection concerns, or where the other party refuses to engage.\n\nBreaching a Child Arrangements Order without good reason can result in enforcement proceedings, including unpaid work requirements or committal to prison in serious cases.\n\nThe <strong>Child Maintenance Service (CMS)</strong> handles financial support separately from contact arrangements.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Prioritise the child\'s safety above all else', detail: 'If you believe the child is at immediate risk of harm, contact the police (999) or social services immediately. Do not delay in the interests of avoiding conflict.', urgent: true },
+      { title: 'Attend a MIAM (Mediation Information and Assessment Meeting)', detail: 'This is required before most court applications. A mediator will assess whether mediation is suitable. Contact a family mediator through familymediationcouncil.org.uk.', urgent: false },
+      { title: 'Try to agree arrangements in writing', detail: 'A written co-parenting agreement, while not legally binding, sets clear expectations and demonstrates good faith if you later need to go to court.', urgent: false },
+      { title: 'Apply for a Child Arrangements Order if necessary', detail: 'Use Form C100 (available at gov.uk) to apply to the family court. The application fee is £232. Many people do this without a solicitor using the guidance at cafcass.gov.uk.', urgent: false },
+      { title: 'Contact CAFCASS for guidance', detail: 'The Children and Family Court Advisory and Support Service (CAFCASS) supports children and families involved in family court. Visit cafcass.gov.uk or call 0300 456 4000.', urgent: false },
+    ],
+    evidence: [
+      'Any existing court orders relating to the child',
+      'Written records of agreed contact arrangements',
+      'Log of missed or refused contact (dates and circumstances)',
+      'Any communications from the other parent about contact',
+      'Evidence of the child\'s wishes (if age-appropriate)',
+      'School or medical records showing your involvement',
+      'Evidence of domestic abuse or safeguarding concerns if applicable',
+      'MIAM attendance certificate',
+    ],
+    letterType: 'child_contact_letter',
+  },
+
+  coparenting: {
+    title: 'Co-parenting Agreement',
+    rights: `Co-parenting agreements are not legally binding in England and Wales unless made into a court order, but they provide a clear written framework that both parents can refer to and that courts will consider if disputes arise.\n\nKey areas typically covered include:\n• <strong>Contact schedule</strong> — regular weekly arrangements and holiday splits\n• <strong>Education decisions</strong> — school choice, parents' evenings, school trips\n• <strong>Medical decisions</strong> — consent for treatment, GP registration\n• <strong>Communication</strong> — how parents communicate about the child, response times\n• <strong>Financial arrangements</strong> — maintenance (handled by CMS), school costs, activities\n\nUnder the <strong>Children Act 1989</strong>, both parents with parental responsibility have equal rights to make decisions about the child's upbringing. A co-parenting agreement works best when both parties commit to it voluntarily.\n\nIf the agreement breaks down, either parent can apply to the family court for a <strong>Child Arrangements Order</strong>.`,
+    urgency: 'low',
+    actions: [
+      { title: 'Identify all key areas to agree on', detail: 'Before drafting anything, list all decisions that need to be made: contact schedule, holidays, school, medical, communication, and finances. Work through each systematically.', urgent: false },
+      { title: 'Consider using a family mediator', detail: 'A mediator can help you both reach agreement on disputed areas in a neutral setting. This is far cheaper than court and produces more durable agreements. Find one at familymediationcouncil.org.uk.', urgent: false },
+      { title: 'Put the agreement in writing', detail: 'Once agreed, put the full arrangement in writing and have both parents sign it. Keep copies. While not legally binding, it provides a clear reference point.', urgent: false },
+      { title: 'Consider making it a court order', detail: 'You can apply to the family court for a "consent order" which turns your agreement into a legally enforceable court order. This provides greater security for both parties.', urgent: false },
+      { title: 'Review the agreement regularly', detail: 'Children\'s needs change. Build in a review process — for example, every 6 or 12 months — so the agreement evolves as your child grows.', urgent: false },
+    ],
+    evidence: [
+      'Any previous written agreements between parents',
+      'Existing court orders if applicable',
+      'School information (term dates, holidays)',
+      'Record of current contact arrangements',
+      'Any mediation notes or memorandum of understanding',
+    ],
+    letterType: 'coparenting_agreement',
+  },
+
+  ex_harassment: {
+    title: 'Harassment from Ex-Partner',
+    rights: `Harassment by an ex-partner is a serious matter covered by multiple laws:\n\n<strong>Protection from Harassment Act 1997</strong>: It is a criminal offence to pursue a course of conduct (two or more incidents) that causes another person to fear violence or that amounts to harassment. This carries up to 10 years imprisonment.\n\n<strong>Stalking</strong> (Section 2A and 4A, Protection from Harassment Act 1997): Specific stalking offences were introduced in 2012 and carry up to 10 years imprisonment.\n\n<strong>Non-Molestation Orders</strong> (Family Law Act 1996): Available from the family court, these legally prohibit the abusive person from contacting you or coming near you. Breach is a criminal offence carrying up to 5 years imprisonment.\n\n<strong>Domestic abuse</strong> (Domestic Abuse Act 2021): Covers psychological, emotional, and coercive control as well as physical abuse between intimate partners and family members.\n\nYou can apply for a non-molestation order without the other person knowing (without notice) in urgent cases.`,
+    urgency: 'high',
+    actions: [
+      { title: 'Contact the police if you feel unsafe', detail: 'Call 999 in an emergency or 101 for non-emergency reports. Harassment and stalking by an ex-partner are criminal offences. Always get a crime reference number.', urgent: true },
+      { title: 'Apply for a Non-Molestation Order', detail: 'This is a court order prohibiting the person from contacting or approaching you. Apply using Form FL401 at your local family court. You do not need a solicitor. In urgent cases, the court can grant it the same day without notifying the other person.', urgent: true },
+      { title: 'Contact the National Domestic Abuse Helpline', detail: 'Call 0808 2000 247 (free, 24/7) or visit nationaldahelpline.org.uk. They can provide immediate support and help you access specialist services including legal advice.', urgent: false },
+      { title: 'Block all contact channels and document everything', detail: 'Block on all platforms, but before blocking, screenshot and save all messages, calls, and social media activity. This evidence is crucial for police and court applications.', urgent: false },
+      { title: 'Inform trusted people', detail: 'Tell your employer, school, or trusted neighbours so they can help keep you safe and be witnesses if the person approaches those locations.', urgent: false },
+    ],
+    evidence: [
+      'Log of all incidents (dates, times, what happened)',
+      'Screenshots of all messages, social media contact, and emails',
+      'Call logs showing repeated contact attempts',
+      'Photographs of any damage to property or physical injuries',
+      'Witness statements from those who have seen the harassment',
+      'Police crime reference number(s)',
+      'Any previous court orders (non-molestation, occupation order)',
+      'Medical records if physical or psychological harm has occurred',
+    ],
+    letterType: 'ex_harassment_warning',
+  },
+
+  separation_letter: {
+    title: 'Separation Communication Letter',
+    rights: `When a relationship ends, written communication can help establish clear boundaries, confirm arrangements, and create a record of what has been agreed. While separation letters are not legal documents in themselves, they:\n\n• Provide a written record of communications which can be used as evidence if disputes arise\n• Help establish clear boundaries around contact, especially where there is a risk of harassment\n• Confirm agreed arrangements for children, property, or finances\n• Can form the basis of a formal legal agreement if reviewed by a solicitor\n\nIf you are married or in a civil partnership, formal separation has legal implications for finances and property under the <strong>Matrimonial Causes Act 1973</strong>. A formal separation agreement or divorce petition may be needed for financial matters to be legally binding.\n\nFor cohabiting couples, the <strong>Trusts of Land and Appointment of Trustees Act 1996 (TOLATA)</strong> governs property disputes.`,
+    urgency: 'low',
+    actions: [
+      { title: 'Be clear and factual in all written communication', detail: 'Keep letters or emails focused on practical matters. Avoid emotional language that could escalate conflict or be used against you later.', urgent: false },
+      { title: 'Confirm key arrangements in writing', detail: 'Where you have agreed arrangements for children, property, or finances, confirm these in a letter or email immediately after any verbal discussion.', urgent: false },
+      { title: 'Set clear communication boundaries', detail: 'If you want to limit contact to certain topics (e.g. children only) or certain channels (e.g. email only), state this clearly and consistently.', urgent: false },
+      { title: 'Seek legal advice for financial matters', detail: 'If you are married, any financial settlement should be formalised through a court consent order to be legally binding. A solicitor can advise on your entitlements.', urgent: false },
+      { title: 'Consider a solicitor\'s letter for serious disputes', detail: 'If communication has broken down or the other party is not cooperating, a formal letter from a solicitor carries more weight and signals you are serious about protecting your legal rights.', urgent: false },
+    ],
+    evidence: [
+      'All previous written communications between you',
+      'Any existing agreements about children, property, or finances',
+      'Evidence of what has been agreed verbally (diary notes, witness accounts)',
+      'Marriage certificate or civil partnership certificate if applicable',
+      'Property documents if relevant',
+      'Children\'s details if arrangements are being confirmed',
+    ],
+    letterType: 'separation_communication',
+  },
+
+  // ── MEDICAL ──────────────────────────────────────────────────────────
+  gp_complaint: {
+    title: 'GP Complaint',
+    rights: `You have the right to make a complaint about NHS care under the <strong>NHS Constitution for England</strong>, which gives patients the right to have complaints investigated and to receive a full response.\n\nThe NHS complaints process has two stages:\n1. <strong>Local resolution</strong> — complain directly to the GP practice. They must acknowledge within 3 working days and respond fully within 40 working days.\n2. <strong>Parliamentary and Health Service Ombudsman (PHSO)</strong> — if local resolution fails, you can escalate free of charge.\n\nComplaints must generally be made within <strong>12 months</strong> of the incident. For serious concerns about a GP's fitness to practise, report to the <strong>General Medical Council (GMC)</strong> at gmc-uk.org.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Submit a formal written complaint to the Practice Manager', detail: 'Set out what happened, when, who was involved, and what outcome you want. They must acknowledge within 3 working days and respond within 40 working days.', urgent: false },
+      { title: 'Contact NHS England if the practice does not resolve it', detail: 'Escalate to NHS England at england.nhs.uk/contact-us/complaint if the practice\'s response is unsatisfactory.', urgent: false },
+      { title: 'Refer to the Parliamentary and Health Service Ombudsman', detail: 'If local resolution fails, contact the PHSO at ombudsman.org.uk or 0345 015 4033. Free and independent.', urgent: false },
+      { title: 'Report to the GMC for serious fitness to practise concerns', detail: 'If you have concerns about a doctor\'s conduct or competence affecting patient safety, report to gmc-uk.org/concerns.', urgent: false },
+      { title: 'Seek legal advice for clinical negligence', detail: 'If negligent care caused you harm, consult a clinical negligence solicitor — many work on no-win no-fee.', urgent: false },
+    ],
+    evidence: [
+      'Full written account of what happened (dates, times, staff names)',
+      'Copies of prescriptions, referral letters, or test results',
+      'Your GP records (request via Subject Access Request)',
+      'Correspondence with the practice about this issue',
+      'Witness details if anyone accompanied you',
+      'Medical evidence of any harm caused',
+      'Your complaint letter and any responses received',
+    ],
+    letterType: 'gp_complaint_letter',
+  },
+
+  hospital_complaint: {
+    title: 'Hospital Complaint',
+    rights: `Under the <strong>NHS Constitution</strong> and the <strong>Local Authority Social Services and NHS Complaints Regulations 2009</strong>, you have the right to have your complaint investigated promptly.\n\nKey rights:\n• Acknowledgement within <strong>3 working days</strong>\n• Full written response within <strong>40 working days</strong>\n• The right to escalate to the <strong>Parliamentary and Health Service Ombudsman (PHSO)</strong>\n\nSerious patient safety concerns can also be reported to the <strong>Care Quality Commission (CQC)</strong> at cqc.org.uk, which regulates all health and social care providers.\n\nFor clinical negligence claims, the limitation period is generally <strong>3 years</strong> from the date of negligence or when you first became aware of it.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Contact PALS for informal resolution', detail: 'Every NHS hospital has a Patient Advice and Liaison Service. They can often resolve issues quickly. Find yours at nhs.uk/pals.', urgent: false },
+      { title: 'Submit a formal written complaint to the hospital', detail: 'Write to the Chief Executive or Complaints Manager. Set out clearly what happened, who was involved, when, and what outcome you want.', urgent: false },
+      { title: 'Request your medical records via SAR', detail: 'Submit a Subject Access Request to the medical records department. Free under GDPR, must be provided within 1 month.', urgent: false },
+      { title: 'Escalate to the PHSO if not resolved', detail: 'Contact the Parliamentary and Health Service Ombudsman at ombudsman.org.uk if the hospital\'s response is unsatisfactory.', urgent: false },
+      { title: 'Report safety concerns to the CQC', detail: 'The Care Quality Commission (cqc.org.uk or 03000 616161) investigates concerns about patient safety and quality of care.', urgent: false },
+    ],
+    evidence: [
+      'Detailed written account (dates, times, ward, staff names)',
+      'Hospital letters, discharge summaries, appointment letters',
+      'Medical records obtained via SAR',
+      'Photographs of any harm or conditions if relevant',
+      'Witness statements from family or friends present',
+      'Correspondence with the hospital',
+      'Evidence of financial losses caused',
+    ],
+    letterType: 'hospital_complaint_letter',
+  },
+
+  misdiagnosis: {
+    title: 'Misdiagnosis Concern',
+    rights: `A misdiagnosis may constitute <strong>clinical negligence</strong> if it falls below the standard of a reasonably competent medical professional and causes harm.\n\nTo succeed in a clinical negligence claim you must prove:\n1. <strong>Duty of care</strong> — owed by the healthcare provider (almost always established)\n2. <strong>Breach</strong> — care fell below the standard of a reasonable body of medical opinion (<em>Bolam test</em>)\n3. <strong>Causation</strong> — the breach caused harm that would not otherwise have occurred\n\nThe limitation period is generally <strong>3 years</strong> from the date of negligence or from when you first had knowledge of it.\n\nBefore pursuing a legal claim you have the right to a full explanation through the <strong>NHS complaints process</strong>, access to your medical records (free under UK GDPR), and a second medical opinion.`,
+    urgency: 'high',
+    actions: [
+      { title: 'Obtain a second medical opinion', detail: 'Ask your GP for a specialist referral or seek a private second opinion. This confirms whether a misdiagnosis occurred and establishes your correct diagnosis.', urgent: true },
+      { title: 'Request your full medical records via SAR', detail: 'Submit a Subject Access Request to every relevant provider. Free under UK GDPR, must be provided within 1 month. These are the foundation of any complaint or claim.', urgent: false },
+      { title: 'Submit a formal NHS complaint', detail: 'Complain in writing asking for a full explanation of the clinical decisions made. This does not affect your right to bring a legal claim later.', urgent: false },
+      { title: 'Contact a clinical negligence solicitor', detail: 'If you have suffered harm, consult a specialist solicitor. Many offer free initial consultations and work on no-win no-fee. Find one at apil.org.uk.', urgent: false },
+      { title: 'Report to the GMC if conduct was seriously below standard', detail: 'The General Medical Council (gmc-uk.org) investigates concerns about doctors\' fitness to practise where patient safety is at risk.', urgent: false },
+    ],
+    evidence: [
+      'Medical records from all relevant providers',
+      'Written account of symptoms reported and when',
+      'Records of all appointments (dates, diagnosis given)',
+      'The correct diagnosis and when it was eventually made',
+      'Second medical opinion confirming misdiagnosis',
+      'Evidence of harm caused (worsened condition, further treatment)',
+      'Financial losses (time off work, private treatment costs)',
+    ],
+    letterType: 'misdiagnosis_complaint',
+  },
+
+  medical_records: {
+    title: 'Access to Medical Records (SAR)',
+    rights: `Under <strong>UK GDPR Article 15</strong> and the <strong>Data Protection Act 2018</strong>, you have the right to access personal data held about you — including medical records — through a <strong>Subject Access Request (SAR)</strong>.\n\nKey rights:\n• Records must be provided <strong>free of charge</strong>\n• The organisation must respond within <strong>1 calendar month</strong>\n• You do not have to give a reason for your request\n• The period can be extended by 2 months for complex requests, but you must be informed\n\nIf access is refused or records are incomplete, you can complain to the <strong>Information Commissioner's Office (ICO)</strong> at ico.org.uk, which has powers to require organisations to comply.`,
+    urgency: 'low',
+    actions: [
+      { title: 'Submit a formal Subject Access Request in writing', detail: 'Write to the Data Controller (Practice Manager for GPs; medical records department for hospitals) citing UK GDPR Article 15. Specify the records and time period you want.', urgent: false },
+      { title: 'Include proof of identity', detail: 'Provide photo ID and proof of address. The organisation may request these before releasing records.', urgent: false },
+      { title: 'Chase if no response within 1 month', detail: 'If no response within 1 calendar month, send a formal chase giving 14 days before escalating to the ICO.', urgent: false },
+      { title: 'Complain to the ICO if refused or ignored', detail: 'The Information Commissioner\'s Office (ico.org.uk or 0303 123 1113) can investigate and require organisations to comply. Complaints are free.', urgent: false },
+      { title: 'Seek legal advice if records are needed for a claim', detail: 'If you need records for a negligence claim, a solicitor can request them and take steps to obtain them more quickly if necessary.', urgent: false },
+    ],
+    evidence: [
+      'Your Subject Access Request letter and proof of postage or email delivery',
+      'Proof of identity provided with your request',
+      'Acknowledgement received from the organisation (if any)',
+      'The response received — or evidence of no response',
+    ],
+    letterType: 'medical_sar_letter',
+  },
   deposit_demand: (data) => `${data.yourName}
 ${data.yourAddress}
 ${data.yourEmail || ''}
@@ -1020,6 +1692,362 @@ Unless my access to the property is restored and you confirm in writing that you
 Please respond within 24 hours.
 
 Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  // ── FAMILY LETTERS ──────────────────────────────────────────────────
+  child_contact_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName}
+${data.landlordAddress}
+
+Re: Child Contact Arrangements — ${data.extraDetails || '[Child\'s Name]'}
+
+Dear ${data.landlordName},
+
+I write regarding the arrangements for contact with our child/children following our separation.
+
+I wish to set out my position clearly and in writing, and to propose that we work together to establish a stable and consistent arrangement that serves the best interests of our child/children.
+
+Current Situation
+
+${data.harassmentDetails || '[Describe the current contact situation and any issues that have arisen]'}
+
+Proposed Arrangements
+
+I propose the following contact arrangements:
+
+${data.repairDetails || '[Set out your proposed contact schedule — days, times, holidays, special occasions]'}
+
+Legal Position
+
+Under the Children Act 1989, the welfare of our child/children is the paramount consideration. Both parents have parental responsibility and the right to be involved in decisions about upbringing. I am committed to facilitating a positive relationship between our child/children and both parents.
+
+I would ask that you respond to this letter within 14 days with your proposals. If we are unable to reach agreement, I intend to seek mediation through a family mediator before considering any application to the family court.
+
+I hope we can resolve this matter constructively and without the need for court proceedings, which I believe would be in our child/children's best interests.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  coparenting_agreement: (data) => `CO-PARENTING AGREEMENT
+
+Between: ${data.yourName} ("Parent A")
+And: ${data.landlordName} ("Parent B")
+
+Regarding: ${data.extraDetails || '[Child\'s full name and date of birth]'}
+
+Date: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+This agreement is made in the best interests of our child/children and reflects our shared commitment to cooperative parenting following our separation. While this agreement is not legally binding, both parents agree to honour it in good faith.
+
+1. CONTACT SCHEDULE
+
+Regular weekly arrangements:
+${data.repairDetails || '[Set out the regular weekly contact schedule for each parent]'}
+
+School holidays:
+[To be agreed and specified — typically alternated or split equally]
+
+Special occasions (birthdays, Christmas, Easter):
+[Set out specific arrangements for key dates]
+
+2. COMMUNICATION
+
+• Parents will communicate primarily by [email / text / co-parenting app]
+• Response time: within 24 hours on weekdays, 48 hours at weekends
+• Communication will be child-focused and respectful at all times
+• Neither parent will discuss adult matters in front of the child/children
+
+3. EDUCATION
+
+• Both parents will have equal access to school information and reports
+• Both parents may attend school events, parents' evenings, and performances
+• Major educational decisions will be made jointly
+
+4. MEDICAL
+
+• Both parents will be named as emergency contacts
+• Major medical decisions will be made jointly where possible
+• Each parent will inform the other of any medical appointments or concerns promptly
+
+5. FINANCIAL ARRANGEMENTS
+
+Child maintenance will be handled separately [through the Child Maintenance Service / by private agreement as follows: ...]
+
+6. REVIEW
+
+This agreement will be reviewed every [6 / 12] months or when circumstances change significantly.
+
+Signed:
+
+Parent A: ${data.yourName}  Date: _______________
+
+Parent B: ${data.landlordName}  Date: _______________`,
+
+  ex_harassment_warning: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName}
+${data.landlordAddress}
+
+Re: FORMAL WARNING — Harassment and Unwanted Contact
+
+Dear ${data.landlordName},
+
+I am writing to formally require you to cease all unwanted contact with me immediately.
+
+Since our separation, you have engaged in a pattern of behaviour that I find unwanted, distressing, and which may constitute a criminal offence. The incidents include:
+
+${data.harassmentDetails || '[Describe each incident clearly with dates and times]'}
+
+Your Legal Position
+
+Under the Protection from Harassment Act 1997, it is a criminal offence to pursue a course of conduct which amounts to harassment of another person. A "course of conduct" means two or more incidents. The offence carries a maximum sentence of 6 months imprisonment (Section 2) or up to 10 years if the harassment causes fear of violence (Section 4).
+
+Under the Domestic Abuse Act 2021, psychological and emotional abuse, coercive control, and threatening behaviour between former intimate partners is recognised as domestic abuse.
+
+My Requirements
+
+With immediate effect, I require you to:
+
+1. Cease all contact with me by any means — phone, text, email, social media, in person, or through third parties — unless strictly necessary regarding our child/children's arrangements, which must be conducted by email only;
+2. Not attend my home address, place of work, or any other location where you know I will be present;
+3. Confirm in writing within 7 days that you will comply with the above.
+
+Consequences of Non-Compliance
+
+If you do not comply, I will without further notice:
+• Report the matter to the police as a criminal offence
+• Apply to the family court for a Non-Molestation Order under the Family Law Act 1996, breach of which is a criminal offence carrying up to 5 years imprisonment
+• Seek an injunction from the county court
+
+I have retained copies of all communications and have documented all incidents in detail.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  separation_communication: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName}
+${data.landlordAddress}
+
+Re: Separation — Confirmation of Position and Proposed Arrangements
+
+Dear ${data.landlordName},
+
+I write to confirm our separation and to set out my understanding of the current position and proposed arrangements going forward. I hope we can manage this process as constructively as possible.
+
+${data.extraDetails || '[Add any specific context about the separation]'}
+
+${data.repairDetails ? `Arrangements for Children\n\n${data.repairDetails}\n\n` : ''}Communication Going Forward
+
+I propose that we:
+• Communicate primarily in writing (by email) so that there is a clear record
+• Focus communications on practical matters
+• Treat each other with respect at all times
+
+I would ask that you acknowledge receipt of this letter and confirm your agreement to the above approach within 14 days.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  // ── MEDICAL LETTERS ─────────────────────────────────────────────────
+  gp_complaint_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Practice Manager
+${data.landlordName || '[GP Practice Name]'}
+${data.landlordAddress || '[Practice Address]'}
+
+Re: Formal Complaint — ${data.propertyAddress || '[Your Name and Date of Birth]'}
+
+Dear Practice Manager,
+
+I write to make a formal complaint about the care and treatment I received at your practice. I am making this complaint under the NHS complaints procedure.
+
+Details of My Complaint
+
+${data.harassmentDetails || '[Set out clearly what happened, when it happened, who was involved, and how it affected you]'}
+
+The incident(s) described above occurred on ${data.firstReportDate || '[date(s)]'}.
+
+Impact
+
+${data.extraDetails || '[Describe how this has affected your health, wellbeing, or treatment]'}
+
+What I Am Seeking
+
+I would ask that you:
+1. Provide a full written explanation of the clinical decisions made and what happened;
+2. Provide an apology if the care fell below the standard I should have received;
+3. Explain what steps are being taken to prevent a recurrence;
+${data.repairDetails ? `4. ${data.repairDetails}` : '4. Confirm the steps you will take to address my concerns.'}
+
+I understand that you are required to acknowledge this complaint within 3 working days and to provide a full response within 40 working days.
+
+If I am not satisfied with your response, I will refer the matter to the Parliamentary and Health Service Ombudsman and, where appropriate, to the General Medical Council.
+
+Yours sincerely,
+
+${data.yourName}
+Date of Birth: [Your Date of Birth]
+NHS Number: [Your NHS Number if known]
+[Signature]`,
+
+  hospital_complaint_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Chief Executive / Complaints Manager
+${data.landlordName || '[Hospital Name]'}
+${data.landlordAddress || '[Hospital Address]'}
+
+Re: Formal Complaint — Patient: ${data.yourName}
+
+Dear Sir / Madam,
+
+I write to make a formal complaint regarding the care and treatment I received at your hospital. I am making this complaint under the NHS complaints procedure.
+
+Details of My Complaint
+
+Ward / Department: ${data.propertyAddress || '[Ward / Department]'}
+Date(s) of treatment: ${data.firstReportDate || '[Date(s)]'}
+
+${data.harassmentDetails || '[Set out clearly what happened, the names of staff involved where known, and how it affected you]'}
+
+Impact on Me
+
+${data.extraDetails || '[Describe the impact on your health, wellbeing, or recovery]'}
+
+What I Am Seeking
+
+I request that you:
+1. Investigate my complaint thoroughly and provide a full written explanation;
+2. Confirm whether my care met the standards required by the NHS Constitution;
+3. Provide an apology where appropriate;
+4. Set out any steps being taken to prevent a recurrence.
+
+I understand you are required to acknowledge this complaint within 3 working days and respond fully within 40 working days.
+
+I also intend to submit a Subject Access Request for my full medical records relating to this treatment. Please treat this letter as formal notice of that intention.
+
+If I remain dissatisfied, I will refer this matter to the Parliamentary and Health Service Ombudsman and the Care Quality Commission.
+
+Yours faithfully,
+
+${data.yourName}
+Date of Birth: [Your Date of Birth]
+NHS Number: [If known]
+[Signature]`,
+
+  misdiagnosis_complaint: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Complaints Manager
+${data.landlordName || '[Healthcare Provider Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Formal Complaint — Misdiagnosis / Delayed Diagnosis — ${data.yourName}
+
+Dear Sir / Madam,
+
+I write to make a formal complaint regarding what I believe was a misdiagnosis / delayed diagnosis that has caused me significant harm.
+
+Background
+
+${data.harassmentDetails || '[Describe your symptoms, when you first presented, what diagnosis was given, and what the correct diagnosis turned out to be]'}
+
+I first presented with symptoms on ${data.firstReportDate || '[date]'}. I was informed that ${data.repairDetails || '[set out the diagnosis given]'}. It was subsequently established that the correct diagnosis was ${data.extraDetails || '[correct diagnosis]'}.
+
+Impact
+
+As a result of the misdiagnosis / delayed diagnosis, I have suffered the following harm:
+${data.evictionDetails || '[Describe the harm caused — delayed treatment, worsened condition, unnecessary procedures, psychological distress, financial loss etc.]'}
+
+What I Am Requesting
+
+I request that you:
+1. Provide a full written explanation of the clinical reasoning behind the original diagnosis;
+2. Explain what steps, if any, were taken to investigate my symptoms;
+3. Confirm whether my care met the standard expected under the Bolam test;
+4. Provide an apology where appropriate;
+5. Explain what changes will be made to prevent this from happening to others.
+
+Please note that I have obtained / am in the process of obtaining a second medical opinion. I have also submitted / intend to submit a Subject Access Request for my full medical records.
+
+I reserve the right to seek specialist legal advice regarding a potential clinical negligence claim.
+
+Yours faithfully,
+
+${data.yourName}
+Date of Birth: [Your Date of Birth]
+[Signature]`,
+
+  medical_sar_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Data Controller
+${data.landlordName || '[Healthcare Provider Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Subject Access Request — UK GDPR Article 15
+
+Dear Data Controller,
+
+I am writing to make a formal Subject Access Request under Article 15 of the UK General Data Protection Regulation (UK GDPR) and Section 45 of the Data Protection Act 2018.
+
+I request a copy of all personal data held about me, specifically:
+
+${data.harassmentDetails || '• All medical records, clinical notes, and correspondence\n• Test results, referral letters, and discharge summaries\n• Any records relating to my treatment or attendance'}
+
+Time period: ${data.firstReportDate || '[Specify dates or "all records held"]'}
+
+My details for identification purposes are:
+
+Full name: ${data.yourName}
+Date of birth: [Your Date of Birth]
+Previous addresses if relevant: [List if applicable]
+NHS Number (if known): [NHS Number]
+
+I enclose a copy of my photo ID and proof of address to assist with verification.
+
+Under UK GDPR, you are required to provide this information free of charge and within one calendar month of receipt of this request.
+
+Please confirm receipt of this request. If you require any further information to process it, please contact me within one month.
+
+If you fail to respond within the statutory timeframe, I will not hesitate to raise a complaint with the Information Commissioner's Office (ICO).
+
+Yours faithfully,
 
 ${data.yourName}
 [Signature]`,
@@ -1308,30 +2336,74 @@ function HomePage({ onStart }) {
 // ── ISSUE SELECTOR ─────────────────────────────────────────────────────
 function IssueSelector({ onSelect, mode }) {
   const [selected, setSelected] = useState(null);
+  const [openCategory, setOpenCategory] = useState('tenancy');
+
   return (
-    <div className="section section-sm" style={{ margin: '0 auto', paddingTop: '2.5rem' }}>
+    <div className="section" style={{ margin: '0 auto', paddingTop: '2.5rem', maxWidth: 860 }}>
       <div className="breadcrumb">
         <span className="breadcrumb-link" onClick={() => onSelect(null, 'home')}>Home</span>
         <span className="breadcrumb-sep">›</span>
         <span>{mode === 'rights' ? 'Check My Rights' : 'Generate a Letter'}</span>
       </div>
       <h2 className="section-title">{mode === 'rights' ? 'What is your issue?' : 'What letter do you need?'}</h2>
-      <p className="section-sub">Select the issue that best describes your situation.</p>
-      <div className="issue-grid">
-        {ISSUES.map(issue => (
-          <div
-            key={issue.id}
-            className={`issue-card${selected === issue.id ? ' selected' : ''}`}
-            onClick={() => setSelected(issue.id)}
-          >
-            <span className="issue-icon">{issue.icon}</span>
-            <h4>{issue.label}</h4>
-            <span className={`tag ${issue.tag === 'Urgent' ? 'tag-danger' : issue.tag === 'Money' ? 'tag-success' : 'tag-amber'} mt-1`}>{issue.tag}</span>
+      <p className="section-sub">Select a category, then choose your specific issue.</p>
+
+      {CATEGORIES.map(cat => {
+        const catIssues = ISSUES.filter(i => i.category === cat.id);
+        const isOpen = openCategory === cat.id;
+        return (
+          <div key={cat.id} style={{ marginBottom: '0.6rem' }}>
+            {/* Category header */}
+            <div
+              onClick={() => setOpenCategory(isOpen ? null : cat.id)}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '0.9rem 1.2rem',
+                background: isOpen ? 'var(--navy)' : 'var(--white)',
+                color: isOpen ? 'var(--white)' : 'var(--navy)',
+                borderRadius: isOpen ? '10px 10px 0 0' : '10px',
+                cursor: 'pointer',
+                border: `2px solid ${isOpen ? 'var(--navy)' : 'var(--muted)'}`,
+                fontWeight: 600, fontSize: '0.95rem',
+                transition: 'all 0.15s',
+              }}
+            >
+              <span>{cat.label}</span>
+              <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>{isOpen ? '▲' : '▼'} {catIssues.length} issues</span>
+            </div>
+            {/* Issues grid */}
+            {isOpen && (
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))',
+                gap: '0.6rem',
+                padding: '0.8rem',
+                background: 'var(--off-white)',
+                border: '2px solid var(--navy)',
+                borderTop: 'none',
+                borderRadius: '0 0 10px 10px',
+              }}>
+                {catIssues.map(issue => (
+                  <div
+                    key={issue.id}
+                    className={`issue-card${selected === issue.id ? ' selected' : ''}`}
+                    onClick={() => setSelected(issue.id)}
+                    style={{ padding: '1rem', background: 'var(--white)' }}
+                  >
+                    <span className="issue-icon" style={{ fontSize: '1.5rem' }}>{issue.icon}</span>
+                    <h4 style={{ fontSize: '0.82rem' }}>{issue.label}</h4>
+                    <span className={`tag ${issue.tag === 'Urgent' ? 'tag-danger' : issue.tag === 'Money' ? 'tag-success' : 'tag-amber'} mt-1`}>{issue.tag}</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-        ))}
-      </div>
+        );
+      })}
+
       <button
         className="btn btn-primary btn-lg btn-block"
+        style={{ marginTop: '1.2rem' }}
         disabled={!selected}
         onClick={() => onSelect(selected)}
       >
