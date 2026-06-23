@@ -689,7 +689,38 @@
     .how-step h4 { font-size: 0.95rem; color: var(--navy); margin-bottom: 0.3rem; font-weight: 600; }
     .how-step p { font-size: 0.82rem; color: var(--slate); line-height: 1.5; }
 
-    /* ── UTILITIES ──────────────────────────────────────────────────── */
+    /* ── QUICK EXIT ─────────────────────────────────────────────────────── */
+    .quick-exit {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 9999;
+      background: #cc0000;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.2rem;
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background 0.15s, transform 0.1s;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+    }
+    .quick-exit:hover { background: #aa0000; transform: scale(1.04); animation: none; }
+    .quick-exit:active { transform: scale(0.97); }
+    @keyframes pulse-red {
+      0%, 100% { box-shadow: 0 4px 20px rgba(204,0,0,0.35); }
+      50%       { box-shadow: 0 4px 28px rgba(204,0,0,0.7); }
+    }
+    .quick-exit { animation: pulse-red 2.5s ease-in-out infinite; }
+
+    /* ── UTILITIES ──────────────────────────────────────────────────────── */
     .text-center { text-align: center; }
     .mt-1 { margin-top: 0.5rem; }
     .mt-2 { margin-top: 1rem; }
@@ -4800,10 +4831,16 @@ function ResultsPage({ issueId, answers, userData, mode, onBack, onNewIssue }) {
         <p className="results-sub">Your personalised rights summary, action plan, and legal letter are ready.</p>
       </div>
 
+      {issue.urgency === 'high' || issue.urgency === 'critical' ? (
+        <div className="disclaimer" style={{ background: 'rgba(204,0,0,0.06)', borderColor: 'rgba(204,0,0,0.25)', color: '#6b0000' }}>
+          <strong>🔴 Your safety comes first.</strong> If you are in immediate danger, call <strong>999</strong>. Use the <strong>red Quick Exit button</strong> (bottom-right) to leave this page instantly. For full privacy, browse in <strong>private / incognito mode</strong> so this site does not appear in your browser history.
+        </div>
+      ) : (
       <div className="disclaimer">
         <strong>⚠ Important:</strong> This tool provides general guidance based on UK law and is <strong>not legal advice</strong>.
         For complex situations, always consult a qualified solicitor or contact <strong>Shelter (0808 800 4444)</strong> or <strong>Citizens Advice</strong>.
       </div>
+      )}
 
       {/* Tab navigation */}
       <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
@@ -4934,6 +4971,28 @@ function StripeSection() {
   );
 }
 
+// ── QUICK EXIT ─────────────────────────────────────────────────────────
+// Instantly navigates away from the page and attempts to replace the
+// history entry so the site does not appear when the back button is pressed.
+// Advise users to also use private/incognito browsing for full privacy.
+function QuickExit() {
+  function handleExit(e) {
+    e.preventDefault();
+    // Replace current history entry with Google so back button goes there
+    window.location.replace('https://www.google.co.uk');
+  }
+  return (
+    <button
+      className="quick-exit"
+      onClick={handleExit}
+      aria-label="Quick exit — leave this site immediately"
+      title="Click to leave this site immediately"
+    >
+      ✕ Quick Exit
+    </button>
+  );
+}
+
 // ── FOOTER ─────────────────────────────────────────────────────────────
 function Footer() {
   return (
@@ -5039,6 +5098,7 @@ function App() {
   return (
     <div className="app-shell">
       <Nav onHome={goHome} />
+      <QuickExit />
       <main className="main-content">
         {screen === 'home' && <HomePage onStart={startFlow} />}
         {screen === 'select' && (
