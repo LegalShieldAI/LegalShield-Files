@@ -1010,6 +1010,96 @@ const DECISION_TREES = {
     { id: 'q3', question: 'How long ago did this happen?', hint: 'Strict time limits apply under the Montreal Convention', answers: ['Within the last 7 days', '7–21 days ago', '21 days – 2 years ago', 'Over 2 years ago'] },
     { id: 'q4', question: 'What is the approximate value of lost or damaged items?', answers: ['Under £500', '£500–£1,500', '£1,500–£5,000 (Montreal Convention limit approx.)', 'Over £5,000'] },
   ],
+
+  // ── VEHICLE ────────────────────────────────────────────────────────
+  faulty_car: [
+    { id: 'q1', question: 'How did you purchase the vehicle?', answers: ['From a dealer (new car)', 'From a dealer (used car)', 'Private sale', 'On finance (PCP / HP)'] },
+    { id: 'q2', question: 'How long ago did you purchase it?', hint: 'The 30-day short-term right to reject is key under the Consumer Rights Act 2015', answers: ['Within 30 days', '30 days – 6 months', '6 months – 6 years', 'Over 6 years'] },
+    { id: 'q3', question: 'What is the fault?', answers: ['Mechanical failure', 'Electrical fault', 'Bodywork or cosmetic defect', 'Vehicle does not match description', 'Multiple faults'] },
+    { id: 'q4', question: 'Has the dealer responded to your complaint?', answers: ['Refused a refund or replacement', 'Offered a repair only', 'Not responded', 'Attempted repair but fault persists'] },
+  ],
+  insurance_complaint: [
+    { id: 'q1', question: 'What type of insurance complaint do you have?', answers: ['Claim unfairly rejected', 'Claim underpaid', 'Policy mis-sold or misrepresented', 'Excessive premium increase', 'Delayed claim handling'] },
+    { id: 'q2', question: 'What type of insurance is involved?', answers: ['Car insurance', 'Home insurance', 'Travel insurance', 'Life or health insurance', 'Other'] },
+    { id: 'q3', question: 'Have you raised a formal complaint with the insurer?', answers: ['Yes — rejected', 'Yes — no response within 8 weeks', 'In progress', 'Not yet'] },
+    { id: 'q4', question: 'How long ago did the issue arise?', hint: 'You have 6 months from the insurer\'s final response to refer to the Financial Ombudsman', answers: ['Within the last 3 months', '3–6 months ago', 'Over 6 months ago'] },
+  ],
+  parking_charge: [
+    { id: 'q1', question: 'What type of parking charge have you received?', answers: ['Private Parking Charge Notice (PCN) from a private company', 'Council Penalty Charge Notice', 'DVLA registered keeper notice'] },
+    { id: 'q2', question: 'Where was the vehicle parked?', answers: ['Private car park (retail, hospital, etc.)', 'Residential estate or private road', 'On a public road (council issued)', 'Unknown'] },
+    { id: 'q3', question: 'Do you believe the charge is valid?', answers: ['No — I had a valid permit/ticket', 'No — signage was unclear or missing', 'No — I was there for a legitimate reason', 'Unsure — I want to understand my rights'] },
+    { id: 'q4', question: 'How long ago did you receive the notice?', hint: 'Appeal deadlines are typically 28 days for private PCNs and 28 days for council PCNs', answers: ['Within the last 14 days', '14–28 days ago', 'Over 28 days ago'] },
+  ],
+  mechanic_dispute: [
+    { id: 'q1', question: 'What is the nature of the dispute?', answers: ['Charged more than the agreed quote', 'Work not carried out properly', 'Vehicle damaged while in the garage', 'Parts replaced without consent', 'Work carried out not requested'] },
+    { id: 'q2', question: 'Did you receive a written quote before the work began?', answers: ['Yes — and they exceeded it significantly', 'Verbal quote only', 'No quote given'] },
+    { id: 'q3', question: 'Have you raised the issue with the garage?', answers: ['Yes — they refused to help', 'Yes — offered a partial refund', 'Not yet'] },
+    { id: 'q4', question: 'Is the garage a member of a trade association?', hint: 'e.g. RAC Approved, AA Approved, RMI, IMI', answers: ['Yes — RAC/AA approved', 'Yes — RMI / IMI member', 'No / unknown'] },
+  ],
+
+  // ── DATA PROTECTION ────────────────────────────────────────────────
+  sar_request: [
+    { id: 'q1', question: 'Who holds the data you are requesting?', answers: ['Employer or former employer', 'NHS or healthcare provider', 'Bank or financial institution', 'Government or local authority', 'Tech company or social media platform', 'Other organisation'] },
+    { id: 'q2', question: 'What data are you requesting?', answers: ['All data held about me', 'Specific records (emails, call recordings, files)', 'Data shared with third parties', 'Data used for a specific purpose (e.g. credit decision)'] },
+    { id: 'q3', question: 'Have you previously made this request?', answers: ['No — first request', 'Yes — ignored or no response', 'Yes — response was incomplete', 'Yes — request was refused'] },
+    { id: 'q4', question: 'Why do you need the data?', hint: 'You do not have to give a reason, but it helps tailor the advice', answers: ['Legal proceedings or dispute', 'Employment matter', 'Medical or insurance purposes', 'Personal review', 'Other'] },
+  ],
+  right_erasure: [
+    { id: 'q1', question: 'What data do you want erased?', answers: ['Online profile or account', 'Search engine results', 'Marketing or mailing lists', 'Historical records held by an organisation', 'Social media posts or images'] },
+    { id: 'q2', question: 'On what grounds are you requesting erasure?', hint: 'UK GDPR Article 17 sets out specific grounds', answers: ['Data no longer necessary for original purpose', 'I am withdrawing consent', 'Data was processed unlawfully', 'I object to processing and there is no overriding reason to continue', 'Other'] },
+    { id: 'q3', question: 'Has the organisation responded to a previous erasure request?', answers: ['No previous request made', 'Request ignored', 'Request refused — no proper reason given', 'Request refused — organisation cited legitimate interest'] },
+    { id: 'q4', question: 'Has any harm resulted from the continued processing?', answers: ['Yes — reputational harm', 'Yes — financial harm', 'Yes — distress or psychological impact', 'No direct harm yet but I want it erased'] },
+  ],
+  data_breach: [
+    { id: 'q1', question: 'How did you find out about the data breach?', answers: ['Organisation notified me directly', 'News report or public announcement', 'I noticed suspicious activity (fraud, spam)', 'I discovered it myself'] },
+    { id: 'q2', question: 'What type of data was involved?', answers: ['Name, address, and contact details', 'Financial data (bank, card details)', 'Health or medical data', 'Login credentials or passwords', 'Sensitive personal data (race, religion, political views)'] },
+    { id: 'q3', question: 'Has the breach caused you any harm?', answers: ['Financial loss or fraud', 'Identity theft or attempted fraud', 'Significant distress', 'Reputational damage', 'No direct harm yet'] },
+    { id: 'q4', question: 'Has the organisation taken responsibility?', answers: ['Yes — apologised and taken action', 'Partial acknowledgement only', 'Denied responsibility', 'No response received'] },
+  ],
+  data_correction: [
+    { id: 'q1', question: 'What type of data is inaccurate?', answers: ['Credit file or financial records', 'Employment or HR records', 'Medical or health records', 'Government records (DVLA, HMRC etc.)', 'Online profile or social media'] },
+    { id: 'q2', question: 'How is the inaccuracy affecting you?', answers: ['Being denied credit or financial services', 'Employment consequences', 'Medical treatment issues', 'Reputational damage', 'Financial loss'] },
+    { id: 'q3', question: 'Do you have evidence the data is wrong?', answers: ['Yes — documentary proof', 'Yes — witness evidence', 'Partial evidence', 'No evidence yet but I know it is wrong'] },
+    { id: 'q4', question: 'Have you already asked the organisation to correct it?', answers: ['No — first request', 'Yes — they agreed but have not done it', 'Yes — they refused', 'Yes — they corrected it but it is wrong again'] },
+  ],
+
+  // ── SEXUAL HARASSMENT ──────────────────────────────────────────────
+  workplace_sexual_harassment: [
+    { id: 'q1', question: 'What type of conduct have you experienced?', hint: 'Be as specific as you are comfortable — you do not need to include graphic detail', answers: ['Unwanted physical contact', 'Unwanted verbal comments or "jokes"', 'Unwanted messages or images sent to me', 'Being stared at or followed at work', 'Pressure for dates or sexual favours'] },
+    { id: 'q2', question: 'Who is the conduct coming from?', answers: ['A colleague at a similar level', 'A manager or person in authority', 'A client, customer, or contractor', 'Multiple people'] },
+    { id: 'q3', question: 'Have you reported this to anyone at work?', answers: ['Yes — HR have been informed', 'Yes — told a manager (not the perpetrator)', 'Not yet — I am unsure what to do', 'Not yet — I am worried about the consequences'] },
+    { id: 'q4', question: 'Has the conduct happened more than once?', answers: ['Yes — it has been ongoing', 'It was a single incident', 'It varies — some incidents more serious than others'] },
+  ],
+  ex_sexual_harassment: [
+    { id: 'q1', question: 'What type of behaviour are you experiencing from your ex-partner?', answers: ['Unwanted sexual messages or images', 'Threats to share intimate images', 'Turning up uninvited', 'Persistent unwanted contact of a sexual nature', 'Physical unwanted contact'] },
+    { id: 'q2', question: 'Has your ex-partner shared or threatened to share intimate images of you?', hint: 'Image-based abuse is a criminal offence under the Online Safety Act 2023', answers: ['Yes — images have been shared', 'Threatened to share images', 'No — other conduct only'] },
+    { id: 'q3', question: 'Have you reported this to the police?', answers: ['Yes — crime reference obtained', 'Not yet — I am unsure if it is a crime', 'Not yet — I am worried about the process'] },
+    { id: 'q4', question: 'Are you currently safe?', answers: ['Yes — they do not know my location', 'Mostly — but contact continues online', 'No — I feel at risk of physical harm'] },
+  ],
+  online_harassment: [
+    { id: 'q1', question: 'What type of online harassment are you experiencing?', answers: ['Unwanted sexual messages (unsolicited images, explicit texts)', 'Sharing or threatening to share intimate images without consent', 'Sexual comments on social media posts', 'Impersonation or fake sexual profiles created about me', 'Online stalking or monitoring'] },
+    { id: 'q2', question: 'Do you know who is responsible?', answers: ['Yes — I know them personally', 'Yes — an online contact', 'No — anonymous account', 'Partially — I have suspicions'] },
+    { id: 'q3', question: 'Have you reported it to the platform?', answers: ['Yes — removed but continues from new accounts', 'Yes — platform has not acted', 'Not yet'] },
+    { id: 'q4', question: 'Have you reported it to the police?', answers: ['Yes — crime reference obtained', 'Not yet — unsure if it is reportable', 'Not yet — worried about the process'] },
+  ],
+  public_harassment: [
+    { id: 'q1', question: 'Where did the harassment occur?', answers: ['Street or public place', 'Public transport', 'Place of work (client / customer)', 'Bar, restaurant, or venue', 'Other public setting'] },
+    { id: 'q2', question: 'What happened?', answers: ['Unwanted verbal comments of a sexual nature', 'Unwanted physical contact', 'Being followed or pursued', 'Exposure or other sexual acts in public', 'Multiple incidents'] },
+    { id: 'q3', question: 'Were there witnesses?', answers: ['Yes — witnesses present', 'Possibly — CCTV likely', 'No witnesses that I am aware of'] },
+    { id: 'q4', question: 'Have you reported it to anyone?', answers: ['Reported to police', 'Reported to venue / transport provider', 'Not yet reported'] },
+  ],
+  school_harassment: [
+    { id: 'q1', question: 'Who is the harassment coming from?', answers: ['Another student', 'A teacher or member of staff', 'Multiple people', 'Online — by someone from school'] },
+    { id: 'q2', question: 'What type of conduct has occurred?', answers: ['Unwanted verbal comments of a sexual nature', 'Unwanted physical contact', 'Sharing or circulating intimate images', 'Unwanted messages of a sexual nature', 'Sexual bullying or humiliation'] },
+    { id: 'q3', question: 'Has the school been told?', answers: ['Yes — school has not taken adequate action', 'Yes — but the situation has worsened', 'Not yet — unsure how to report', 'Not yet — worried about not being believed'] },
+    { id: 'q4', question: 'How old is the person experiencing the harassment?', hint: 'Additional safeguarding protections apply to under-18s', answers: ['Under 16', '16–17', '18 or over (adult education / university)'] },
+  ],
+  stalking: [
+    { id: 'q1', question: 'What stalking behaviour are you experiencing?', answers: ['Being followed or monitored in person', 'Repeated unwanted contact (calls, texts, online)', 'Someone watching or loitering near my home or work', 'Interference with my property or belongings', 'Being tracked via GPS or spyware', 'Multiple types'] },
+    { id: 'q2', question: 'Do you know who is stalking you?', answers: ['Yes — a former partner', 'Yes — an acquaintance or colleague', 'Yes — someone I met online', 'No — unknown person'] },
+    { id: 'q3', question: 'How long has this been happening?', answers: ['Just started — within the last week', 'A few weeks', 'Several months', 'Over a year'] },
+    { id: 'q4', question: 'Have you reported it to the police?', answers: ['Yes — crime reference obtained', 'Yes — but police have not acted', 'Not yet — I want to understand my options first'] },
+  ],
 };
 
 // Rights summaries, action plans, and evidence checklists per issue
@@ -1768,6 +1858,327 @@ const LEGAL_DATA = {
       'Travel insurance policy details',
     ],
     letterType: 'lost_luggage_letter',
+  },
+
+  // ── VEHICLE ──────────────────────────────────────────────────────────
+  faulty_car: {
+    title: 'Faulty Car Rejection',
+    rights: `Under the <strong>Consumer Rights Act 2015</strong>, a vehicle bought from a dealer must be of satisfactory quality, fit for purpose, and as described.\n\n<strong>Within 30 days</strong> of purchase: you have the right to a full refund — the "short-term right to reject."\n\n<strong>30 days to 6 months</strong>: the dealer must repair or replace the vehicle. If one repair attempt fails to fix the fault, you are entitled to a full refund (subject to a deduction for use).\n\n<strong>6 months to 6 years</strong>: you can still claim but must show the fault existed at the time of purchase.\n\nFor vehicles bought on <strong>finance (PCP or HP)</strong>, the finance company is jointly liable and you may be able to exercise your right to reject against the finance company rather than the dealer, under Section 75 of the Consumer Credit Act 1974 or the Consumer Rights Act 2015.\n\n<strong>Private sales</strong>: much weaker protection — the vehicle must only match its description. "Sold as seen" does not remove all rights if the seller misrepresented the car.\n\nThe <strong>Motor Ombudsman</strong> (themotorombudsman.org) provides free ADR for disputes with registered dealers.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Exercise your 30-day right to reject immediately if within 30 days', detail: 'Write to the dealer stating you are rejecting the vehicle under the Consumer Rights Act 2015 Section 20, citing the fault(s). Do this in writing and keep proof of delivery. Stop driving the car if possible.', urgent: true },
+      { title: 'Get an independent inspection report', detail: 'For disputes beyond 30 days, instruct an independent engineer (RAC, AA, or independent motor engineer) to inspect the vehicle and produce a written report. This is strong evidence of the fault and when it arose.', urgent: false },
+      { title: 'Submit a formal written complaint to the dealer', detail: 'If the 30-day period has passed, write to the dealer formally requesting repair or replacement. If repair fails once, you are entitled to reject. Set a deadline of 14 days to respond.', urgent: false },
+      { title: 'Contact the finance company if bought on finance', detail: 'If purchased on PCP or HP, write to the finance company. Under Section 75 of the Consumer Credit Act 1974 and the Consumer Rights Act 2015, they are jointly liable and you can reject the vehicle with them.', urgent: false },
+      { title: 'Refer to the Motor Ombudsman', detail: 'If the dealer is a Motor Ombudsman member, refer your dispute to themotorombudsman.org. This is free and independent. Many disputes are resolved at this stage without going to court.', urgent: false },
+    ],
+    evidence: [
+      'Purchase contract or order form',
+      'V5C (log book) and any service history provided',
+      'Dealer\'s description or advertisement of the vehicle',
+      'Written record of when the fault first appeared',
+      'Independent engineer\'s inspection report',
+      'All written communications with the dealer',
+      'Finance agreement if purchased on PCP/HP',
+      'Receipts for any costs incurred due to the fault',
+    ],
+    letterType: 'faulty_car_letter',
+  },
+
+  insurance_complaint: {
+    title: 'Insurance Complaint',
+    rights: `Insurance companies in the UK are regulated by the <strong>Financial Conduct Authority (FCA)</strong> and must treat customers fairly under FCA Principles.\n\nIf you have a complaint:\n1. <strong>Complain to the insurer first</strong> — they must acknowledge within 5 business days and provide a final response within <strong>8 weeks</strong>.\n2. If unsatisfied, refer to the <strong>Financial Ombudsman Service (FOS)</strong> within <strong>6 months</strong> of the insurer's final response. The FOS is free and independent.\n\nFor <strong>rejected claims</strong>, insurers must provide written reasons. Common grounds for challenge include:\n• Misrepresentation by the insurer of what the policy covers\n• Incorrect application of policy exclusions\n• Failure to consider all relevant evidence\n• Delays that breach FCA rules on fair and prompt claim handling\n\nFor <strong>mis-sold policies</strong>, you may be able to claim a refund of premiums paid under the <strong>Consumer Rights Act 2015</strong> or FCA rules on fair dealing.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Submit a formal written complaint to the insurer', detail: 'Write to the insurer\'s complaints team clearly setting out your complaint, what you want as an outcome, and attaching all relevant evidence. They must respond within 8 weeks.', urgent: false },
+      { title: 'Request a full explanation of the rejection in writing', detail: 'If your claim was rejected, request the specific policy clause relied upon, the evidence considered, and the reasoning behind the decision. This helps you identify grounds for challenge.', urgent: false },
+      { title: 'Gather independent supporting evidence', detail: 'For property or vehicle damage claims, get independent repair quotes or assessments. For health or travel claims, gather medical evidence. Independent evidence is key to overturning a rejection.', urgent: false },
+      { title: 'Refer to the Financial Ombudsman Service', detail: 'If the insurer\'s response is unsatisfactory or they do not respond within 8 weeks, contact the FOS at financial-ombudsman.org.uk or 0800 023 4567. Free and independent. Must refer within 6 months of the final response.', urgent: false },
+      { title: 'Report serious misconduct to the FCA', detail: 'If you believe the insurer has acted unlawfully or in serious breach of FCA rules, report to the FCA at fca.org.uk/consumers/report-information-about-firm. The FCA investigates systemic issues.', urgent: false },
+    ],
+    evidence: [
+      'Your insurance policy document and schedule',
+      'Certificate of insurance',
+      'Original claim submission and supporting documents',
+      'The insurer\'s rejection letter and reasons given',
+      'Independent repair estimates or assessments',
+      'Your formal complaint letter and insurer\'s response',
+      'All correspondence with the insurer',
+      'Photographs or other evidence relevant to the claim',
+    ],
+    letterType: 'insurance_complaint_letter',
+  },
+
+  parking_charge: {
+    title: 'Parking Charge Appeal',
+    rights: `There are two very different types of parking charge and the rules differ significantly:\n\n<strong>Private Parking Charge Notices (PCNs)</strong> from companies like NCP, Euro Car Parks, or parking enforcement firms:\n• These are <strong>contractual charges</strong>, not fines. The company must prove a contract existed (clear signage) and that it was breached.\n• Under the <strong>Protection of Freedoms Act 2012</strong>, private companies can pursue the registered keeper (not just the driver) only if strict conditions are met.\n• Charges must be a genuine pre-estimate of loss or a legitimate commercial interest — excessive charges can be challenged as a <strong>penalty clause</strong>.\n• Appeal first to the operator, then to <strong>POPLA</strong> (for BPA members) or <strong>IAS</strong> (for IPC members) — free independent appeals.\n\n<strong>Council Penalty Charge Notices</strong>:\n• These are enforced under the <strong>Traffic Management Act 2004</strong> (England/Wales).\n• Appeal within 28 days to the council, then to an independent adjudicator (PATAS/PATROL).`,
+    urgency: 'low',
+    actions: [
+      { title: 'Do not ignore the notice — appeal within the deadline', detail: 'For private PCNs, appeal within 28 days to get the reduced charge period. For council PCNs, appeal within 28 days. Ignoring it makes enforcement much harder to resist.', urgent: true },
+      { title: 'Check the signage and conditions carefully', detail: 'Visit or photograph the car park signage. Private PCNs are only enforceable if there was clear, visible signage before entering. Poor or hidden signage is a strong ground for appeal.', urgent: false },
+      { title: 'Submit a formal appeal to the operator', detail: 'Write to the parking company setting out your grounds for appeal — unclear signage, valid reason for parking, disabled badge, etc. Keep a copy and use recorded post or email with read receipt.', urgent: false },
+      { title: 'Escalate to POPLA or IAS if the appeal is rejected', detail: 'If the operator rejects your appeal, you can escalate free of charge to POPLA (popla.co.uk) for BPA members or IAS (theias.org) for IPC members. Around 50% of appeals are successful at this stage.', urgent: false },
+      { title: 'Ignore debt collector letters for private PCNs if appropriate', detail: 'Private parking companies often sell debts to collectors. If you have a valid appeal and the charge was never properly enforced through a court, these letters may be unenforceable. Seek advice from Pepipoo.com forums or a solicitor before ignoring.', urgent: false },
+    ],
+    evidence: [
+      'The Parking Charge Notice itself (front and back)',
+      'Photographs of the car park signage (taken as soon as possible)',
+      'Your parking ticket or permit if you had one',
+      'Evidence of reason for parking (disabled badge, delivery receipt, etc.)',
+      'Photographs showing the state of signage or parking markings',
+      'Any witness statements',
+      'Your appeal letter and the operator\'s response',
+      'DVLA registered keeper documents',
+    ],
+    letterType: 'parking_appeal_letter',
+  },
+
+  mechanic_dispute: {
+    title: 'Mechanic Dispute',
+    rights: `Under the <strong>Consumer Rights Act 2015</strong>, vehicle repair services must be carried out with <strong>reasonable care and skill</strong>, within a <strong>reasonable time</strong>, and at a <strong>reasonable price</strong> if no price was agreed in advance.\n\nKey rights:\n• If an agreed price is exceeded significantly without your consent, you are only obliged to pay a <strong>reasonable price</strong>\n• If work is not done with reasonable care and skill, you are entitled to have it <strong>redone at no extra charge</strong>, or to receive a <strong>price reduction</strong>\n• A garage cannot retain your vehicle as security for a disputed bill — this may constitute <strong>conversion</strong> (wrongful interference with goods)\n• If work was carried out without your authorisation, you may not be obliged to pay for it\n\nFor garages registered with the <strong>Motor Ombudsman</strong> (RAC Approved, AA Approved, RMI, IMI members), free ADR is available at themotorombudsman.org.\n\nFor disputes up to £10,000, the <strong>small claims court</strong> is the most practical legal remedy.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Put your complaint in writing to the garage immediately', detail: 'Write to the garage manager or owner setting out the specific problem, what was agreed, what was done, and what remedy you are seeking. Give 14 days to respond.', urgent: false },
+      { title: 'Get an independent inspection of the work', detail: 'Instruct another qualified mechanic to inspect the vehicle and produce a written report on the quality of the work carried out. This is essential evidence for any dispute.', urgent: false },
+      { title: 'Pay under protest if necessary to retrieve your vehicle', detail: 'If the garage is withholding your vehicle, you may need to pay under clear written protest ("paid under protest, without prejudice to my right to recover the full amount") to get your vehicle back, then pursue the refund separately.', urgent: false },
+      { title: 'Refer to the Motor Ombudsman if garage is registered', detail: 'Check if the garage is registered at themotorombudsman.org. If so, use their free ADR service before going to court. They handle disputes about quality of work, pricing, and customer service.', urgent: false },
+      { title: 'Issue a small claims court claim', detail: 'For amounts up to £10,000, file a claim at gov.uk/make-court-claim-for-money citing the Consumer Rights Act 2015. Bring your independent inspection report, the original quote, and all correspondence as evidence.', urgent: false },
+    ],
+    evidence: [
+      'Original written quote or job card from the garage',
+      'Invoices showing what was actually charged',
+      'Your written authorisation for the work (or evidence it was not given)',
+      'Independent mechanic\'s inspection report on the quality of work',
+      'Photographs of any damage caused or poor workmanship',
+      'All written communications with the garage',
+      'Bank statements showing payments made',
+      'Any warranty documentation provided by the garage',
+    ],
+    letterType: 'mechanic_dispute_letter',
+  },
+
+  // ── DATA PROTECTION ──────────────────────────────────────────────────
+  sar_request: {
+    title: 'Subject Access Request (SAR)',
+    rights: `Under <strong>UK GDPR Article 15</strong> and the <strong>Data Protection Act 2018</strong>, you have the right to obtain a copy of all personal data an organisation holds about you. This is called a Subject Access Request (SAR).\n\nKey rights:\n• Data must be provided <strong>free of charge</strong>\n• Response required within <strong>one calendar month</strong> (extendable by 2 months for complex requests, with notice)\n• You must receive: a copy of the data, the purposes of processing, who it is shared with, and retention periods\n• You do not need to give a reason for your request\n\nIf the organisation fails to respond, responds incompletely, or refuses without valid reason, complain to the <strong>Information Commissioner's Office (ICO)</strong> at ico.org.uk or 0303 123 1113. The ICO can investigate and require compliance.\n\nYou can also seek compensation under <strong>Article 82 UK GDPR</strong> for material or non-material damage caused by a breach of your data rights.`,
+    urgency: 'low',
+    actions: [
+      { title: 'Submit a clear written SAR to the Data Controller', detail: 'Write to the organisation\'s Data Controller (or Data Protection Officer if one is named). State you are making a Subject Access Request under UK GDPR Article 15. Be specific about what data you want. Provide proof of identity.', urgent: false },
+      { title: 'Note the one-month deadline from the date of receipt', detail: 'The clock starts when the organisation receives your request. Note the date and set a calendar reminder for 28 days to chase if you have not heard back.', urgent: false },
+      { title: 'Chase in writing if no response within one month', detail: 'Send a formal chase email or letter giving 7 days to respond. State you will complain to the ICO if you do not receive a response.', urgent: false },
+      { title: 'Complain to the ICO if the request is refused or ignored', detail: 'The ICO can investigate and require the organisation to comply. File your complaint at ico.org.uk/make-a-complaint. Complaints are free.', urgent: false },
+      { title: 'Consider a court claim for compensation', detail: 'If the failure to comply with your SAR has caused you material harm or distress, you may be entitled to compensation under Article 82 UK GDPR. Seek legal advice.', urgent: false },
+    ],
+    evidence: [
+      'Your SAR letter and proof of sending (email read receipt or recorded post)',
+      'Proof of identity submitted with the request',
+      'Any acknowledgement or response from the organisation',
+      'Evidence of harm caused by the data held or the failure to provide it',
+    ],
+    letterType: 'sar_request_letter',
+  },
+
+  right_erasure: {
+    title: 'Right to Erasure',
+    rights: `Under <strong>UK GDPR Article 17</strong>, you have the right to request that an organisation erases your personal data — the "right to be forgotten." This applies where:\n\n• The data is no longer necessary for the purpose for which it was collected\n• You withdraw consent and there is no other legal basis for processing\n• You object to processing and there are no overriding legitimate grounds\n• The data was processed unlawfully\n• The data must be erased to comply with a legal obligation\n\nThe organisation must respond within <strong>one calendar month</strong> and, if it agrees, must also inform any third parties to whom the data was disclosed.\n\nThe right is <strong>not absolute</strong> — organisations can refuse if processing is necessary for freedom of expression, legal claims, public health, archiving purposes, or compliance with a legal obligation.\n\nIf refused, you can complain to the <strong>ICO</strong> or seek a court order.`,
+    urgency: 'low',
+    actions: [
+      { title: 'Submit a formal erasure request citing Article 17 UK GDPR', detail: 'Write to the organisation\'s Data Controller specifying exactly what data you want erased and the legal ground for erasure under Article 17. Keep a copy.', urgent: false },
+      { title: 'Request confirmation of third-party notification', detail: 'Ask the organisation to confirm that any third parties to whom your data was disclosed have also been informed of the erasure request, as required by Article 19 UK GDPR.', urgent: false },
+      { title: 'Chase if no response within one month', detail: 'If no response within one calendar month, send a formal chase giving 7 days before complaining to the ICO.', urgent: false },
+      { title: 'Complain to the ICO if refused without proper reason', detail: 'If the organisation refuses your erasure request without citing a valid exemption under Article 17(3), complain to the ICO at ico.org.uk.', urgent: false },
+      { title: 'For search engine results, contact the search engine directly', detail: 'Google, Bing, and other search engines have their own erasure request processes. Submit a "Right to be Forgotten" request directly through their online forms.', urgent: false },
+    ],
+    evidence: [
+      'Your erasure request letter and proof of sending',
+      'The organisation\'s response (or evidence of no response)',
+      'Evidence of the data that exists and where it appears',
+      'Grounds for erasure (e.g. withdrawal of consent, unlawful processing)',
+    ],
+    letterType: 'right_erasure_letter',
+  },
+
+  data_breach: {
+    title: 'Data Breach Complaint',
+    rights: `Under <strong>UK GDPR Articles 33 and 34</strong>, organisations must:\n• Report a personal data breach to the <strong>ICO within 72 hours</strong> of becoming aware, if it is likely to result in risk to individuals\n• Notify <strong>affected individuals without undue delay</strong> where the breach is likely to result in high risk to their rights and freedoms\n\nIf an organisation fails to notify you of a breach affecting your data, or handles a breach negligently, you have the right to:\n• <strong>Complain to the ICO</strong> — which can investigate and impose fines of up to £17.5 million or 4% of global turnover\n• <strong>Claim compensation</strong> under Article 82 UK GDPR for material damage (financial loss) or non-material damage (distress, anxiety) caused by the breach\n\nCompensation claims can be brought in the county court. Many data breach claims are handled by specialist solicitors on a no-win no-fee basis.`,
+    urgency: 'high',
+    actions: [
+      { title: 'Protect yourself immediately', detail: 'Change passwords for affected accounts. Enable two-factor authentication. Monitor bank accounts and credit files for suspicious activity. Consider a credit freeze with Experian, Equifax, or TransUnion.', urgent: true },
+      { title: 'Report to the organisation and request a full account', detail: 'Write formally to the organisation requesting a full explanation of the breach — what data was affected, when it occurred, and what they are doing about it.', urgent: false },
+      { title: 'Report to the ICO', detail: 'Complain to the Information Commissioner\'s Office at ico.org.uk/make-a-complaint. The ICO investigates data breaches and can require organisations to take corrective action.', urgent: false },
+      { title: 'Report financial fraud to Action Fraud', detail: 'If the breach has led to financial fraud, report to Action Fraud at actionfraud.police.uk or 0300 123 2040. Get a crime reference number.', urgent: false },
+      { title: 'Consider a compensation claim', detail: 'If the breach caused you financial loss or significant distress, you may be entitled to compensation under Article 82 UK GDPR. Many specialist data breach solicitors work on no-win no-fee.', urgent: false },
+    ],
+    evidence: [
+      'The breach notification letter or email from the organisation',
+      'Evidence of when you discovered the breach',
+      'Evidence of harm caused (fraudulent transactions, bank statements, medical records)',
+      'Records of all communication with the organisation about the breach',
+      'ICO complaint reference number',
+      'Action Fraud crime reference number if applicable',
+      'Evidence of steps taken to mitigate harm (new passwords, credit monitoring)',
+    ],
+    letterType: 'data_breach_letter',
+  },
+
+  data_correction: {
+    title: 'Incorrect Data Correction Request',
+    rights: `Under <strong>UK GDPR Article 16</strong>, you have the right to have inaccurate personal data corrected without undue delay — the "right to rectification." You also have the right to have incomplete personal data completed.\n\nOrganisations must:\n• Respond within <strong>one calendar month</strong>\n• Inform any third parties to whom the inaccurate data was disclosed\n\nThis right is particularly important for:\n• <strong>Credit file errors</strong> — contact the credit reference agency (Experian, Equifax, TransUnion) directly and the lender who supplied the data\n• <strong>Employment records</strong> — inaccurate disciplinary records or references\n• <strong>Medical records</strong> — factual inaccuracies (note: you cannot require clinical opinions to be changed, only factual errors)\n• <strong>Government records</strong> — DVLA, HMRC, DWP records\n\nIf rectification is refused, complain to the <strong>ICO</strong> or apply to the court for an order requiring correction.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Identify every organisation holding the inaccurate data', detail: 'Inaccurate data often appears in multiple places — for example, a credit file error may have been passed to multiple lenders. Use a SAR to identify all holders before requesting correction.', urgent: false },
+      { title: 'Submit a formal rectification request with evidence', detail: 'Write to each organisation citing UK GDPR Article 16. Clearly identify the inaccurate data and provide documentary evidence of the correct information. Set a deadline of 14 days.', urgent: false },
+      { title: 'For credit file errors, use the credit reference agency dispute process', detail: 'Raise a dispute directly with Experian, Equifax, or TransUnion. They must investigate and correct or add a Notice of Correction to your file. This is free and usually resolved within 28 days.', urgent: false },
+      { title: 'Chase and escalate to the ICO if not corrected', detail: 'If the organisation does not correct the data within one month without valid reason, complain to the ICO. The ICO can require correction and investigate the underlying data practices.', urgent: false },
+      { title: 'Add a Notice of Correction to your credit file', detail: 'If a credit file dispute is not resolved to your satisfaction, you can add a 200-word Notice of Correction explaining the circumstances. This is visible to all lenders who search your file.', urgent: false },
+    ],
+    evidence: [
+      'Your rectification request and proof of sending',
+      'Documentary evidence of the correct information (official documents, statements)',
+      'Evidence of where the inaccurate data appears',
+      'Evidence of harm caused by the inaccuracy',
+      'Organisation\'s response (or evidence of no response)',
+    ],
+    letterType: 'data_correction_letter',
+  },
+
+  // ── SEXUAL HARASSMENT ────────────────────────────────────────────────
+  workplace_sexual_harassment: {
+    title: 'Workplace Sexual Harassment',
+    rights: `Under <strong>Section 26 of the Equality Act 2010</strong>, sexual harassment is defined as unwanted conduct of a sexual nature that has the purpose or effect of violating dignity or creating an intimidating, hostile, degrading, humiliating, or offensive environment.\n\nThe <strong>Worker Protection (Amendment of Equality Act 2010) Act 2023</strong> introduced a new positive duty on employers to take reasonable steps to prevent sexual harassment — employers who fail to do so can face an uplift of up to 25% on any tribunal award.\n\nYou have the right to:\n• Raise a formal grievance without fear of victimisation\n• Bring an Employment Tribunal claim — time limit is <strong>3 months minus 1 day</strong> from the last act of harassment\n• Claim compensation including injury to feelings (Vento scale: £1,100 to £44,000+)\n\nYou do not have to have said "no" or made a formal complaint for conduct to constitute sexual harassment. The test is whether the conduct was unwanted and had the relevant effect.`,
+    urgency: 'high',
+    actions: [
+      { title: 'Document every incident immediately and in detail', detail: 'Write down what happened, when, where, who was present, and your response. Do this as soon as possible after each incident. Save any relevant messages, emails, or other evidence securely.', urgent: true },
+      { title: 'Report to HR or a trusted manager in writing', detail: 'Submit a formal written grievance. You do not have to use the word "grievance" — a clear written account of what happened and asking for it to be investigated is sufficient. Keep a copy.', urgent: false },
+      { title: 'Contact ACAS before any tribunal claim', detail: 'You must notify ACAS for Early Conciliation before bringing an Employment Tribunal claim. Do this well before the 3-month minus 1 day deadline. Call 0300 123 1100 or visit acas.org.uk.', urgent: false },
+      { title: 'Seek confidential support', detail: 'Contact your employer\'s Employee Assistance Programme (EAP) if available, or seek independent support from the Rape Crisis helpline (0808 500 2222) or the Equality Advisory Support Service (0808 800 0082).', urgent: false },
+      { title: 'Consider an Employment Tribunal claim', detail: 'Compensation for sexual harassment has no upper limit. Awards include loss of earnings, injury to feelings, and aggravated damages. Many employment solicitors work on no-win no-fee for discrimination claims.', urgent: false },
+    ],
+    evidence: [
+      'Written log of all incidents with dates, times, locations, and descriptions',
+      'Any messages, emails, or social media communications from the harasser',
+      'Witness names and contact details',
+      'Your formal grievance and the employer\'s response',
+      'HR correspondence and any investigation outcome',
+      'Medical or counselling records if health has been affected',
+      'ACAS Early Conciliation certificate',
+      'Evidence of any detriment suffered for raising the complaint',
+    ],
+    letterType: 'workplace_sexual_harassment_letter',
+  },
+
+  ex_sexual_harassment: {
+    title: 'Harassment from Ex-Partner (Sexual)',
+    rights: `Unwanted sexual contact, messages, or threats from an ex-partner are covered by multiple serious criminal laws:\n\n<strong>Protection from Harassment Act 1997</strong>: A course of conduct causing harassment is a criminal offence (up to 10 years if causing fear of violence).\n\n<strong>Online Safety Act 2023</strong>: Sharing intimate images without consent ("revenge porn") is a criminal offence. Threatening to share intimate images is also a criminal offence under the same Act.\n\n<strong>Sexual Offences Act 2003</strong>: Unwanted sexual touching without consent is sexual assault — a serious criminal offence.\n\n<strong>Domestic Abuse Act 2021</strong>: Coercive and controlling behaviour, including of a sexual nature, between former partners is a criminal offence.\n\nYou can apply for a <strong>Non-Molestation Order</strong> from the family court to legally prohibit contact. Breach is a criminal offence carrying up to 5 years imprisonment.`,
+    urgency: 'high',
+    actions: [
+      { title: 'Report to the police immediately if you feel unsafe', detail: 'Call 999 in an emergency or 101 for non-emergency. Sexual harassment, threats, and image-based abuse by an ex-partner are serious criminal offences. Always get a crime reference number.', urgent: true },
+      { title: 'Preserve all evidence before blocking', detail: 'Screenshot all messages, images, and social media posts before blocking the person. Once blocked they may not be accessible. Store evidence securely in multiple places.', urgent: true },
+      { title: 'Report intimate image sharing to the platform and police', detail: 'Report to the platform immediately for removal. Report to the police — sharing or threatening to share intimate images without consent is a criminal offence under the Online Safety Act 2023. The Revenge Porn Helpline (0345 600 0459) provides specialist support.', urgent: false },
+      { title: 'Apply for a Non-Molestation Order', detail: 'Apply using Form FL401 at your local family court. In urgent cases the court can grant this on the same day without notifying the other person. Legal aid may be available for domestic abuse cases.', urgent: false },
+      { title: 'Contact specialist support services', detail: 'Rape Crisis (0808 500 2222), the National Domestic Abuse Helpline (0808 2000 247), and the Revenge Porn Helpline (0345 600 0459) all provide free, confidential support.', urgent: false },
+    ],
+    evidence: [
+      'Screenshots of all unwanted messages, images, or posts (with timestamps)',
+      'Call logs showing repeated contact attempts',
+      'Any intimate images shared without consent (report but preserve evidence)',
+      'Police crime reference number(s)',
+      'Non-Molestation Order if obtained',
+      'Medical or counselling records',
+      'Witness accounts if applicable',
+    ],
+    letterType: 'ex_harassment_warning',
+  },
+
+  online_harassment: {
+    title: 'Online Sexual Harassment',
+    rights: `Online sexual harassment is covered by several UK laws:\n\n<strong>Online Safety Act 2023</strong>: Sharing or threatening to share intimate images without consent is a criminal offence. Sending unwanted explicit images (cyberflashing) is also a criminal offence.\n\n<strong>Protection from Harassment Act 1997</strong>: A course of online conduct causing harassment or fear of violence is a criminal offence.\n\n<strong>Malicious Communications Act 1988 / Communications Act 2003</strong>: Sending offensive or threatening messages online is a criminal offence.\n\nPlatforms regulated under the Online Safety Act have a legal duty to remove illegal content promptly and have clear reporting mechanisms. Ofcom regulates compliance and can fine platforms up to £18 million or 10% of global turnover for failures.\n\nYou can report online harassment to the police, to the platform, and to the <strong>Revenge Porn Helpline</strong> (for image-based abuse) at 0345 600 0459.`,
+    urgency: 'high',
+    actions: [
+      { title: 'Preserve all evidence before reporting or blocking', detail: 'Screenshot every message, post, and profile. Note URLs, usernames, and timestamps. Do this before reporting to the platform as content may be removed.', urgent: true },
+      { title: 'Report to the platform immediately', detail: 'Use the platform\'s reporting tools to report harassment, unwanted explicit content, or intimate images. Under the Online Safety Act 2023, platforms must act on reports of illegal content promptly.', urgent: false },
+      { title: 'Report to the police', detail: 'Online sexual harassment, cyberflashing, and intimate image abuse are criminal offences. Report to police (101) or Action Fraud (actionfraud.police.uk). Get a crime reference number.', urgent: false },
+      { title: 'Contact the Revenge Porn Helpline for image-based abuse', detail: 'The Revenge Porn Helpline (revengepornhelpline.org.uk or 0345 600 0459) provides specialist support for intimate image abuse and can help with platform takedowns.', urgent: false },
+      { title: 'Apply for a court injunction if harassment is persistent', detail: 'If online harassment continues from multiple accounts or the police have not acted, you can apply to the county court for an injunction to prohibit the conduct. Seek legal advice.', urgent: false },
+    ],
+    evidence: [
+      'Screenshots of all harassing messages, posts, or images (with timestamps and usernames)',
+      'URLs of any offending pages or profiles',
+      'Evidence of the platform\'s response to your report',
+      'Police crime reference number',
+      'Revenge Porn Helpline reference if applicable',
+      'Evidence of the impact on your wellbeing or safety',
+    ],
+    letterType: 'stalking_letter',
+  },
+
+  public_harassment: {
+    title: 'Public Sexual Harassment',
+    rights: `Sexual harassment in public places is a criminal offence under several laws:\n\n<strong>Sexual Offences Act 2003</strong>: Unwanted sexual touching without consent is sexual assault. Exposure is also a criminal offence.\n\n<strong>Public Order Act 1986</strong>: Threatening, abusive, or insulting words or behaviour that causes harassment, alarm, or distress is a criminal offence.\n\n<strong>Protection from Harassment Act 1997</strong>: A course of conduct causing harassment in public is a criminal offence.\n\nThe police have powers to arrest for these offences. Transport operators (TfL, National Rail, bus companies) also have codes of conduct and duty of care obligations to passengers and can take action against perpetrators.\n\nIf harassment occurs at a licensed venue, the venue may be in breach of its <strong>premises licence conditions</strong> — report to the local authority licensing team.`,
+    urgency: 'high',
+    actions: [
+      { title: 'Report to the police', detail: 'Report the incident to police (999 if ongoing emergency, 101 otherwise). Provide as much detail as possible — description of the person, location, time, and what happened. Get a crime reference number.', urgent: true },
+      { title: 'Report to the transport operator if on public transport', detail: 'Report to the driver, conductor, or station staff immediately. TfL, National Rail, and bus companies all have reporting mechanisms for sexual harassment. Many have CCTV that can be preserved.', urgent: false },
+      { title: 'Report to the venue if at a bar or event', detail: 'Report to management immediately. Venues have a duty to maintain safe environments. Ask them to preserve CCTV footage and take the details of any witnesses.', urgent: false },
+      { title: 'Seek support', detail: 'Rape Crisis (0808 500 2222) supports victims of all forms of sexual violence and harassment. The service is free, confidential, and available 24/7.', urgent: false },
+      { title: 'Keep a record even if you cannot report immediately', detail: 'Write down everything as soon as possible — time, location, description of the person, what happened, any witnesses. This is important if you decide to report later.', urgent: false },
+    ],
+    evidence: [
+      'Written account of the incident (time, location, description of the person)',
+      'CCTV footage (request preservation from the venue or transport operator immediately)',
+      'Witness names and contact details',
+      'Police crime reference number',
+      'Medical records if physical harm occurred',
+      'Transport or venue incident report reference',
+    ],
+    letterType: 'stalking_letter',
+  },
+
+  school_harassment: {
+    title: 'School / College Sexual Harassment',
+    rights: `Sexual harassment in schools and colleges is covered by the <strong>Equality Act 2010</strong> and statutory safeguarding obligations.\n\nSchools and colleges have a legal duty under <strong>Keeping Children Safe in Education (KCSIE) 2023</strong> to:\n• Have robust policies on sexual harassment and violence\n• Take all reports seriously and respond promptly\n• Protect victims from retaliation\n• Refer to police where criminal conduct may have occurred\n\nFor under-18s, child protection and safeguarding obligations apply — the school must involve the Designated Safeguarding Lead (DSL).\n\nFor sexual harassment by a staff member, this is a <strong>serious safeguarding matter</strong> — report to the headteacher and, if they are implicated, directly to the local authority designated officer (LADO) and Ofsted.\n\nUniversities have their own codes of conduct and sexual harassment policies — the Office for Students (ofs.ac.uk) regulates higher education providers on this issue.`,
+    urgency: 'high',
+    actions: [
+      { title: 'Report to the Designated Safeguarding Lead (DSL) immediately', detail: 'Every school has a DSL responsible for safeguarding. Report what happened in writing. They are legally required to take your report seriously and follow safeguarding procedures.', urgent: true },
+      { title: 'Report to the police for any criminal conduct', detail: 'Sexual touching, assault, or intimate image sharing involving under-18s are serious criminal offences. The DSL should refer to police, but you can also report directly to police (101).', urgent: true },
+      { title: 'Submit a formal written complaint to the headteacher', detail: 'If the DSL\'s response is inadequate, write formally to the headteacher. For harassment by a teacher, write to the headteacher and simultaneously to the local authority.', urgent: false },
+      { title: 'Report to the LADO if a staff member is involved', detail: 'The Local Authority Designated Officer (LADO) handles allegations against people who work with children. Contact your local authority to report. This is separate from, and in addition to, the school\'s internal process.', urgent: false },
+      { title: 'Contact specialist support', detail: 'Rape Crisis (0808 500 2222) supports young people as well as adults. Childline (0800 1111) provides support for under-18s. Both are free and confidential.', urgent: false },
+    ],
+    evidence: [
+      'Written account of what happened (date, time, location, who was involved)',
+      'Any messages, images, or social media evidence',
+      'Witness details',
+      'The school\'s response to your initial report',
+      'Medical or counselling records if applicable',
+      'Your formal complaint and the school\'s response',
+      'Police crime reference number if reported',
+    ],
+    letterType: 'bullying_report_letter',
+  },
+
+  stalking: {
+    title: 'Stalking & Persistent Unwanted Contact',
+    rights: `Stalking is a serious criminal offence under <strong>Sections 2A and 4A of the Protection from Harassment Act 1997</strong> (inserted by the Protection of Freedoms Act 2012).\n\nStalking behaviours include:\n• Following, watching, or spying on someone\n• Contacting or attempting to contact someone repeatedly\n• Monitoring internet, email, or other electronic communication\n• Loitering in any place (public or private)\n• Interfering with property\n• Watching or spying on someone\n\nPenalties: up to <strong>10 years imprisonment</strong> for stalking causing fear of violence or serious alarm and distress.\n\nCivil remedies include:\n• <strong>Restraining orders</strong> — granted by criminal courts on conviction or acquittal\n• <strong>Stalking Protection Orders (SPOs)</strong> — civil orders the police can apply for even before charges are brought\n• <strong>Non-Molestation Orders</strong> — from the family court if the stalker is a partner or family member\n\nContact the <strong>National Stalking Helpline</strong>: 0808 802 0300.`,
+    urgency: 'high',
+    actions: [
+      { title: 'Report to the police immediately', detail: 'Stalking is a criminal offence. Report to police (101 for non-emergency, 999 if in immediate danger). Ask specifically for your report to be recorded as stalking, not just harassment. Get a crime reference number.', urgent: true },
+      { title: 'Keep a detailed stalking log', detail: 'Record every incident — date, time, location, what happened, any witnesses or evidence. This log is crucial for police investigations, court applications, and any legal proceedings.', urgent: true },
+      { title: 'Apply for a Stalking Protection Order (SPO)', detail: 'Police can apply for an SPO even before charges are brought. Ask the officer dealing with your case about this. SPOs can prohibit specific behaviours and require the stalker to attend a programme.', urgent: false },
+      { title: 'Apply for a Non-Molestation Order if in a domestic context', detail: 'If the stalker is a current or former partner or family member, apply to the family court for a Non-Molestation Order using Form FL401. Can be granted urgently on the same day.', urgent: false },
+      { title: 'Contact the National Stalking Helpline', detail: 'Call 0808 802 0300 or visit suzylamplugh.org/national-stalking-helpline. They provide specialist advice, safety planning, and can help you navigate the legal process.', urgent: false },
+    ],
+    evidence: [
+      'Detailed stalking log (dates, times, locations, descriptions of each incident)',
+      'Screenshots of all digital contact (messages, social media, emails)',
+      'Call logs showing repeated contact attempts',
+      'CCTV footage if available — request preservation immediately',
+      'Witness statements',
+      'Photographs of the stalker near your home or workplace if safe to take',
+      'Police crime reference number(s)',
+      'Any existing court orders',
+    ],
+    letterType: 'stalking_letter',
   },
 };
 
@@ -2608,6 +3019,409 @@ Yours faithfully,
 
 ${data.yourName}
 [Signature]`,
+
+  // ── VEHICLE LETTERS ──────────────────────────────────────────────────
+  faulty_car_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Manager
+${data.landlordName || '[Dealer Name]'}
+${data.landlordAddress || '[Dealer Address]'}
+
+Re: Rejection of Vehicle / Claim for Refund Under Consumer Rights Act 2015
+Vehicle: ${data.propertyAddress || '[Make, Model, Registration]'}
+Purchase Date: ${data.firstReportDate || '[Date of Purchase]'}
+Purchase Price: £${data.depositAmount || '[Amount]'}
+
+Dear Sir / Madam,
+
+I write to formally notify you of my rejection of the above vehicle and to demand a full refund under the Consumer Rights Act 2015.
+
+The Fault
+
+${data.harassmentDetails || '[Describe the fault clearly — what it is, when it first appeared, and how it affects the vehicle]'}
+
+I first reported this fault to you on ${data.repairDetails || '[date]'}. ${data.extraDetails || '[Describe the dealer\'s response or lack of response]'}.
+
+My Legal Rights
+
+Under Section 9 of the Consumer Rights Act 2015, goods sold by a trader must be of satisfactory quality. This vehicle is not of satisfactory quality due to the fault described above.
+
+${data.evictionDetails === 'Within 30 days' ? 'As my purchase was within 30 days, I am exercising my short-term right to reject under Section 20 of the Consumer Rights Act 2015 and am entitled to a full refund without deduction.' : 'As the fault has appeared within 6 months of purchase, the burden is on you to show the fault did not exist at the time of sale. I am entitled to a repair or replacement, and if this fails, a full refund.'}
+
+I require you to:
+1. Accept the return of the vehicle; and
+2. Refund £${data.depositAmount || '[Purchase Price]'} to my original payment method within 14 days.
+
+If you do not comply within 14 days I will refer this matter to the Motor Ombudsman and issue county court proceedings without further notice.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  insurance_complaint_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+Complaints Department
+${data.landlordName || '[Insurance Company Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Formal Complaint — Policy Number: ${data.propertyAddress || '[Policy Number]'}
+
+Dear Sir / Madam,
+
+I write to make a formal complaint regarding the handling of my insurance ${data.evictionDetails || 'claim / policy'}.
+
+Details of My Complaint
+
+${data.harassmentDetails || '[Set out clearly what happened — when you made your claim, what the claim was for, and what the insurer did or failed to do]'}
+
+The decision / action I am disputing was communicated to me on ${data.firstReportDate || '[date]'}.
+
+Why I Believe the Decision Is Wrong
+
+${data.repairDetails || '[Set out why you disagree with the insurer\'s decision — which policy clause is being misapplied, what evidence was ignored, or how the policy was misrepresented to you]'}
+
+${data.extraDetails || ''}
+
+What I Am Seeking
+
+I am requesting: ${data.evictionDetails || '[a full payment of my claim / a refund of premiums / reconsideration of the decision]'} in the amount of £${data.depositAmount || '[Amount]'}.
+
+Please note that under FCA rules, you are required to provide a final response to this complaint within 8 weeks. If your response is unsatisfactory or not received within 8 weeks, I will refer this matter to the Financial Ombudsman Service without further notice.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  parking_appeal_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+Appeals Department
+${data.landlordName || '[Parking Company / Council Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Formal Appeal Against Parking Charge Notice
+PCN Reference: ${data.propertyAddress || '[PCN Reference Number]'}
+Vehicle Registration: ${data.firstReportDate || '[Registration]'}
+Date of Alleged Contravention: ${data.repairDetails || '[Date]'}
+
+Dear Sir / Madam,
+
+I write to formally appeal against the above Parking Charge Notice on the following grounds:
+
+${data.harassmentDetails || '[Set out your grounds for appeal clearly, for example:\n\n1. The signage at the location was inadequate, unclear, or not visible before entering the car park;\n2. I held a valid permit / had paid for a valid ticket;\n3. The vehicle was parked for a legitimate reason;\n4. The charge is an unenforceable penalty clause rather than a genuine pre-estimate of loss;\n5. Other: [specify]]'}
+
+${data.extraDetails || ''}
+
+I am enclosing / attaching the following evidence in support of this appeal:
+• [Photographs of the signage]
+• [Copy of parking ticket / permit if held]
+• [Any other supporting evidence]
+
+I respectfully request that you cancel this Parking Charge Notice. If my appeal is rejected, please confirm the independent appeals service available (POPLA / IAS) and provide a POPLA/IAS code so that I may escalate this matter.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  mechanic_dispute_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Manager
+${data.landlordName || '[Garage Name]'}
+${data.landlordAddress || '[Garage Address]'}
+
+Re: Formal Complaint — Vehicle Repair Dispute
+Vehicle: ${data.propertyAddress || '[Make, Model, Registration]'}
+Work Carried Out: ${data.firstReportDate || '[Date(s) of Work]'}
+
+Dear Sir / Madam,
+
+I write to formally complain about the vehicle repair work carried out at your garage and to request an immediate remedy.
+
+The Problem
+
+${data.harassmentDetails || '[Describe clearly what was agreed, what was done, and what the problem is — overcharging, poor workmanship, unauthorised work, damage caused, etc.]'}
+
+The original quote / agreed price was: £${data.depositAmount || '[Agreed Amount]'}
+The amount charged was: £${data.repairDetails || '[Amount Charged]'}
+
+My Legal Rights
+
+Under the Consumer Rights Act 2015, services must be carried out with reasonable care and skill and at the agreed or reasonable price. ${data.extraDetails || 'The work carried out did not meet this standard / exceeded the agreed price without authorisation.'}
+
+What I Require
+
+I require you within 14 days to:
+1. ${data.evictionDetails || '[Refund the overcharge / Redo the work at no charge / Compensate me for damage caused]'};
+2. Provide a written response confirming your position.
+
+If this matter is not resolved, I will refer it to the Motor Ombudsman (if you are a registered member) and/or issue proceedings in the county court without further notice.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  // ── DATA PROTECTION LETTERS ──────────────────────────────────────────
+  sar_request_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Data Controller
+${data.landlordName || '[Organisation Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Subject Access Request — UK GDPR Article 15
+
+Dear Data Controller,
+
+I am writing to make a Subject Access Request under Article 15 of the UK General Data Protection Regulation (UK GDPR) and Section 45 of the Data Protection Act 2018.
+
+I request a copy of all personal data held about me, including but not limited to:
+${data.harassmentDetails || '• All records, correspondence, and notes relating to me\n• Any data shared with third parties\n• The purposes for which my data is processed\n• How long my data is retained'}
+
+Time period: ${data.firstReportDate || 'All data currently held'}
+
+My details:
+Full name: ${data.yourName}
+${data.propertyAddress ? `Previous address: ${data.propertyAddress}` : ''}
+${data.depositAmount ? `Account / reference number: ${data.depositAmount}` : ''}
+
+I enclose proof of identity for verification purposes.
+
+You are required to respond free of charge within one calendar month. If you need clarification, please contact me promptly as this does not pause the one-month deadline.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  right_erasure_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Data Controller
+${data.landlordName || '[Organisation Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Request for Erasure of Personal Data — UK GDPR Article 17
+
+Dear Data Controller,
+
+I am writing to request the erasure of my personal data under Article 17 of the UK General Data Protection Regulation (UK GDPR) — the "right to be forgotten."
+
+I request that you erase the following personal data:
+${data.harassmentDetails || '[Describe the specific data you want erased — e.g. your account, profile, posts, personal details]'}
+
+Grounds for Erasure
+
+I am requesting erasure on the following ground(s):
+${data.repairDetails || '• The data is no longer necessary for the purpose for which it was collected\n• I am withdrawing consent on which processing was based\n• The data has been processed unlawfully\n• [Other ground under Article 17 UK GDPR]'}
+
+${data.extraDetails || ''}
+
+Please confirm in writing within one calendar month that the data has been erased and that you have informed any third parties to whom the data was disclosed.
+
+If you refuse this request, please provide written reasons and inform me of my right to complain to the Information Commissioner's Office.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  data_breach_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Data Controller / Complaints Team
+${data.landlordName || '[Organisation Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Formal Complaint — Personal Data Breach
+
+Dear Data Controller,
+
+I am writing to formally notify you of a personal data breach affecting my data and to seek assurance that appropriate steps are being taken.
+
+Details of the Breach
+
+${data.harassmentDetails || '[Describe what happened — when you became aware, what data was affected, and how it occurred or was discovered]'}
+
+I became aware of this breach on ${data.firstReportDate || '[date]'}.
+
+Impact on Me
+
+${data.repairDetails || '[Describe the actual or potential harm — financial loss, identity theft risk, distress, reputational damage]'}
+
+My Requirements
+
+Under the UK GDPR, you are required to:
+1. Notify the Information Commissioner's Office (ICO) within 72 hours of becoming aware of a breach likely to result in risk to individuals;
+2. Notify affected individuals without undue delay where the breach is likely to result in high risk.
+
+I request that you:
+1. Confirm in writing the nature and extent of the breach and what data was affected;
+2. Confirm whether the ICO has been notified;
+3. Set out what steps you are taking to contain the breach and prevent recurrence;
+4. Confirm what support you are offering to affected individuals.
+
+${data.extraDetails || ''}
+
+I reserve the right to complain to the ICO and to seek compensation for any distress or financial loss caused by this breach under Article 82 of the UK GDPR.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  data_correction_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Data Controller
+${data.landlordName || '[Organisation Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Request for Rectification of Inaccurate Personal Data — UK GDPR Article 16
+
+Dear Data Controller,
+
+I am writing to request the rectification of inaccurate or incomplete personal data held about me, under Article 16 of the UK General Data Protection Regulation (UK GDPR).
+
+The Inaccurate Data
+
+The following data you hold about me is inaccurate or incomplete:
+${data.harassmentDetails || '[Describe the inaccurate data and where it appears — e.g. credit file, account records, employee records]'}
+
+The Correct Information
+
+The correct information is:
+${data.repairDetails || '[Provide the accurate information that should replace the incorrect data]'}
+
+Evidence
+
+I enclose the following evidence supporting the correct information:
+${data.extraDetails || '[List supporting documents — e.g. birth certificate, bank statements, official letters]'}
+
+You are required to rectify this data without undue delay and within one calendar month of this request. Please also inform any third parties to whom the inaccurate data has been disclosed.
+
+Please confirm in writing once the correction has been made.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  // ── SEXUAL HARASSMENT LETTERS ────────────────────────────────────────
+  workplace_sexual_harassment_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName || '[HR Manager / Director Name]'}
+${data.landlordAddress || '[Employer Name and Address]'}
+
+Re: Formal Grievance — Sexual Harassment
+
+Dear ${data.landlordName || 'Sir / Madam'},
+
+I write to submit a formal grievance regarding sexual harassment I have experienced in the workplace. I am submitting this grievance in accordance with the company's grievance procedure and under my rights pursuant to the Equality Act 2010.
+
+Details of the Harassment
+
+${data.harassmentDetails || '[Describe each incident clearly and factually — date, time, location, what was said or done, and who was present. Do not include graphic details — focus on the nature of the conduct and its impact on you.]'}
+
+Impact on Me
+
+This conduct has had the following impact on my ability to work and my wellbeing:
+${data.repairDetails || '[Describe the impact — distress, difficulty attending work, impact on performance, health effects]'}
+
+Witnesses
+
+${data.extraDetails || '[Name any witnesses or state that there were no witnesses to specific incidents]'}
+
+Legal Position
+
+This conduct constitutes sexual harassment as defined in Section 26 of the Equality Act 2010. My employer has a legal duty under the Worker Protection (Amendment of Equality Act 2010) Act 2023 to take reasonable steps to prevent sexual harassment in the workplace.
+
+What I Am Seeking
+
+I request that you:
+1. Investigate this grievance promptly and thoroughly;
+2. Take appropriate action against the individual(s) responsible;
+3. Provide me with a written outcome within the timescale specified in the grievance procedure;
+4. Ensure I am not subjected to any detriment for raising this grievance.
+
+I am willing to attend a grievance meeting and to provide further information as required.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  stalking_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName || '[Name of Person / Organisation]'}
+${data.landlordAddress || '[Address]'}
+
+Re: FORMAL WARNING — Stalking and Persistent Unwanted Contact
+
+Dear ${data.landlordName || 'Sir / Madam'},
+
+I am writing to formally require you to cease all contact with me immediately.
+
+Your behaviour constitutes stalking and/or harassment under the Protection from Harassment Act 1997 (as amended by the Protection of Freedoms Act 2012). I am documenting all incidents and am prepared to provide this evidence to the police and a court.
+
+Incidents
+
+${data.harassmentDetails || '[Describe the incidents of unwanted contact or stalking behaviour — dates, times, what happened. Keep factual and professional.]'}
+
+Legal Warning
+
+Under Sections 2A and 4A of the Protection from Harassment Act 1997, stalking is a criminal offence carrying up to 10 years imprisonment. This includes monitoring, following, watching, contacting repeatedly, or interfering with property.
+
+I require you to:
+1. Cease all contact with me by any means — phone, email, social media, in person, or through third parties — with immediate effect;
+2. Not attend any location where you know I will be present.
+
+I have already reported / intend to report this matter to the police. I am also considering applying to the court for a restraining order or injunction.
+
+This letter is written without prejudice to any other legal action I may take.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
 };
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -2833,11 +3647,11 @@ function HomePage({ onStart }) {
   return (
     <>
       <div className="hero">
-        <p className="hero-eyebrow">🇬🇧 UK Tenant Rights — Free Guidance</p>
+        <p className="hero-eyebrow">🇬🇧 UK Legal Rights — Free Guidance Across 14 Areas of Law</p>
         <h1>Know your rights.<br/><em>Fight back</em> with the law.</h1>
         <p className="hero-sub">
-          LegalShield AI helps UK private tenants understand their rights, generate
-          formal legal letters, and build evidence packs — in minutes, not months.
+          LegalShield AI helps people across the UK understand their legal rights, build evidence packs,
+          and generate formal legal letters — covering tenancy, employment, consumer rights, family law, data protection, and much more.
         </p>
         <div className="hero-actions">
           <button className="btn btn-primary btn-lg" onClick={() => onStart('rights')}>
@@ -2847,7 +3661,7 @@ function HomePage({ onStart }) {
             ✉ Generate a Letter
           </button>
         </div>
-        <div className="hero-badge">Free to use · No signup required · AI-powered letters</div>
+        <div className="hero-badge">Free rights guidance · Letters & PDFs require Pro · No signup needed</div>
       </div>
 
       <div className="dashboard">
@@ -2855,13 +3669,13 @@ function HomePage({ onStart }) {
           <div className="dash-card" onClick={() => onStart('rights')}>
             <div className="dash-card-icon">⚖</div>
             <h3>Check My Rights</h3>
-            <p>Answer a few questions about your situation and get a personalised rights summary based on current UK law.</p>
+            <p>Answer a few questions about your situation and get a personalised rights summary based on current UK law — covering 14 areas of law, free of charge.</p>
             <span className="arrow">Start now →</span>
           </div>
           <div className="dash-card" onClick={() => onStart('letter')}>
             <div className="dash-card-icon">✉</div>
             <h3>Generate a Letter</h3>
-            <p>Produce a formal, AI-personalised legal letter ready to send to your landlord or agent. Download as PDF.</p>
+            <p>Produce a formal, AI-personalised legal letter ready to send. Download as PDF. <strong style={{color:'var(--amber)'}}>Requires Pro (£9.99/mo)</strong> — rights guidance is always free.</p>
             <span className="arrow">Create letter →</span>
           </div>
         </div>
@@ -2869,13 +3683,29 @@ function HomePage({ onStart }) {
 
       <div className="how-section">
         <div className="how-inner">
-          <h2 className="how-title">How it works</h2>
-          <p className="how-sub">Three steps to protect your tenancy rights</p>
-          <div className="how-steps">
+          <h2 className="how-title">One tool. 14 areas of UK law.</h2>
+          <p className="how-sub">Free rights guidance for everyone. AI-powered letters for Pro members.</p>
+
+          {/* Category pills */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', marginBottom: '2.5rem' }}>
+            {['🏠 Tenancy', '💼 Employment', '🛒 Consumer Rights', '💳 Debt & Creditors',
+              '🏘 Neighbours', '⚖ Small Claims', '📋 Benefits', '👨‍👩‍👧 Family',
+              '🏥 Medical & NHS', '🎓 Education', '✈ Travel', '🚗 Vehicle & Insurance',
+              '🔒 Data Protection', '🛡 Sexual Harassment'].map(cat => (
+              <span key={cat} style={{
+                background: 'var(--off-white)', border: '1px solid var(--muted)',
+                borderRadius: 999, padding: '0.3rem 0.8rem', fontSize: '0.78rem',
+                color: 'var(--navy)', fontWeight: 500,
+              }}>{cat}</span>
+            ))}
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px,1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
             {[
-              { n: '1', title: 'Choose your issue', body: 'Select from deposit disputes, repairs, harassment, or illegal eviction.' },
-              { n: '2', title: 'Answer questions', body: 'A short decision tree tailors the guidance to your exact situation.' },
-              { n: '3', title: 'Get your pack', body: 'Receive a rights summary, action plan, evidence checklist, and legal letter — all in one click.' },
+              { n: '1', title: 'Choose your area of law', body: 'Browse 14 categories and 45+ specific issues. Select the one that matches your situation.' },
+              { n: '2', title: 'Answer a few questions', body: 'A short decision tree tailors the guidance to your exact circumstances and tells you where you stand legally.' },
+              { n: '3', title: 'Get your rights summary', body: 'Receive a free personalised rights summary, step-by-step action plan, and evidence checklist instantly.' },
+              { n: '4', title: 'Unlock your legal letter', body: 'Pro members get an AI-personalised formal letter and PDF export — ready to send in minutes.' },
             ].map(s => (
               <div className="how-step" key={s.n}>
                 <div className="how-num">{s.n}</div>
@@ -2883,6 +3713,24 @@ function HomePage({ onStart }) {
                 <p>{s.body}</p>
               </div>
             ))}
+          </div>
+
+          {/* Free vs Pro comparison */}
+          <div style={{ background: 'var(--white)', borderRadius: 14, border: '1px solid var(--muted)', overflow: 'hidden', marginTop: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+              <div style={{ padding: '1.2rem 1.5rem', borderRight: '1px solid var(--muted)' }}>
+                <p style={{ fontWeight: 700, color: 'var(--navy)', marginBottom: '0.8rem', fontSize: '0.9rem' }}>✓ Always Free</p>
+                {['Rights summary based on UK law', 'Step-by-step action plan', 'Evidence checklist', 'Emergency helpline numbers'].map(f => (
+                  <p key={f} style={{ fontSize: '0.82rem', color: 'var(--slate)', marginBottom: '0.4rem' }}>✓ {f}</p>
+                ))}
+              </div>
+              <div style={{ padding: '1.2rem 1.5rem', background: '#fffbf2' }}>
+                <p style={{ fontWeight: 700, color: 'var(--amber)', marginBottom: '0.8rem', fontSize: '0.9rem' }}>⭐ Pro — £9.99/mo</p>
+                {['AI-personalised legal letters', 'PDF download & export', 'All 45+ letter types', 'Unlimited use'].map(f => (
+                  <p key={f} style={{ fontSize: '0.82rem', color: 'var(--slate)', marginBottom: '0.4rem' }}>✓ {f}</p>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -3349,12 +4197,56 @@ function StripeSection() {
 function Footer() {
   return (
     <footer className="footer">
-      <p><strong>LegalShield AI</strong> — Free UK tenant rights guidance</p>
-      <p style={{ marginTop: '0.3rem' }}>
-        Not legal advice. For urgent matters: <strong>Shelter 0808 800 4444</strong> · <strong>Citizens Advice 0800 144 8848</strong>
+      <p><strong>LegalShield AI</strong> — Free UK legal rights guidance across 14 areas of law</p>
+      <p style={{ marginTop: '0.5rem', color: 'var(--amber)', fontWeight: 600, fontSize: '0.82rem' }}>
+        Rights guidance is free · Letters & PDF export require LegalShield Pro (£9.99/mo) · Not a substitute for legal advice
       </p>
-      <p style={{ marginTop: '0.3rem' }}>
-        Based on: Housing Act 1988/2004 · Protection from Eviction Act 1977 · Landlord & Tenant Act 1985 · Homes (Fitness for Human Habitation) Act 2018 · Tenant Fees Act 2019
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px,1fr))', gap: '1rem', margin: '1.2rem 0', textAlign: 'left', maxWidth: 900, marginLeft: 'auto', marginRight: 'auto' }}>
+        <div>
+          <p style={{ color: 'var(--muted)', fontWeight: 600, marginBottom: '0.4rem', fontSize: '0.78rem' }}>TENANCY & HOUSING</p>
+          <p style={{ fontSize: '0.73rem', lineHeight: 1.6 }}>Housing Act 1988 &amp; 2004 · Protection from Eviction Act 1977 · Landlord &amp; Tenant Act 1985 · Homes (Fitness for Human Habitation) Act 2018 · Tenant Fees Act 2019</p>
+          <p style={{ fontSize: '0.73rem', marginTop: '0.3rem' }}>Shelter: <strong>0808 800 4444</strong></p>
+        </div>
+        <div>
+          <p style={{ color: 'var(--muted)', fontWeight: 600, marginBottom: '0.4rem', fontSize: '0.78rem' }}>EMPLOYMENT</p>
+          <p style={{ fontSize: '0.73rem', lineHeight: 1.6 }}>Employment Rights Act 1996 · Equality Act 2010 · Working Time Regulations 1998 · Worker Protection (Amendment of Equality Act 2010) Act 2023</p>
+          <p style={{ fontSize: '0.73rem', marginTop: '0.3rem' }}>ACAS: <strong>0300 123 1100</strong> · EASS: <strong>0808 800 0082</strong></p>
+        </div>
+        <div>
+          <p style={{ color: 'var(--muted)', fontWeight: 600, marginBottom: '0.4rem', fontSize: '0.78rem' }}>CONSUMER, DEBT & TRAVEL</p>
+          <p style={{ fontSize: '0.73rem', lineHeight: 1.6 }}>Consumer Rights Act 2015 · Consumer Credit Act 1974 · Package Travel Regulations 2018 · UK Regulation 261/2004 · Montreal Convention 1999 · Taking Control of Goods Regulations 2013 · Limitation Act 1980</p>
+          <p style={{ fontSize: '0.73rem', marginTop: '0.3rem' }}>Citizens Advice: <strong>0800 144 8848</strong></p>
+        </div>
+        <div>
+          <p style={{ color: 'var(--muted)', fontWeight: 600, marginBottom: '0.4rem', fontSize: '0.78rem' }}>FAMILY & EDUCATION</p>
+          <p style={{ fontSize: '0.73rem', lineHeight: 1.6 }}>Children Act 1989 · Family Law Act 1996 · Domestic Abuse Act 2021 · Children and Families Act 2014 · SEND Code of Practice 2015 · Education Act 2002 · Matrimonial Causes Act 1973</p>
+          <p style={{ fontSize: '0.73rem', marginTop: '0.3rem' }}>CAFCASS: <strong>0300 456 4000</strong> · IPSEA: <strong>0300 018 1573</strong></p>
+        </div>
+        <div>
+          <p style={{ color: 'var(--muted)', fontWeight: 600, marginBottom: '0.4rem', fontSize: '0.78rem' }}>MEDICAL & NHS</p>
+          <p style={{ fontSize: '0.73rem', lineHeight: 1.6 }}>NHS Constitution · Local Authority Social Services &amp; NHS Complaints Regulations 2009 · UK GDPR · Data Protection Act 2018 · Access to Health Records Act 1990</p>
+          <p style={{ fontSize: '0.73rem', marginTop: '0.3rem' }}>PHSO: <strong>0345 015 4033</strong> · ICO: <strong>0303 123 1113</strong></p>
+        </div>
+        <div>
+          <p style={{ color: 'var(--muted)', fontWeight: 600, marginBottom: '0.4rem', fontSize: '0.78rem' }}>SEXUAL HARASSMENT & STALKING</p>
+          <p style={{ fontSize: '0.73rem', lineHeight: 1.6 }}>Equality Act 2010 · Protection from Harassment Act 1997 · Protection of Freedoms Act 2012 · Online Safety Act 2023 · Sexual Offences Act 2003 · Domestic Abuse Act 2021</p>
+          <p style={{ fontSize: '0.73rem', marginTop: '0.3rem' }}>Rape Crisis: <strong>0808 500 2222</strong> · National Stalking Helpline: <strong>0808 802 0300</strong> · Revenge Porn Helpline: <strong>0345 600 0459</strong> · National DA Helpline: <strong>0808 2000 247</strong></p>
+        </div>
+        <div>
+          <p style={{ color: 'var(--muted)', fontWeight: 600, marginBottom: '0.4rem', fontSize: '0.78rem' }}>DATA PROTECTION & VEHICLE</p>
+          <p style={{ fontSize: '0.73rem', lineHeight: 1.6 }}>UK GDPR · Data Protection Act 2018 · Consumer Rights Act 2015 · Protection of Freedoms Act 2012 · Traffic Management Act 2004</p>
+          <p style={{ fontSize: '0.73rem', marginTop: '0.3rem' }}>ICO: <strong>0303 123 1113</strong> · Financial Ombudsman: <strong>0800 023 4567</strong></p>
+        </div>
+        <div>
+          <p style={{ color: 'var(--muted)', fontWeight: 600, marginBottom: '0.4rem', fontSize: '0.78rem' }}>BENEFITS & UNIVERSAL CREDIT</p>
+          <p style={{ fontSize: '0.73rem', lineHeight: 1.6 }}>Welfare Reform Act 2012 · Social Security Administration Act 1992 · Human Rights Act 1998</p>
+          <p style={{ fontSize: '0.73rem', marginTop: '0.3rem' }}>StepChange: <strong>0800 138 1111</strong> · National Debtline: <strong>0808 808 4000</strong> · UC Helpline: <strong>0800 328 5644</strong></p>
+        </div>
+      </div>
+
+      <p style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1rem', marginTop: '0.5rem' }}>
+        LegalShield AI provides general guidance only and is <strong>not a substitute for legal advice</strong>. Always consult a qualified solicitor for complex matters.
       </p>
     </footer>
   );
