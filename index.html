@@ -984,6 +984,12 @@ const DECISION_TREES = {
     { id: 'q3', question: 'Have you attended a governors\' review meeting?', hint: 'For permanent exclusions you have the right to a review by the governing body', answers: ['Yes — decision upheld', 'Yes — exclusion overturned', 'Not yet — meeting scheduled', 'Meeting not offered'] },
     { id: 'q4', question: 'Are there any mitigating factors the school has not considered?', hint: 'e.g. SEND, safeguarding concerns, discriminatory treatment', answers: ['Yes — SEND not considered', 'Yes — discriminatory treatment', 'Yes — other mitigating factors', 'No specific mitigating factors'] },
   ],
+};
+
+// Rights summaries, action plans, and evidence checklists per issue
+const LEGAL_DATA = {
+  // ── TENANCY ────────────────────────────────────────────────────────
+  deposit: {
     title: 'Deposit Not Returned',
     rights: `Under the <strong>Housing Act 2004</strong>, landlords must protect your deposit in a government-approved tenancy deposit scheme (TDS, DPS, or MyDeposits) within <strong>30 days</strong> of receiving it, and provide you with the prescribed information.\n\nIf your deposit was not protected, your landlord may owe you between <strong>1× and 3× the deposit amount</strong> as a penalty, which you can claim through the county court.\n\nWhen your tenancy ends, your landlord must return your deposit within <strong>10 days</strong> of you both agreeing the amount. If there is a dispute, the scheme's free <strong>Alternative Dispute Resolution (ADR)</strong> service can adjudicate.\n\nDeductions are only permitted for <strong>damages beyond fair wear and tear, unpaid rent, or breach of tenancy agreement</strong>. Betterment (e.g. replacing a worn carpet entirely at your cost) is not permitted.`,
     urgency: 'medium',
@@ -1643,6 +1649,10 @@ const DECISION_TREES = {
     ],
     letterType: 'exclusion_appeal_letter',
   },
+};
+
+// Letter templates — personalised with user details
+const LETTER_TEMPLATES = {
   deposit_demand: (data) => `${data.yourName}
 ${data.yourAddress}
 ${data.yourEmail || ''}
