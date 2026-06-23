@@ -984,6 +984,32 @@ const DECISION_TREES = {
     { id: 'q3', question: 'Have you attended a governors\' review meeting?', hint: 'For permanent exclusions you have the right to a review by the governing body', answers: ['Yes — decision upheld', 'Yes — exclusion overturned', 'Not yet — meeting scheduled', 'Meeting not offered'] },
     { id: 'q4', question: 'Are there any mitigating factors the school has not considered?', hint: 'e.g. SEND, safeguarding concerns, discriminatory treatment', answers: ['Yes — SEND not considered', 'Yes — discriminatory treatment', 'Yes — other mitigating factors', 'No specific mitigating factors'] },
   ],
+
+  // ── TRAVEL ─────────────────────────────────────────────────────────
+  flight_delay: [
+    { id: 'q1', question: 'What happened to your flight?', answers: ['Delayed by 3+ hours', 'Cancelled', 'Denied boarding (overbooked)', 'Missed connection due to first flight'] },
+    { id: 'q2', question: 'Where did the flight depart from or arrive?', hint: 'UK261 covers flights from UK airports, and EU261 covers flights to the UK on UK/EU carriers', answers: ['Departed from a UK airport', 'Arrived in UK on a UK or EU airline', 'Neither — non-UK/EU carrier flying between non-UK/EU airports'] },
+    { id: 'q3', question: 'How long was the delay or how much notice of cancellation did you receive?', answers: ['Delay of 3–4 hours', 'Delay of 4+ hours', 'Cancellation with less than 14 days notice', 'Cancellation with 14+ days notice'] },
+    { id: 'q4', question: 'Did the airline cite extraordinary circumstances?', hint: 'e.g. severe weather, air traffic control strikes — these can exempt airlines from paying compensation', answers: ['Yes — extreme weather', 'Yes — ATC/political circumstances', 'No reason given', 'Technical fault cited'] },
+  ],
+  hotel_complaint: [
+    { id: 'q1', question: 'What is the nature of your complaint?', answers: ['Room not as described or advertised', 'Facilities unavailable (pool, spa, etc.)', 'Unsatisfactory cleanliness or condition', 'Overbooking — moved to inferior hotel', 'Poor service or staff conduct'] },
+    { id: 'q2', question: 'Did you raise the issue during your stay?', answers: ['Yes — with hotel management', 'Yes — but no one acted', 'No — I complained after returning'] },
+    { id: 'q3', question: 'How did you book the hotel?', hint: 'Package holidays have stronger protections under the Package Travel Regulations 2018', answers: ['Direct with the hotel', 'Through a package holiday (flights + hotel)', 'Through an OTA (Booking.com, Expedia etc.)', 'Through a travel agent'] },
+    { id: 'q4', question: 'Do you have evidence of what was advertised vs what you received?', answers: ['Yes — screenshots and photos', 'Yes — booking confirmation only', 'Limited evidence'] },
+  ],
+  holiday_cancel: [
+    { id: 'q1', question: 'Who cancelled the holiday?', answers: ['The travel company / operator', 'The airline', 'I had to cancel due to personal circumstances', 'I cancelled due to FCO travel warnings'] },
+    { id: 'q2', question: 'Was this a package holiday?', hint: 'Package holidays (flights + hotel + transfer booked together) have the strongest legal protections', answers: ['Yes — ATOL-protected package', 'Yes — package but unsure of ATOL status', 'No — separate flights and accommodation', 'Cruise holiday'] },
+    { id: 'q3', question: 'How much notice were you given of the cancellation?', answers: ['Less than 14 days', '14–28 days', 'More than 28 days', 'No notice — arrived to find cancelled'] },
+    { id: 'q4', question: 'What has the company offered so far?', answers: ['Full refund offered', 'Credit note or voucher only', 'Partial refund', 'Nothing offered yet'] },
+  ],
+  lost_luggage: [
+    { id: 'q1', question: 'What happened to your luggage?', answers: ['Lost — not arrived and declared lost', 'Delayed — arrived late', 'Damaged during flight', 'Items stolen from baggage'] },
+    { id: 'q2', question: 'Did you report it at the airport?', hint: 'You must report lost/damaged luggage before leaving the airport baggage area', answers: ['Yes — PIR (Property Irregularity Report) completed', 'Yes — reported but no PIR given', 'No — I left the airport first'] },
+    { id: 'q3', question: 'How long ago did this happen?', hint: 'Strict time limits apply under the Montreal Convention', answers: ['Within the last 7 days', '7–21 days ago', '21 days – 2 years ago', 'Over 2 years ago'] },
+    { id: 'q4', question: 'What is the approximate value of lost or damaged items?', answers: ['Under £500', '£500–£1,500', '£1,500–£5,000 (Montreal Convention limit approx.)', 'Over £5,000'] },
+  ],
 };
 
 // Rights summaries, action plans, and evidence checklists per issue
@@ -1648,6 +1674,100 @@ const LEGAL_DATA = {
       'Evidence of any discriminatory treatment',
     ],
     letterType: 'exclusion_appeal_letter',
+  },
+
+  // ── TRAVEL ───────────────────────────────────────────────────────────
+  flight_delay: {
+    title: 'Flight Delay Compensation',
+    rights: `Following Brexit, the UK retained equivalent protections to EU Regulation 261/2004 under <strong>UK Regulation 261/2004 (UK261)</strong>.\n\nYou are entitled to compensation if:\n• Your flight <strong>departed from a UK airport</strong> (any airline), OR\n• Your flight <strong>arrived in the UK on a UK or EU carrier</strong>\n\nCompensation amounts:\n• <strong>£220</strong> for flights under 1,500km delayed 3+ hours\n• <strong>£350</strong> for flights 1,500–3,500km delayed 3+ hours\n• <strong>£520</strong> for flights over 3,500km delayed 4+ hours\n\nFor <strong>cancellations</strong> with less than 14 days' notice, you are entitled to the same compensation plus a full refund or alternative flight.\n\nAirlines can avoid paying if the disruption was caused by <strong>extraordinary circumstances</strong> beyond their control (genuine severe weather, political instability, ATC strikes). Technical faults are generally <strong>not</strong> extraordinary circumstances.\n\nClaims can be made up to <strong>6 years</strong> after the flight (England/Wales).`,
+    urgency: 'low',
+    actions: [
+      { title: 'Check your eligibility and calculate your compensation', detail: 'Use the Civil Aviation Authority checker at caa.co.uk/consumers/resolving-complaints to confirm your rights. Note the distance of your route and the exact length of the delay.', urgent: false },
+      { title: 'Submit a formal claim to the airline in writing', detail: 'Email the airline\'s customer relations team citing UK Regulation 261/2004, stating the flight details, delay length, and the compensation amount you are claiming. Keep a copy.', urgent: false },
+      { title: 'Escalate to an approved ADR scheme if refused', detail: 'If the airline rejects your claim or does not respond within 8 weeks, you can refer to an approved Alternative Dispute Resolution scheme. Most UK airlines use CEDR or Aviation ADR — check the CAA website for which scheme your airline uses.', urgent: false },
+      { title: 'Refer to the CAA if ADR is unavailable', detail: 'The Civil Aviation Authority (caa.co.uk) enforces passenger rights. If the airline is not a member of an ADR scheme, you can refer your complaint to the CAA.', urgent: false },
+      { title: 'Issue a small claims court claim as a last resort', detail: 'If all else fails, file a small claims claim at gov.uk/make-court-claim-for-money. Many airlines settle before the hearing. You can claim up to 6 years after the flight.', urgent: false },
+    ],
+    evidence: [
+      'Booking confirmation and boarding passes',
+      'Flight number and scheduled vs actual departure/arrival times',
+      'Screenshot of flight tracker showing delay (FlightAware, FlightRadar24)',
+      'Any communications from the airline about the delay/cancellation',
+      'Receipts for meals, accommodation, or transfers caused by the delay',
+      'Your written claim to the airline and their response',
+      'Evidence of extraordinary circumstances claimed by the airline (if disputing)',
+    ],
+    letterType: 'flight_delay_letter',
+  },
+
+  hotel_complaint: {
+    title: 'Hotel Complaint',
+    rights: `Your rights when complaining about a hotel depend on how you booked:\n\n<strong>Package holidays</strong> (flights + hotel booked together): The <strong>Package Travel and Linked Travel Arrangements Regulations 2018</strong> give strong protections. The organiser is responsible for all elements of the package. You are entitled to a price reduction for any period of non-conformity, and compensation for damage caused.\n\n<strong>Direct hotel bookings</strong>: Governed by the <strong>Consumer Rights Act 2015</strong> — the service must be provided with reasonable care and skill and match its description. If it does not, you are entitled to a repeat performance or a price reduction.\n\n<strong>Online Travel Agency bookings</strong> (Booking.com, Expedia): Your contract is with the hotel. The OTA may assist but is generally not legally liable for the hotel's failures.\n\nFor credit card payments over £100, <strong>Section 75 of the Consumer Credit Act 1974</strong> makes your credit card provider jointly liable — useful if the hotel has ceased trading or refuses to engage.`,
+    urgency: 'low',
+    actions: [
+      { title: 'Raise the issue with hotel management during your stay', detail: 'Always complain in writing (email to the manager) during your stay and request a remedy. If you leave without complaining, it weakens your claim significantly.', urgent: false },
+      { title: 'Document everything thoroughly', detail: 'Photograph every issue — dirty rooms, broken facilities, signage about unavailable amenities. Save screenshots of what was advertised vs what you found on arrival.', urgent: false },
+      { title: 'Submit a formal complaint to the hotel after returning', detail: 'Write to the hotel\'s head office or complaints team. For package holidays, write to the tour operator. Set out the specific failures and the compensation or refund you are seeking.', urgent: false },
+      { title: 'Use Section 75 or chargeback if paid by card', detail: 'For credit card payments over £100, raise a Section 75 claim with your card provider. For debit cards, request a chargeback within 120 days of payment.', urgent: false },
+      { title: 'Refer to ABTA or ATOL if a package holiday', detail: 'If your package holiday was ABTA-registered, you can use ABTA\'s dispute resolution service (abta.com). ATOL protects you if the company becomes insolvent.', urgent: false },
+    ],
+    evidence: [
+      'Booking confirmation showing what was advertised',
+      'Screenshots of the hotel website or brochure description',
+      'Photographs and videos of the issues during your stay',
+      'Written complaints made to hotel management during your stay',
+      'Hotel responses to complaints made during the stay',
+      'Receipts for any alternative costs incurred',
+      'Credit card statement showing payment method',
+    ],
+    letterType: 'hotel_complaint_letter',
+  },
+
+  holiday_cancel: {
+    title: 'Holiday Cancellation Refund',
+    rights: `Your rights on cancellation depend on how the holiday was booked:\n\n<strong>ATOL-protected package holidays</strong>: Under the <strong>Package Travel and Linked Travel Arrangements Regulations 2018</strong>, if the organiser cancels, you are entitled to a <strong>full refund within 14 days</strong>. You do not have to accept a credit note. ATOL protection also means you will not lose money if the company becomes insolvent.\n\n<strong>Operator-cancelled packages</strong>: You are also entitled to compensation if cancelled less than 14 days before departure (unless extraordinary circumstances apply), on the same scale as flight delay compensation.\n\n<strong>Separate bookings</strong> (not a package): Each element (flight, hotel) must be claimed separately under the relevant rules.\n\n<strong>Self-cancellation</strong>: Your rights depend on the booking terms and conditions. Travel insurance may cover you if you have a valid reason.\n\nThe <strong>Competition and Markets Authority (CMA)</strong> has confirmed that consumers are entitled to cash refunds — not just vouchers — for cancelled holidays.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Demand a full cash refund in writing', detail: 'Write to the travel company citing the Package Travel Regulations 2018. State clearly that you are not accepting a credit note or voucher and require a cash refund within 14 days.', urgent: false },
+      { title: 'Check your ATOL protection', detail: 'If your package is ATOL-protected and the company has become insolvent, contact the CAA\'s ATOL team (caa.co.uk/atol) to make a claim. ATOL certificates are issued at the time of booking.', urgent: false },
+      { title: 'Use Section 75 or chargeback if refund not received', detail: 'If paid by credit card (over £100), raise a Section 75 claim with your card provider. For debit cards, request a chargeback. Both can be used if the company refuses to refund.', urgent: false },
+      { title: 'Raise a complaint with ABTA', detail: 'If the operator is ABTA-registered, use ABTA\'s dispute resolution service at abta.com. ABTA can mediate and arbitrate disputes between consumers and travel companies.', urgent: false },
+      { title: 'Issue a small claims court claim', detail: 'For amounts up to £10,000, file at gov.uk/make-court-claim-for-money. Cite the Package Travel Regulations 2018 or Consumer Rights Act 2015 as appropriate.', urgent: false },
+    ],
+    evidence: [
+      'Original booking confirmation and ATOL certificate',
+      'Cancellation notification from the travel company',
+      'Any vouchers or credit notes offered (keep but do not accept)',
+      'Your written refund demand and the company\'s response',
+      'Credit card or bank statement showing payment',
+      'Travel insurance policy if claiming through insurance',
+      'FCO travel advice if relevant to cancellation reason',
+    ],
+    letterType: 'holiday_cancel_letter',
+  },
+
+  lost_luggage: {
+    title: 'Lost Luggage Claim',
+    rights: `Lost, delayed, and damaged baggage on international flights is governed by the <strong>Montreal Convention 1999</strong>, which has the force of law in the UK.\n\nKey rights:\n• <strong>Lost luggage</strong>: Airline is liable up to approximately <strong>1,288 Special Drawing Rights (SDR)</strong> — roughly £1,400–£1,500 — per passenger. Luggage is deemed lost after 21 days.\n• <strong>Delayed baggage</strong>: You can claim reasonable expenses for essential items purchased while waiting. Keep all receipts.\n• <strong>Damaged baggage</strong>: Airline is liable up to the same SDR limit. Must be reported at the airport before leaving — ideally within 7 days for damage.\n\nStrict time limits:\n• Damaged baggage: report <strong>within 7 days</strong>\n• Delayed baggage: claim <strong>within 21 days</strong> of receipt\n• Lost baggage: claim <strong>within 2 years</strong> of scheduled arrival\n\nAlways complete a <strong>Property Irregularity Report (PIR)</strong> at the airport — without this, claims are very difficult.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Complete a Property Irregularity Report (PIR) at the airport', detail: 'Before leaving the baggage hall, report to the airline\'s baggage desk and complete a PIR. Get a copy with a reference number. This is essential for any claim.', urgent: true },
+      { title: 'Keep all receipts for essential purchases', detail: 'If your bag is delayed, keep receipts for all essential items you buy (clothing, toiletries, medication). Airlines will reimburse reasonable expenses — typically £50–£100/day for a few days.', urgent: true },
+      { title: 'Submit a formal written claim to the airline', detail: 'Write to the airline\'s baggage claims department with your PIR reference, a list of lost/damaged items with values, and receipts. Cite the Montreal Convention 1999.', urgent: false },
+      { title: 'Claim on your travel insurance', detail: 'Most travel insurance policies cover lost or delayed luggage. Check your policy excess and limits. Insurers often pay faster than airlines and can pursue the airline directly.', urgent: false },
+      { title: 'Escalate to ADR or small claims if refused', detail: 'If the airline rejects your claim, refer to their approved ADR scheme or file a small claims court claim. The Montreal Convention limits apply as the maximum, not the minimum.', urgent: false },
+    ],
+    evidence: [
+      'Property Irregularity Report (PIR) with reference number',
+      'Boarding passes and baggage receipts (tags)',
+      'Booking confirmation and baggage allowance details',
+      'Receipts for all essential purchases while bag was delayed',
+      'List of lost/damaged items with purchase prices and dates',
+      'Photographs of damaged luggage or items',
+      'All correspondence with the airline',
+      'Travel insurance policy details',
+    ],
+    letterType: 'lost_luggage_letter',
   },
 };
 
@@ -2347,6 +2467,142 @@ I am requesting:
 1. A governing body review meeting at the earliest opportunity;
 2. Copies of all documents the governing body will consider, in advance of the meeting;
 3. The opportunity to be accompanied by a friend or representative at the meeting.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  // ── TRAVEL LETTERS ───────────────────────────────────────────────────
+  flight_delay_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+Customer Relations Department
+${data.landlordName || '[Airline Name]'}
+${data.landlordAddress || '[Airline Address]'}
+
+Re: Claim for Compensation — Flight Delay / Cancellation
+Flight: ${data.propertyAddress || '[Flight Number]'} on ${data.firstReportDate || '[Date]'}
+
+Dear Sir / Madam,
+
+I write to claim statutory compensation under UK Regulation 261/2004 in respect of the above flight.
+
+Scheduled departure: ${data.repairDetails || '[Scheduled time and airport]'}
+Actual situation: ${data.extraDetails || '[Delay length or cancellation details]'}
+Reason given: ${data.harassmentDetails || '[Reason given or "no reason given"]'}
+
+Under UK Regulation 261/2004, I am entitled to compensation of £${data.depositAmount || '[220 / 350 / 520]'} per passenger. A technical fault does not constitute extraordinary circumstances and does not exempt the airline from paying compensation.
+
+I also claim reimbursement of the following expenses caused by the disruption:
+[List meals, accommodation, transport costs with receipts]
+
+Please respond within 14 days. If I do not receive a satisfactory response I will refer to your approved ADR scheme and issue court proceedings if necessary.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  hotel_complaint_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+Customer Relations
+${data.landlordName || '[Hotel / Tour Operator Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Formal Complaint — Booking Reference: ${data.propertyAddress || '[Reference]'}
+Travel Dates: ${data.firstReportDate || '[Dates]'}
+
+Dear Sir / Madam,
+
+I write to formally complain about the standard of accommodation and services provided and to claim compensation.
+
+What was advertised: ${data.repairDetails || '[Describe what was advertised]'}
+
+What was actually provided: ${data.harassmentDetails || '[Describe the issues found]'}
+
+I raised these concerns ${data.evictionDetails || '[during my stay / on [date]]'} and received the following response: ${data.extraDetails || '[response received or "no satisfactory response"]'}.
+
+This constitutes a failure to provide the service with reasonable care and skill and as described, in breach of the Consumer Rights Act 2015.
+
+I am seeking a partial refund / compensation of £[Amount] representing the difference in value between what was advertised and what was delivered.
+
+Please respond within 14 days or I will pursue this through ABTA dispute resolution and/or the county court.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  holiday_cancel_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+Customer Services / Refunds Department
+${data.landlordName || '[Travel Company Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Demand for Full Cash Refund — Cancelled Holiday
+Booking Reference: ${data.propertyAddress || '[Reference]'}
+Original Travel Dates: ${data.firstReportDate || '[Dates]'}
+
+Dear Sir / Madam,
+
+I write to formally demand a full cash refund in respect of the above booking, cancelled by your company on ${data.repairDetails || '[date of cancellation]'}.
+
+Amount paid: £${data.depositAmount || '[Amount]'}
+
+Under Regulation 13 of the Package Travel and Linked Travel Arrangements Regulations 2018, I am entitled to a full refund of all payments within 14 days of cancellation. I am not willing to accept a credit note, voucher, or re-booking in lieu of a cash refund. The Competition and Markets Authority has confirmed consumers are entitled to cash refunds for cancelled holidays.
+
+I require a full cash refund of £${data.depositAmount || '[Amount]'} within 14 days. If not received, I will raise a Section 75 / chargeback claim, file a complaint with ABTA / the CAA, and issue county court proceedings without further notice.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  lost_luggage_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+Baggage Claims Department
+${data.landlordName || '[Airline Name]'}
+${data.landlordAddress || '[Airline Address]'}
+
+Re: Claim for ${data.evictionDetails || 'Lost / Delayed / Damaged'} Baggage
+PIR Reference: ${data.propertyAddress || '[PIR Reference]'}
+Flight: ${data.repairDetails || '[Flight Number and Date]'}
+
+Dear Sir / Madam,
+
+I write to make a formal claim under the Montreal Convention 1999 in respect of my baggage on the above flight.
+
+I completed a Property Irregularity Report at the airport on ${data.firstReportDate || '[date]'}.
+
+${data.harassmentDetails || '[Describe what happened to your baggage]'}
+
+Items lost / damaged and their values:
+${data.extraDetails || '[List items with approximate values]'}
+
+Total value of claim: £${data.depositAmount || '[Total]'}
+
+Expenses incurred purchasing essential replacement items:
+[List with receipts attached]
+
+Under the Montreal Convention 1999, you are liable for lost, delayed, and damaged baggage up to 1,288 SDR (approximately £1,400–£1,500) per passenger.
+
+Please respond within 21 days.
 
 Yours faithfully,
 
