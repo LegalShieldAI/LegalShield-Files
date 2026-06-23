@@ -958,7 +958,32 @@ const DECISION_TREES = {
     { id: 'q3', question: 'Have you previously requested these records?', answers: ['Yes — request was ignored', 'Yes — records were incomplete', 'Yes — request was refused', 'No — this is my first request'] },
     { id: 'q4', question: 'How long ago did you make any previous request?', hint: 'Organisations must respond to a SAR within 1 month', answers: ['Less than 1 month ago', '1–3 months ago', 'Over 3 months ago', 'N/A — first request'] },
   ],
-  deposit: {
+
+  // ── EDUCATION ──────────────────────────────────────────────────────
+  school_bullying: [
+    { id: 'q1', question: 'Who is being bullied?', answers: ['My child by another pupil', 'My child by a member of staff', 'Me (as a student)', 'Multiple incidents involving different people'] },
+    { id: 'q2', question: 'What type of bullying is occurring?', answers: ['Physical', 'Verbal or emotional', 'Cyberbullying / online', 'Racist, homophobic, or discriminatory', 'Multiple types'] },
+    { id: 'q3', question: 'Has the school been informed?', answers: ['Yes — verbally, no action taken', 'Yes — in writing, no action taken', 'Yes — action taken but problem continues', 'Not yet'] },
+    { id: 'q4', question: 'How long has this been going on?', answers: ['A single incident', 'A few weeks', 'Several months', 'Over a year'] },
+  ],
+  headteacher_complaint: [
+    { id: 'q1', question: 'What is the nature of your complaint?', answers: ['Bullying not addressed', 'Unfair treatment of my child', 'Failure to follow school policy', 'Staff conduct', 'Academic concerns', 'Safeguarding concern'] },
+    { id: 'q2', question: 'Have you raised this with the class teacher or head of year first?', answers: ['Yes — not resolved', 'Yes — no response', 'No — the issue is serious enough to go straight to the headteacher'] },
+    { id: 'q3', question: 'Do you have a record of previous communications with the school?', answers: ['Yes — emails and letters', 'Yes — verbal only', 'No records kept'] },
+    { id: 'q4', question: 'What outcome are you seeking?', answers: ['Acknowledgement and apology', 'Specific action against another pupil or staff member', 'Change in school policy or procedure', 'Independent investigation'] },
+  ],
+  sen_support: [
+    { id: 'q1', question: 'What type of SEN support is needed?', answers: ['Assessment for an Education, Health and Care (EHC) Plan', 'Review of existing EHC Plan', 'School not following the EHC Plan', 'Concerns about SEN provision without an EHC Plan', 'Transition to secondary school or college'] },
+    { id: 'q2', question: 'How old is the child?', hint: 'EHC Plans can cover young people up to age 25 in education', answers: ['Under 5', '5–11 (primary)', '11–16 (secondary)', '16–25 (further education)'] },
+    { id: 'q3', question: 'Has the school or local authority responded to your concerns?', answers: ['Yes — but the response is inadequate', 'No response received', 'Request refused', 'Not yet raised formally'] },
+    { id: 'q4', question: 'Have you requested a statutory EHC needs assessment?', hint: 'Local authorities must carry out an assessment if requested and there is reason to think the child needs an EHC Plan', answers: ['Yes — approved', 'Yes — refused', 'In progress', 'Not yet requested'] },
+  ],
+  exclusion_appeal: [
+    { id: 'q1', question: 'What type of exclusion has been imposed?', answers: ['Fixed-term exclusion (temporary)', 'Permanent exclusion', 'Informal exclusion or "encouraged to leave"'] },
+    { id: 'q2', question: 'Has the school followed the correct exclusion procedure?', hint: 'Schools must follow statutory guidance: Suspension and Permanent Exclusion DfE 2023', answers: ['Yes, as far as I know', 'No — correct procedure was not followed', 'Unsure'] },
+    { id: 'q3', question: 'Have you attended a governors\' review meeting?', hint: 'For permanent exclusions you have the right to a review by the governing body', answers: ['Yes — decision upheld', 'Yes — exclusion overturned', 'Not yet — meeting scheduled', 'Meeting not offered'] },
+    { id: 'q4', question: 'Are there any mitigating factors the school has not considered?', hint: 'e.g. SEND, safeguarding concerns, discriminatory treatment', answers: ['Yes — SEND not considered', 'Yes — discriminatory treatment', 'Yes — other mitigating factors', 'No specific mitigating factors'] },
+  ],
     title: 'Deposit Not Returned',
     rights: `Under the <strong>Housing Act 2004</strong>, landlords must protect your deposit in a government-approved tenancy deposit scheme (TDS, DPS, or MyDeposits) within <strong>30 days</strong> of receiving it, and provide you with the prescribed information.\n\nIf your deposit was not protected, your landlord may owe you between <strong>1× and 3× the deposit amount</strong> as a penalty, which you can claim through the county court.\n\nWhen your tenancy ends, your landlord must return your deposit within <strong>10 days</strong> of you both agreeing the amount. If there is a dispute, the scheme's free <strong>Alternative Dispute Resolution (ADR)</strong> service can adjudicate.\n\nDeductions are only permitted for <strong>damages beyond fair wear and tear, unpaid rent, or breach of tenancy agreement</strong>. Betterment (e.g. replacing a worn carpet entirely at your cost) is not permitted.`,
     urgency: 'medium',
@@ -1522,6 +1547,102 @@ const DECISION_TREES = {
     ],
     letterType: 'medical_sar_letter',
   },
+
+  // ── EDUCATION ────────────────────────────────────────────────────────
+  school_bullying: {
+    title: 'Bullying Incident Report',
+    rights: `All schools in England have a legal duty under the <strong>Education Act 2002 (Section 175)</strong> to safeguard and promote the welfare of pupils. Schools must have an <strong>anti-bullying policy</strong> and must act on reports of bullying.\n\nWhere bullying is based on a protected characteristic (race, disability, religion, sexual orientation, gender reassignment), it may also constitute unlawful discrimination under the <strong>Equality Act 2010</strong>, and the school has a duty to take action under the Public Sector Equality Duty.\n\n<strong>Cyberbullying</strong> that occurs outside school can still be addressed by the school if it affects the school environment or involves pupils.\n\nIf the school fails to act, you can:\n• Complain to the school governors\n• Refer to the local authority\n• Complain to the Department for Education (for academies/free schools, also to the Regional Director)\n• In serious cases involving criminal behaviour, report to the police`,
+    urgency: 'high',
+    actions: [
+      { title: 'Report in writing to the class teacher or form tutor immediately', detail: 'Put all reports in writing — email is ideal. Describe each incident with dates, times, who was involved, and any witnesses. This creates a paper trail.', urgent: true },
+      { title: 'Request a meeting with the headteacher if not resolved', detail: 'If initial reports are not acted on, write formally to the headteacher. Reference the school\'s anti-bullying policy (available on the school website) and ask what action will be taken.', urgent: false },
+      { title: 'Document all incidents in detail', detail: 'Keep a written log of every bullying incident, including dates, times, descriptions, and your child\'s account. Screenshot and preserve any online bullying evidence immediately.', urgent: false },
+      { title: 'Contact the governing body if the school does not act', detail: 'Write to the chair of governors. Governing bodies have oversight of school policies and can require the headteacher to account for how policies are being implemented.', urgent: false },
+      { title: 'Report to police if criminal behaviour is involved', detail: 'Serious physical assaults, threats, hate crimes, or the sharing of intimate images without consent are criminal offences. Report to police (101) and obtain a crime reference number.', urgent: false },
+    ],
+    evidence: [
+      'Written log of all incidents (dates, times, what happened, witnesses)',
+      'Screenshots of cyberbullying (messages, posts, images)',
+      'Medical records or GP notes if physical or psychological harm resulted',
+      'Your child\'s written or recorded account',
+      'Witness statements from other pupils or parents (with consent)',
+      'Copies of all correspondence with the school',
+      'The school\'s anti-bullying policy',
+      'Any previous reports made to the school and their response',
+    ],
+    letterType: 'bullying_report_letter',
+  },
+
+  headteacher_complaint: {
+    title: 'Complaint to Headteacher',
+    rights: `All maintained schools and academies in England must have a formal <strong>complaints procedure</strong> that is accessible to parents and published on the school website, under the <strong>Education Act 2002</strong> and the <strong>School Complaints Procedures Regulations</strong>.\n\nA typical school complaints procedure has three stages:\n1. <strong>Informal stage</strong> — raise with the relevant teacher or head of year\n2. <strong>Formal stage</strong> — written complaint to the headteacher, who must respond within a set timescale (usually 10–20 school days)\n3. <strong>Appeal stage</strong> — review by a governing body complaints panel\n\nFor academies and free schools, if the governors' stage fails, you can also refer to the <strong>Regional Director</strong> (formerly Regional Schools Commissioner) or the <strong>Education and Skills Funding Agency (ESFA)</strong>.\n\nFor maintained schools, the final escalation point is the <strong>local authority</strong> and ultimately the <strong>Department for Education (DfE)</strong> School Complaints Unit.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Review the school\'s complaints procedure', detail: 'Download it from the school website. This sets out the exact steps and timescales you must follow. Following the procedure strengthens your position at every stage.', urgent: false },
+      { title: 'Submit a formal written complaint to the headteacher', detail: 'Write clearly setting out what happened, when, who was involved, what you have already raised, and what outcome you are seeking. Give the school the opportunity to respond.', urgent: false },
+      { title: 'Request a meeting with the headteacher', detail: 'A face-to-face or virtual meeting can resolve issues more quickly than correspondence. Ask for a meeting and take notes of everything discussed.', urgent: false },
+      { title: 'Escalate to the governing body if not resolved', detail: 'If the headteacher\'s response is unsatisfactory, write to the chair of governors requesting a formal complaints panel hearing. This is your right under the school\'s complaints procedure.', urgent: false },
+      { title: 'Refer to the DfE School Complaints Unit as a last resort', detail: 'If all school-level processes have been exhausted, the DfE School Complaints Unit (for maintained schools) or Regional Director (for academies) can consider whether the correct procedure was followed.', urgent: false },
+    ],
+    evidence: [
+      'The school\'s published complaints procedure',
+      'All previous correspondence with the school about this matter',
+      'Notes of any meetings or phone calls (with dates)',
+      'Your child\'s account of events (written)',
+      'Witness statements if relevant',
+      'Any relevant school policies (behaviour policy, safeguarding policy etc.)',
+      'Evidence of the issue complained about (emails, photographs, etc.)',
+    ],
+    letterType: 'headteacher_complaint_letter',
+  },
+
+  sen_support: {
+    title: 'SEN Support Request',
+    rights: `Under the <strong>Children and Families Act 2014</strong> and the <strong>SEND Code of Practice 2015</strong>, children and young people with special educational needs and disabilities (SEND) have the right to appropriate support.\n\nKey rights:\n• Schools must use their <strong>best endeavours</strong> to meet a child's SEN needs (Section 66, Children and Families Act 2014)\n• Parents can request a <strong>statutory EHC needs assessment</strong> from the local authority at any time\n• The local authority must decide within <strong>6 weeks</strong> whether to carry out an assessment\n• If an EHC Plan is issued, the provision specified in it is <strong>legally binding</strong> — the school and local authority must provide it\n• You have the right to request a <strong>Personal Budget</strong> to arrange some of the support yourself\n• Disputes can be referred to the <strong>SEND Tribunal</strong> (free) for independent resolution\n\nContact <strong>IPSEA (ipsea.org.uk)</strong> or <strong>SOS!SEN (sossen.org.uk)</strong> for specialist free advice.`,
+    urgency: 'medium',
+    actions: [
+      { title: 'Request a statutory EHC needs assessment in writing', detail: 'Write to your local authority\'s SEND team requesting a statutory EHC needs assessment. You do not need the school\'s agreement — you can request this directly. The LA must respond within 6 weeks.', urgent: false },
+      { title: 'Gather evidence of your child\'s needs', detail: 'Collect school reports, teacher assessments, medical diagnoses, CAMHS letters, and any private assessments. The stronger the evidence, the more likely an assessment will be agreed.', urgent: false },
+      { title: 'Engage with the school\'s SENCO', detail: 'The Special Educational Needs Coordinator (SENCO) coordinates SEN support. Request a meeting to discuss what support is currently in place and what the school is doing to meet your child\'s needs.', urgent: false },
+      { title: 'Appeal to the SEND Tribunal if assessment or plan is refused', detail: 'If the LA refuses to assess, refuses to issue an EHC Plan, or you disagree with the plan\'s contents, you can appeal to the First-Tier Tribunal (SEND) free of charge. Deadlines are strict — 2 months from the decision.', urgent: false },
+      { title: 'Contact IPSEA for free legal advice', detail: 'Independent Provider of Special Education Advice (ipsea.org.uk or 0300 018 1573) provides free, legally-based advice and can help you challenge decisions by schools and local authorities.', urgent: false },
+    ],
+    evidence: [
+      'School reports and teacher assessments',
+      'Educational psychologist report if available',
+      'Medical diagnoses and consultant letters',
+      'CAMHS or mental health assessments',
+      'Any existing EHC Plan or SEN support plans',
+      'Records of communication with school and local authority',
+      'Your child\'s own views (age-appropriate)',
+      'Evidence of impact on learning and wellbeing',
+    ],
+    letterType: 'sen_request_letter',
+  },
+
+  exclusion_appeal: {
+    title: 'Exclusion Appeal',
+    rights: `Schools in England must follow the statutory guidance <strong>"Suspension and Permanent Exclusion from maintained schools, academies and pupil referral units" (DfE, 2023)</strong>.\n\nFor <strong>permanent exclusions</strong>:\n• Parents must be informed in writing on the day of exclusion\n• Parents have the right to make representations to the <strong>governing body</strong>, which must review the exclusion\n• If the governing body upholds the exclusion, parents can request an independent review by an <strong>Independent Review Panel (IRP)</strong>\n• The IRP can uphold, recommend reconsideration, or quash the exclusion\n\nFor <strong>fixed-term (suspension)</strong>:\n• Parents can make representations to the governing body for suspensions of more than 15 days in a term\n\nGrounds for challenging an exclusion include:\n• Failure to follow correct procedure\n• Disproportionate response\n• SEND or disability not taken into account\n• Discriminatory treatment (Equality Act 2010)\n• Evidence not properly considered`,
+    urgency: 'high',
+    actions: [
+      { title: 'Request the exclusion in writing immediately', detail: 'The school must provide written notice of the exclusion on the day it is imposed, with reasons. If this was not provided, request it urgently in writing.', urgent: true },
+      { title: 'Submit representations to the governing body', detail: 'Write to the chair of governors formally requesting a governing body review meeting. Set out the grounds for challenging the exclusion and include all supporting evidence. Deadlines are strict — usually 15 school days from the exclusion.', urgent: true },
+      { title: 'Gather all relevant evidence', detail: 'Collect the school\'s account of events, your child\'s account, any witness statements, the school\'s behaviour policy, and any SEND documentation. Challenge any factual inaccuracies in the school\'s account.', urgent: false },
+      { title: 'Request an Independent Review Panel if governors uphold exclusion', detail: 'If the governing body upholds a permanent exclusion, you have 15 school days to request an Independent Review Panel. Request this in writing to the clerk of governors.', urgent: false },
+      { title: 'Seek specialist advice from IPSEA or a solicitor', detail: 'For permanent exclusions, consider contacting IPSEA (if SEND is involved) or an education law solicitor. Many exclusions are overturned on appeal when properly challenged.', urgent: false },
+    ],
+    evidence: [
+      'The school\'s written exclusion notice (must be given on the day)',
+      'Your child\'s full account of events in writing',
+      'Witness statements from other pupils if available',
+      'The school\'s behaviour and exclusion policy',
+      'Your child\'s EHC Plan or SEN support records if relevant',
+      'Any medical or CAMHS evidence relevant to the behaviour',
+      'Records of previous behaviour incidents and how they were handled',
+      'Evidence of any discriminatory treatment',
+    ],
+    letterType: 'exclusion_appeal_letter',
+  },
   deposit_demand: (data) => `${data.yourName}
 ${data.yourAddress}
 ${data.yourEmail || ''}
@@ -2032,20 +2153,190 @@ ${data.harassmentDetails || '• All medical records, clinical notes, and corres
 
 Time period: ${data.firstReportDate || '[Specify dates or "all records held"]'}
 
-My details for identification purposes are:
-
+My details:
 Full name: ${data.yourName}
 Date of birth: [Your Date of Birth]
-Previous addresses if relevant: [List if applicable]
 NHS Number (if known): [NHS Number]
 
 I enclose a copy of my photo ID and proof of address to assist with verification.
 
 Under UK GDPR, you are required to provide this information free of charge and within one calendar month of receipt of this request.
 
-Please confirm receipt of this request. If you require any further information to process it, please contact me within one month.
+If you fail to respond within the statutory timeframe, I will raise a complaint with the Information Commissioner's Office (ICO).
 
-If you fail to respond within the statutory timeframe, I will not hesitate to raise a complaint with the Information Commissioner's Office (ICO).
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  // ── EDUCATION LETTERS ────────────────────────────────────────────────
+  bullying_report_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName || '[Headteacher Name]'}
+${data.landlordAddress || '[School Name and Address]'}
+
+Re: Formal Report of Bullying — ${data.propertyAddress || '[Child\'s Name and Year Group]'}
+
+Dear ${data.landlordName || 'Headteacher'},
+
+I write to formally report ongoing bullying affecting my child / me and to request that the school takes immediate and effective action in accordance with its anti-bullying policy and its legal duty of care under Section 175 of the Education Act 2002.
+
+Details of the Incidents
+
+${data.harassmentDetails || '[Set out each incident clearly with dates, times, location, who was involved, and what happened. Be as specific as possible.]'}
+
+The bullying has been occurring since approximately ${data.firstReportDate || '[date]'} and has had the following impact:
+
+${data.extraDetails || '[Describe the impact on your child\'s wellbeing, attendance, academic performance, or mental health]'}
+
+Previous Reports
+
+${data.repairDetails || '[Describe any previous reports made to the school and the response received, or state that this is the first formal report]'}
+
+My Requirements
+
+I request that you:
+
+1. Investigate these incidents thoroughly and promptly;
+2. Provide me with a written account of the action taken within 10 school days;
+3. Confirm what sanctions, if any, will be applied to those responsible;
+4. Set out what support will be provided to my child / me;
+5. Explain what steps will be taken to prevent recurrence.
+
+Please note that where bullying is based on a protected characteristic, it may constitute unlawful discrimination under the Equality Act 2010 and I expect this to be treated accordingly.
+
+I look forward to your response within 10 school days.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  headteacher_complaint_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName || '[Headteacher Name]'}
+${data.landlordAddress || '[School Name and Address]'}
+
+Re: Formal Complaint — ${data.propertyAddress || '[Child\'s Name and Year Group]'}
+
+Dear ${data.landlordName || 'Headteacher'},
+
+I write to make a formal complaint in accordance with the school's published complaints procedure. I have not been able to resolve this matter informally and am therefore escalating to a formal complaint.
+
+Background
+
+${data.harassmentDetails || '[Set out the background to the complaint — what happened, when, and who was involved]'}
+
+Steps Already Taken
+
+${data.repairDetails || '[Describe what you have already done to try to resolve the matter — who you spoke to, when, and what was said or done]'}
+
+Grounds for Complaint
+
+My complaint is that ${data.extraDetails || '[set out clearly the specific failing or concern — what should have happened and why what happened was wrong]'}.
+
+This is a breach of ${data.evictionDetails || 'the school\'s published policy / the school\'s duty of care under the Education Act 2002 / the Equality Act 2010'}.
+
+Outcome Sought
+
+I am seeking the following outcome:
+
+1. [A formal written apology / an explanation of what went wrong];
+2. [Specific action to remedy the situation];
+3. [Confirmation of what changes will be made to prevent recurrence].
+
+I expect a response within 20 school days in accordance with the school's complaints procedure. If I do not receive a satisfactory response, I will escalate this matter to the governing body.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  sen_request_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The SEND Team
+${data.landlordName || '[Local Authority Name]'}
+${data.landlordAddress || '[Local Authority Address]'}
+
+Re: Request for Statutory Education, Health and Care (EHC) Needs Assessment
+Child: ${data.propertyAddress || '[Child\'s Full Name and Date of Birth]'}
+
+Dear Sir / Madam,
+
+I am writing to formally request that the local authority carries out a statutory Education, Health and Care (EHC) needs assessment for my child under Section 36 of the Children and Families Act 2014.
+
+About My Child
+
+${data.harassmentDetails || '[Describe your child\'s needs, difficulties, and diagnosis if any. Explain how their SEN affects their learning, development, and wellbeing.]'}
+
+Current Provision
+
+My child currently attends ${data.repairDetails || '[school name]'} where they receive ${data.extraDetails || '[describe current support in place]'}. Despite this support, my child continues to experience significant difficulties and I believe they require an EHC Plan to ensure their needs are properly met.
+
+Supporting Evidence
+
+I am enclosing / am able to provide the following supporting evidence:
+${data.evictionDetails || '• School reports and teacher assessments\n• [Medical diagnoses / consultant letters]\n• [Educational psychologist report if available]\n• [CAMHS or other specialist reports]'}
+
+Legal Basis
+
+Under Section 36 of the Children and Families Act 2014, I have the right as a parent to request a statutory EHC needs assessment. The local authority must decide within 6 weeks whether to carry out the assessment. I understand that you must carry out an assessment if it is necessary to determine whether an EHC Plan is required.
+
+I look forward to your acknowledgement of this request and confirmation of the decision within 6 weeks.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  exclusion_appeal_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Clerk to the Governing Body
+${data.landlordName || '[School Name]'}
+${data.landlordAddress || '[School Address]'}
+
+Re: Formal Representations Against Exclusion — ${data.propertyAddress || '[Child\'s Name]'}
+
+Dear Clerk to the Governing Body,
+
+I write to formally challenge the ${data.evictionDetails || '[permanent / fixed-term]'} exclusion of my child from ${data.landlordName || '[School Name]'} imposed on ${data.firstReportDate || '[date of exclusion]'}.
+
+I am requesting a governing body review meeting in accordance with the DfE statutory guidance "Suspension and Permanent Exclusion from maintained schools, academies and pupil referral units" (2023).
+
+Grounds for Challenge
+
+I challenge this exclusion on the following grounds:
+
+${data.harassmentDetails || '[Set out the grounds for your challenge clearly, e.g.:]\n\n1. The school failed to follow the correct exclusion procedure;\n2. The exclusion was disproportionate to the alleged behaviour;\n3. My child\'s special educational needs / disability were not properly taken into account;\n4. The evidence relied upon was incomplete or inaccurate;\n5. The exclusion constitutes discriminatory treatment under the Equality Act 2010.'}
+
+My Child's Account
+
+${data.repairDetails || '[Set out your child\'s account of events and how it differs from the school\'s account]'}
+
+Mitigating Factors
+
+${data.extraDetails || '[Set out any mitigating factors the school has not properly considered — SEND, mental health, family circumstances, provocation, etc.]'}
+
+I am requesting:
+1. A governing body review meeting at the earliest opportunity;
+2. Copies of all documents the governing body will consider, in advance of the meeting;
+3. The opportunity to be accompanied by a friend or representative at the meeting.
 
 Yours faithfully,
 
@@ -2889,8 +3180,8 @@ function App() {
   );
 }
 
-<script>
-<script src="app.js"></script>
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
 </script>
 </body>
 </html>
