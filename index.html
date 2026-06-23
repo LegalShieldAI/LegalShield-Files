@@ -3422,10 +3422,728 @@ Yours faithfully,
 
 ${data.yourName}
 [Signature]`,
-};
 
-// ═══════════════════════════════════════════════════════════════════════
-//  AI LETTER GENERATION via Anthropic API
+  // ── MISSING TEMPLATES — EMPLOYMENT ───────────────────────────────────
+  unfair_dismissal_grievance: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName || '[HR Manager / Director]'}
+${data.landlordAddress || '[Employer Name and Address]'}
+
+Re: Formal Appeal Against Dismissal
+
+Dear ${data.landlordName || 'Sir / Madam'},
+
+I write to formally appeal against my dismissal from ${data.propertyAddress || '[Company Name]'} on ${data.firstReportDate || '[Date of Dismissal]'}.
+
+Grounds for Appeal
+
+${data.harassmentDetails || '[Set out clearly why you believe the dismissal was unfair — e.g. procedure not followed, reason given was not genuine, disproportionate response]'}
+
+Procedural Failures
+
+${data.repairDetails || '[Describe any failures of procedure — e.g. no written warnings, no opportunity to respond, no right of appeal offered, ACAS Code not followed]'}
+
+My Employment Record
+
+${data.extraDetails || '[Describe your length of service, performance record, and any other relevant factors]'}
+
+Under the Employment Rights Act 1996 and the ACAS Code of Practice on Disciplinary and Grievance Procedures, I am entitled to a fair procedure and a fair reason for dismissal. I do not believe either has been satisfied in this case.
+
+I request a formal appeal hearing at the earliest opportunity, at which I wish to be accompanied by a colleague or trade union representative.
+
+Please confirm the date, time, and location of the appeal hearing within 5 working days.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  unpaid_wages_demand: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName || '[Employer Name]'}
+${data.landlordAddress || '[Employer Address]'}
+
+Re: Formal Demand for Payment of Outstanding Wages
+
+Dear ${data.landlordName || 'Sir / Madam'},
+
+I write to formally demand payment of wages owed to me which remain outstanding.
+
+Details of Monies Owed
+
+${data.harassmentDetails || '[Set out what is owed — salary, holiday pay, notice pay, commission — with the pay period and amount for each]'}
+
+Total amount owed: £${data.depositAmount || '[Total]'}
+Due date(s): ${data.firstReportDate || '[Pay date(s) on which payment should have been made]'}
+
+I have raised this matter with you ${data.repairDetails || '[previously on [date] / verbally on [date]]'} and no satisfactory payment has been made.
+
+Legal Position
+
+Under the Employment Rights Act 1996, you are required to pay all wages due on the agreed pay date. Failure to do so constitutes an unlawful deduction from wages under Part II of the Act.
+
+I require full payment of £${data.depositAmount || '[Total]'} within 7 days of the date of this letter.
+
+If payment is not received within 7 days, I will without further notice:
+1. Submit a claim to the Employment Tribunal for unlawful deduction of wages; and/or
+2. Issue proceedings in the county court.
+
+Please note that an Employment Tribunal claim must be brought within 3 months minus 1 day of the deduction, and I intend to comply with that deadline.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  discrimination_grievance: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName || '[HR Manager / Director]'}
+${data.landlordAddress || '[Employer Name and Address]'}
+
+Re: Formal Grievance — Discrimination Under the Equality Act 2010
+
+Dear ${data.landlordName || 'Sir / Madam'},
+
+I write to submit a formal grievance regarding discrimination I have experienced at work. I am submitting this grievance under the company's grievance procedure and my rights under the Equality Act 2010.
+
+Protected Characteristic
+
+The discrimination I have experienced relates to my: ${data.propertyAddress || '[protected characteristic — e.g. age, disability, race, sex, religion, sexual orientation]'}.
+
+Details of the Discrimination
+
+${data.harassmentDetails || '[Set out each incident clearly — date, time, what happened, who was involved, and how it constitutes discrimination]'}
+
+Impact
+
+${data.repairDetails || '[Describe the impact on you — professionally, personally, and in terms of your health and wellbeing]'}
+
+Legal Position
+
+This conduct constitutes unlawful discrimination under the Equality Act 2010. ${data.extraDetails || 'I believe this amounts to [direct discrimination / indirect discrimination / harassment / victimisation] as defined in Sections 13, 19, 26, and 27 of the Act.'}
+
+What I Am Seeking
+
+I request that you:
+1. Investigate this grievance promptly and thoroughly;
+2. Take appropriate action against those responsible;
+3. Provide a written outcome within the timescale set out in the grievance procedure;
+4. Ensure I am not subjected to any detriment for raising this grievance.
+
+I am willing to attend a grievance meeting. Please confirm the date within 5 working days.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  // ── MISSING TEMPLATES — CONSUMER ─────────────────────────────────────
+  faulty_goods_demand: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName || '[Seller / Retailer Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Formal Demand — Faulty Goods / Refund Under Consumer Rights Act 2015
+Item: ${data.propertyAddress || '[Description of Item]'}
+Purchase Date: ${data.firstReportDate || '[Date]'}
+Purchase Price: £${data.depositAmount || '[Amount]'}
+
+Dear ${data.landlordName || 'Sir / Madam'},
+
+I write to formally notify you of a fault with the above item and to demand a remedy under the Consumer Rights Act 2015.
+
+The Fault
+
+${data.harassmentDetails || '[Describe the fault clearly — what is wrong, when it first appeared, and how it affects the item]'}
+
+My Legal Rights
+
+Under Section 9 of the Consumer Rights Act 2015, goods sold by a trader must be of satisfactory quality, fit for purpose, and as described. The item I purchased does not meet this standard.
+
+${data.evictionDetails === 'Within 30 days' ?
+'As I am within 30 days of purchase, I am exercising my short-term right to reject under Section 20 of the Consumer Rights Act 2015 and require a full refund of £' + (data.depositAmount || '[Amount]') + '.' :
+'As the fault has appeared within 6 months of purchase, I require you to repair or replace the item. If this is not possible or if one repair attempt fails, I am entitled to a full or partial refund.'}
+
+I require your response within 14 days. If I do not receive a satisfactory remedy, I will pursue this through my credit card provider (Section 75 / chargeback) and/or the county court without further notice.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  scam_bank_complaint: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Fraud / Complaints Team
+${data.landlordName || '[Bank Name]'}
+${data.landlordAddress || '[Bank Address]'}
+
+Re: Formal Complaint — Authorised Push Payment Fraud / Scam
+Account Number: ${data.propertyAddress || '[Account Number]'}
+Sort Code: ${data.firstReportDate || '[Sort Code]'}
+
+Dear Sir / Madam,
+
+I write to make a formal complaint and to request reimbursement following an authorised push payment (APP) fraud / scam which resulted in the loss of £${data.depositAmount || '[Amount]'} from my account.
+
+What Happened
+
+${data.harassmentDetails || '[Describe the scam clearly — how you were contacted, what you were told, why you made the payment, and when you realised it was fraudulent]'}
+
+The fraudulent payment was made on ${data.repairDetails || '[date]'} to the following account: ${data.extraDetails || '[recipient account details if known]'}.
+
+I reported this to your fraud team on ${data.evictionDetails || '[date]'} and received crime reference number ${data.depositAmount || '[crime reference]'} from Action Fraud / the police.
+
+Legal Basis for Reimbursement
+
+Under the Payment Systems Regulator's APP Fraud Reimbursement Scheme (mandatory from October 2024), banks are required to reimburse victims of authorised push payment fraud up to £85,000 in most circumstances, unless the victim was grossly negligent.
+
+I did not act with gross negligence. I was deceived by a sophisticated fraud and acted reasonably in the circumstances.
+
+I request full reimbursement of £${data.depositAmount || '[Amount]'} within 5 business days.
+
+If you refuse this request or do not respond within 8 weeks, I will refer this matter to the Financial Ombudsman Service without further notice.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  // ── MISSING TEMPLATES — DEBT ──────────────────────────────────────────
+  debt_cease_contact: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName || '[Debt Collection Agency Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Instruction to Cease Telephone Contact — Account Reference: ${data.propertyAddress || '[Reference]'}
+
+Dear Sir / Madam,
+
+I am writing regarding the above account. I require you to cease all telephone contact with me immediately and to communicate only in writing going forward.
+
+The volume and nature of contact I have been receiving is excessive and constitutes harassment under the Financial Conduct Authority's Consumer Credit Sourcebook (CONC 7.9) and the Protection from Harassment Act 1997.
+
+${data.harassmentDetails || '[Describe the contact — number of calls, times, what was said]'}
+
+I acknowledge that a debt may exist and I am willing to engage with you in writing only. Please direct all future correspondence to my address above.
+
+${data.repairDetails || 'Please note that I dispute the amount claimed and/or the enforceability of this debt and I reserve all my legal rights in this regard.'}
+
+If you continue to telephone me after receipt of this letter, I will report the matter to the Financial Conduct Authority and the Financial Ombudsman Service, and I will consider applying to the court for an injunction.
+
+Please confirm receipt of this instruction in writing within 7 days.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  bailiff_complaint: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Complaints Manager
+${data.landlordName || '[Enforcement Company Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Formal Complaint — Unlawful Bailiff Conduct
+Reference: ${data.propertyAddress || '[Enforcement Reference]'}
+
+Dear Sir / Madam,
+
+I write to make a formal complaint about the conduct of your enforcement agent(s) who attended my property at the above address.
+
+What Happened
+
+${data.harassmentDetails || '[Describe what the bailiff did or said, when it happened, and why you believe it was unlawful]'}
+
+Date of visit: ${data.firstReportDate || '[Date]'}
+Enforcement agent name (if known): ${data.repairDetails || '[Name or description]'}
+
+Why This Was Unlawful
+
+Under the Taking Control of Goods Regulations 2013, enforcement agents must:
+• Give at least 7 clear days' written notice before a first visit;
+• Only visit between 6am and 9pm;
+• Not use force to enter a residential property for most debts;
+• Not take exempt goods (clothing, bedding, essential appliances, work tools up to £1,350);
+• Follow additional protections where vulnerable people are present.
+
+${data.extraDetails || '[Specify which rule(s) were breached]'}
+
+What I Require
+
+I require you to:
+1. Investigate this complaint and provide a full written response within 14 days;
+2. Confirm that no further enforcement action will be taken pending the outcome of this complaint;
+3. Confirm whether the original Notice of Enforcement was validly issued.
+
+If I do not receive a satisfactory response within 14 days, I will refer this matter to the Civil Enforcement Association (CIVEA) or the High Court Enforcement Officers Association (HCEOA), and I will apply to the court to have the enforcement action set aside.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  // ── MISSING TEMPLATES — NEIGHBOUR ────────────────────────────────────
+  noise_complaint: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+Environmental Health Department
+${data.landlordName || '[Local Council Name]'}
+${data.landlordAddress || '[Council Address]'}
+
+Re: Formal Complaint of Statutory Noise Nuisance
+Address of Noise Source: ${data.propertyAddress || '[Neighbour\'s Address]'}
+
+Dear Sir / Madam,
+
+I write to make a formal complaint of noise nuisance under the Environmental Protection Act 1990 and to request that your department investigates and takes enforcement action.
+
+Details of the Noise
+
+${data.harassmentDetails || '[Describe the noise — type, volume, frequency, and times it occurs]'}
+
+This has been occurring since ${data.firstReportDate || '[date]'} and is significantly affecting my ability to enjoy my home and is impacting my health and wellbeing.
+
+${data.repairDetails || '[Describe the impact — disturbed sleep, inability to work from home, stress, health effects]'}
+
+Steps Already Taken
+
+${data.extraDetails || '[Describe any steps already taken — e.g. spoken to the neighbour, previous complaints to the council, reports to police]'}
+
+I am maintaining a noise diary and have recordings of the noise available for your officers to review.
+
+I request that Environmental Health:
+1. Investigate this complaint promptly;
+2. If the noise constitutes a statutory nuisance under Section 79 of the Environmental Protection Act 1990, serve an Abatement Notice on the person responsible;
+3. Keep me informed of the progress of the investigation.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  boundary_dispute: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName || '[Neighbour\'s Name]'}
+${data.landlordAddress || '[Neighbour\'s Address]'}
+
+Re: Boundary Dispute — ${data.propertyAddress || '[Your Property Address]'}
+
+Dear ${data.landlordName || 'Sir / Madam'},
+
+I write regarding a dispute about the boundary between our respective properties at the above addresses.
+
+The Dispute
+
+${data.harassmentDetails || '[Describe the boundary dispute — what the disagreement is, what has happened, and what your position is based on]'}
+
+My Position
+
+Based on my title deeds and the Land Registry title plan for my property (Title Number: ${data.firstReportDate || '[Title Number]'}), the legal boundary is located at ${data.repairDetails || '[describe the correct boundary position according to your evidence]'}.
+
+${data.extraDetails || '[Describe any supporting evidence — historic photographs, previous conveyances, surveyor\'s opinion]'}
+
+Proposed Resolution
+
+I would prefer to resolve this matter amicably without the need for formal legal proceedings, which would be costly and time-consuming for both parties.
+
+I propose that we: ${data.evictionDetails || '[agree to instruct a joint boundary surveyor / agree the boundary position in writing / seek mediation through a RICS-accredited mediator]'}.
+
+Please respond to this letter within 14 days. If I do not receive a response, I will consider instructing a boundary surveyor and, if necessary, applying to HM Land Registry to determine the boundary formally under the Land Registration Act 2002.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  // ── MISSING TEMPLATES — SMALL CLAIMS ─────────────────────────────────
+  letter_before_action: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName || '[Defendant\'s Name]'}
+${data.landlordAddress || '[Defendant\'s Address]'}
+
+Re: Letter Before Action
+Claim Amount: £${data.depositAmount || '[Amount]'}
+
+Dear ${data.landlordName || 'Sir / Madam'},
+
+I write to formally notify you of my intention to bring county court proceedings against you if this matter is not resolved within 14 days.
+
+Background
+
+${data.harassmentDetails || '[Set out clearly the background to your claim — what happened, when, and why you are owed money or a remedy]'}
+
+Amount Claimed
+
+I am claiming the sum of £${data.depositAmount || '[Amount]'}, comprising:
+${data.repairDetails || '[Break down the amount — e.g. unpaid invoice £X, damages £Y, interest £Z]'}
+
+Evidence
+
+I hold the following evidence in support of my claim:
+${data.extraDetails || '[List your evidence — contracts, invoices, photographs, correspondence, witness statements]'}
+
+Previous Attempts to Resolve
+
+${data.evictionDetails || '[Describe previous attempts to resolve the matter and the response received]'}
+
+What I Require
+
+I require payment of £${data.depositAmount || '[Amount]'} (or [alternative remedy]) within <strong>14 days</strong> of the date of this letter.
+
+If I do not receive payment or a satisfactory response within 14 days, I will issue proceedings in the county court without further notice. The court fee and any legal costs will be added to the claim.
+
+Please be aware that the Pre-Action Conduct Practice Direction requires parties to attempt to resolve disputes before issuing proceedings, and the court will take into account any failure to engage with this letter.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  // ── MISSING TEMPLATES — BENEFITS ─────────────────────────────────────
+  uc_mandatory_reconsideration: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+Universal Credit
+${data.landlordName || '[Jobcentre / DWP Office Address]'}
+${data.landlordAddress || ''}
+
+Re: Request for Mandatory Reconsideration
+National Insurance Number: ${data.propertyAddress || '[NI Number]'}
+Decision Date: ${data.firstReportDate || '[Date of Decision]'}
+Decision Reference: ${data.depositAmount || '[Reference if known]'}
+
+Dear Sir / Madam,
+
+I am writing to formally request a Mandatory Reconsideration of the above decision under Section 12 of the Social Security Act 1998.
+
+The Decision I Am Challenging
+
+${data.harassmentDetails || '[Describe the decision — e.g. my Universal Credit has been reduced / a sanction has been applied / my claim has been rejected]'}
+
+Why I Believe the Decision Is Wrong
+
+${data.repairDetails || '[Set out clearly why you disagree with the decision — what information was not considered, what error was made, or why the decision does not reflect your circumstances]'}
+
+Supporting Evidence
+
+I am enclosing / am able to provide the following evidence in support of my reconsideration request:
+${data.extraDetails || '[List supporting documents — medical evidence, payslips, letters, diary evidence]'}
+
+I request that a decision maker reviews this decision and issues a Mandatory Reconsideration Notice as soon as possible.
+
+Please acknowledge receipt of this request and confirm the timescale for the reconsideration.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  benefits_appeal_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+HMCTS SSCS
+${data.landlordName || '[Tribunal Service Address]'}
+${data.landlordAddress || ''}
+
+Re: Appeal Against Benefit Decision (Form SSCS1)
+Benefit: ${data.propertyAddress || '[Benefit Type]'}
+National Insurance Number: ${data.firstReportDate || '[NI Number]'}
+Mandatory Reconsideration Date: ${data.depositAmount || '[Date of MR Notice]'}
+
+Dear Sir / Madam,
+
+I am writing to appeal against the above benefit decision following the Mandatory Reconsideration Notice dated ${data.depositAmount || '[date]'}, which upheld the original decision.
+
+The Decision I Am Appealing
+
+${data.harassmentDetails || '[Describe the decision and what it means for your benefit payments]'}
+
+Grounds of Appeal
+
+${data.repairDetails || '[Set out your grounds of appeal clearly — why the decision is wrong, what evidence was not considered, what the correct legal interpretation should be]'}
+
+Supporting Evidence
+
+I am enclosing the following documents in support of my appeal:
+${data.extraDetails || '• Mandatory Reconsideration Notice\n• [Medical evidence]\n• [Personal statement]\n• [Other supporting documents]'}
+
+I would like an oral hearing. I believe an oral hearing would allow me to present my case more effectively.
+
+${data.evictionDetails || ''}
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  // ── MISSING TEMPLATES — DATA PROTECTION ──────────────────────────────
+  sar_request_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Data Controller
+${data.landlordName || '[Organisation Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Subject Access Request — UK GDPR Article 15
+
+Dear Data Controller,
+
+I am writing to make a Subject Access Request under Article 15 of the UK General Data Protection Regulation (UK GDPR) and Section 45 of the Data Protection Act 2018.
+
+I request a copy of all personal data held about me, including:
+${data.harassmentDetails || '• All records, files, notes, and correspondence relating to me\n• Details of any third parties with whom my data has been shared\n• The purposes and legal basis for processing my data\n• How long my data is retained'}
+
+Time period: ${data.firstReportDate || 'All data currently held'}
+
+My details for identification:
+Full name: ${data.yourName}
+${data.propertyAddress ? `Reference / account number: ${data.propertyAddress}` : ''}
+${data.depositAmount ? `Additional identifier: ${data.depositAmount}` : ''}
+
+I enclose proof of identity. You are required to respond free of charge within one calendar month.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  right_erasure_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Data Controller
+${data.landlordName || '[Organisation Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Request for Erasure of Personal Data — UK GDPR Article 17
+
+Dear Data Controller,
+
+I am writing to request the erasure of my personal data under Article 17 of the UK GDPR — the right to erasure ("right to be forgotten").
+
+Data to be erased:
+${data.harassmentDetails || '[Describe the specific data you want erased and where it appears]'}
+
+Grounds for erasure:
+${data.repairDetails || '• The data is no longer necessary for the purpose for which it was collected\n• I am withdrawing my consent to processing\n• The data has been processed unlawfully'}
+
+${data.extraDetails || ''}
+
+Please confirm in writing within one calendar month that the data has been erased and that any third parties to whom it was disclosed have been informed.
+
+If you refuse this request, please provide written reasons and inform me of my right to complain to the ICO.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  data_breach_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Data Controller / Complaints Team
+${data.landlordName || '[Organisation Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Formal Complaint — Personal Data Breach
+
+Dear Data Controller,
+
+I am writing to formally notify you of a personal data breach affecting my personal data and to seek your urgent response.
+
+Details of the Breach
+
+${data.harassmentDetails || '[Describe what happened, when you became aware, and what data was affected]'}
+
+I became aware of this breach on ${data.firstReportDate || '[date]'}.
+
+Impact
+
+${data.repairDetails || '[Describe the actual or potential harm — financial loss, identity theft risk, distress]'}
+
+I request that you:
+1. Provide a full written explanation of the breach and what data was affected;
+2. Confirm whether the ICO has been notified within the required 72-hour window;
+3. Set out what steps you are taking to contain the breach and prevent recurrence;
+4. Confirm what support or remediation you are offering to affected individuals.
+
+${data.extraDetails || ''}
+
+I reserve the right to complain to the ICO and to seek compensation under Article 82 UK GDPR for any distress or financial loss caused.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  data_correction_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+The Data Controller
+${data.landlordName || '[Organisation Name]'}
+${data.landlordAddress || '[Address]'}
+
+Re: Request for Rectification of Inaccurate Personal Data — UK GDPR Article 16
+
+Dear Data Controller,
+
+I am writing to request the rectification of inaccurate personal data held about me under Article 16 of the UK GDPR.
+
+Inaccurate data held:
+${data.harassmentDetails || '[Describe the inaccurate data and where it appears]'}
+
+Correct information:
+${data.repairDetails || '[Provide the accurate information that should replace the incorrect data]'}
+
+Supporting evidence enclosed:
+${data.extraDetails || '[List documents proving the correct information]'}
+
+You are required to rectify this without undue delay and within one calendar month. Please also inform any third parties to whom the inaccurate data has been disclosed.
+
+Please confirm in writing once the correction has been made. If you refuse, please provide written reasons and inform me of my right to complain to the ICO.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+
+  // ── MISSING TEMPLATES — SEXUAL HARASSMENT ────────────────────────────
+  workplace_sexual_harassment_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName || '[HR Manager / Director]'}
+${data.landlordAddress || '[Employer Name and Address]'}
+
+Re: Formal Grievance — Sexual Harassment
+
+Dear ${data.landlordName || 'Sir / Madam'},
+
+I write to submit a formal grievance regarding sexual harassment I have experienced in the workplace, under the company's grievance procedure and my rights under the Equality Act 2010.
+
+Details of the Conduct
+
+${data.harassmentDetails || '[Describe each incident factually — date, time, location, what was said or done, and who was present. Focus on the nature and impact of the conduct without graphic detail.]'}
+
+Impact
+
+${data.repairDetails || '[Describe the impact on your work and wellbeing]'}
+
+${data.extraDetails ? `Witnesses\n\n${data.extraDetails}` : ''}
+
+Legal Position
+
+This conduct constitutes sexual harassment under Section 26 of the Equality Act 2010. Under the Worker Protection (Amendment of Equality Act 2010) Act 2023, my employer has a positive duty to take reasonable preventative steps.
+
+I request that you:
+1. Investigate this grievance promptly and thoroughly;
+2. Take appropriate action against those responsible;
+3. Provide a written outcome within the grievance procedure timescale;
+4. Ensure I suffer no detriment for raising this complaint.
+
+Please confirm the date of a grievance meeting within 5 working days.
+
+Yours sincerely,
+
+${data.yourName}
+[Signature]`,
+
+  stalking_letter: (data) => `${data.yourName}
+${data.yourAddress}
+${data.yourEmail || ''}
+
+${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+${data.landlordName || '[Name of Person]'}
+${data.landlordAddress || '[Address if known]'}
+
+Re: FORMAL WARNING — Stalking / Harassment — Cease All Contact Immediately
+
+Dear ${data.landlordName || 'Sir / Madam'},
+
+I am writing to formally require you to cease all unwanted contact and conduct directed at me, with immediate effect.
+
+Your behaviour constitutes stalking and/or harassment under the Protection from Harassment Act 1997 (as amended). I have documented all incidents and am prepared to present this evidence to the police and a court.
+
+Incidents
+
+${data.harassmentDetails || '[Describe the stalking or harassment incidents — dates, times, what happened. Keep factual and professional.]'}
+
+Legal Warning
+
+Under Sections 2A and 4A of the Protection from Harassment Act 1997, stalking is a criminal offence carrying up to 10 years imprisonment. The conduct I have described above constitutes stalking as defined in Section 2A(3) of that Act.
+
+I require you to immediately:
+1. Cease all contact with me by any means — phone, email, text, social media, in person, or through third parties;
+2. Not attend my home address, place of work, or any other location you know I will be present.
+
+I have reported / will report this matter to the police. I am also considering applying for a Stalking Protection Order and/or a court injunction.
+
+This letter is written without prejudice to any other legal remedies available to me.
+
+Yours faithfully,
+
+${data.yourName}
+[Signature]`,
+};
 //  Personalises letters using the Claude API if user provides details.
 // ═══════════════════════════════════════════════════════════════════════
 
@@ -3891,6 +4609,29 @@ function DetailsForm({ issueId, answers, onComplete, onBack }) {
 
   const issue = LEGAL_DATA[issueId];
 
+  // Context-aware labels based on issue category
+  const issueData = ISSUES.find(i => i.id === issueId) || {};
+  const category = issueData.category || 'tenancy';
+
+  const labels = {
+    tenancy:            { other: 'Landlord\'s Name',        otherAddr: 'Landlord\'s Address',         ref: 'Property Address (Rented)' },
+    employment:         { other: 'Employer\'s Name',        otherAddr: 'Employer\'s Address',          ref: 'Your Job Title / Department' },
+    consumer:           { other: 'Seller / Company Name',   otherAddr: 'Seller / Company Address',     ref: 'Product or Service Description' },
+    debt:               { other: 'Creditor / Agency Name',  otherAddr: 'Creditor / Agency Address',    ref: 'Account or Reference Number' },
+    neighbour:          { other: 'Neighbour\'s Name',       otherAddr: 'Neighbour\'s Address',         ref: 'Your Property Address' },
+    court:              { other: 'Defendant\'s Name',       otherAddr: 'Defendant\'s Address',         ref: 'Brief Description of Claim' },
+    benefits:           { other: 'DWP / Jobcentre Office',  otherAddr: 'Office Address',               ref: 'National Insurance Number' },
+    family:             { other: 'Other Party\'s Name',     otherAddr: 'Other Party\'s Address',       ref: 'Children\'s Names / Ages (if relevant)' },
+    medical:            { other: 'Organisation / Provider', otherAddr: 'Provider\'s Address',          ref: 'Your Date of Birth / NHS Number' },
+    education:          { other: 'School / College Name',   otherAddr: 'School / College Address',     ref: 'Child\'s Name and Year Group' },
+    travel:             { other: 'Company / Airline Name',  otherAddr: 'Company Address',              ref: 'Booking Reference / Flight Number' },
+    vehicle:            { other: 'Dealer / Company Name',   otherAddr: 'Dealer / Company Address',     ref: 'Vehicle Registration / Policy Number' },
+    data:               { other: 'Organisation Name',       otherAddr: 'Organisation Address',         ref: 'Account / Reference Number (if any)' },
+    harassment_sexual:  { other: 'Organisation / Recipient',otherAddr: 'Address (if known)',           ref: 'Your Reference (if any)' },
+  };
+
+  const L = labels[category] || labels.tenancy;
+
   function set(key, val) { setForm(f => ({ ...f, [key]: val })); }
 
   const isValid = form.yourName && form.yourAddress && form.landlordName && form.landlordAddress && form.propertyAddress;
@@ -3920,18 +4661,18 @@ function DetailsForm({ issueId, answers, onComplete, onBack }) {
           <input className="form-input" value={form.yourEmail} onChange={e => set('yourEmail', e.target.value)} placeholder="your@email.com" />
         </div>
 
-        <p style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--amber)', margin: '1.2rem 0 1rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Property & Landlord</p>
+        <p style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--amber)', margin: '1.2rem 0 1rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>About the Other Party</p>
         <div className="form-group">
-          <label className="form-label">Property Address (rented) *</label>
-          <textarea className="form-textarea" style={{ minHeight: 60 }} value={form.propertyAddress} onChange={e => set('propertyAddress', e.target.value)} placeholder="Full address of the rented property" />
+          <label className="form-label">{L.other} *</label>
+          <input className="form-input" value={form.landlordName} onChange={e => set('landlordName', e.target.value)} placeholder={`e.g. ${L.other}`} />
         </div>
         <div className="form-group">
-          <label className="form-label">Landlord's Name *</label>
-          <input className="form-input" value={form.landlordName} onChange={e => set('landlordName', e.target.value)} placeholder="e.g. John Smith or ABC Lettings Ltd" />
+          <label className="form-label">{L.otherAddr} *</label>
+          <textarea className="form-textarea" style={{ minHeight: 60 }} value={form.landlordAddress} onChange={e => set('landlordAddress', e.target.value)} placeholder={L.otherAddr} />
         </div>
         <div className="form-group">
-          <label className="form-label">Landlord's Address *</label>
-          <textarea className="form-textarea" style={{ minHeight: 60 }} value={form.landlordAddress} onChange={e => set('landlordAddress', e.target.value)} placeholder="Landlord or letting agent address" />
+          <label className="form-label">{L.ref} *</label>
+          <textarea className="form-textarea" style={{ minHeight: 60 }} value={form.propertyAddress} onChange={e => set('propertyAddress', e.target.value)} placeholder={L.ref} />
         </div>
 
         {/* Issue-specific fields */}
