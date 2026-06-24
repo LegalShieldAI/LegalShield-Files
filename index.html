@@ -5268,6 +5268,18 @@ If the user's message is not a UK legal question, do not answer it — redirect 
         }),
       });
       const data = await response.json();
+
+      // Surface the actual error to the user for debugging
+      if (!response.ok) {
+        const errMsg = data?.error || data?.detail?.error?.message || `HTTP ${response.status}`;
+        console.error('AI chat error:', response.status, data);
+        setMessages(prev => [...prev, {
+          role: 'ai',
+          text: `Error (${response.status}): ${errMsg}. Please try again or contact support.`,
+        }]);
+        return;
+      }
+
       const reply = data.content?.[0]?.text || 'Sorry, I could not generate a response. Please try again.';
       setMessages(prev => [...prev, { role: 'ai', text: reply }]);
       setSessionCount(c => c + 1); // Only count successful messages
