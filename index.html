@@ -5284,9 +5284,10 @@ If the user's message is not a UK legal question, do not answer it — redirect 
       setMessages(prev => [...prev, { role: 'ai', text: reply }]);
       setSessionCount(c => c + 1); // Only count successful messages
     } catch (err) {
+      console.error('Chat fetch error:', err);
       setMessages(prev => [...prev, {
         role: 'ai',
-        text: 'Sorry, something went wrong. Please check your connection and try again.',
+        text: `Debug error: ${err.message || err.toString()}`,
       }]);
     } finally {
       setLoading(false);
