@@ -5200,12 +5200,16 @@ function ChatWidget({ currentIssueId }) {
   // Show welcome message when first opened
   useEffect(() => {
     if (open && messages.length === 0) {
-      const issueContext = currentIssueId && LEGAL_DATA[currentIssueId]
-        ? ` I can see you're looking at <strong>${LEGAL_DATA[currentIssueId].title}</strong> — feel free to ask me anything about that, or any other UK legal question.`
-        : '';
+      let welcomeContext = '';
+      if (currentIssueId && LEGAL_DATA[currentIssueId]) {
+        try {
+          const title = LEGAL_DATA[currentIssueId].title || '';
+          welcomeContext = ` I can see you're looking at <strong>${title}</strong> — feel free to ask me anything about that, or any other UK legal question.`;
+        } catch(e) {}
+      }
       setMessages([{
         role: 'ai',
-        text: `Hi, I'm LegalShield AI — I provide general guidance on <strong>UK law only</strong>.${issueContext}\n\nWhat UK legal question can I help you with?`,
+        text: `Hi, I'm LegalShield AI — I provide general guidance on <strong>UK law only</strong>.${welcomeContext}\n\nWhat UK legal question can I help you with?`,
       }]);
     }
   }, [open]);
@@ -5222,9 +5226,20 @@ function ChatWidget({ currentIssueId }) {
     setLoading(true);
 
     // Build context about the current issue
-    const issueContext = currentIssueId && LEGAL_DATA[currentIssueId]
-      ? `The user is currently viewing the "${LEGAL_DATA[currentIssueId].title}" section. Relevant UK law: ${LEGAL_DATA[currentIssueId].rights.replace(/<[^>]+>/g, '')}`
-      : 'The user is on the LegalShield AI homepage.';
+    // Safely build issue context — avoid regex on rich text which fails on some browsers
+    let issueContext = 'The user is on the LegalShield AI homepage.';
+    if (currentIssueId && LEGAL_DATA[currentIssueId]) {
+      try {
+        const issueTitle = LEGAL_DATA[currentIssueId].title || '';
+        // Strip HTML tags safely using a DOM element instead of regex
+        const tmp = document.createElement('div');
+        tmp.innerHTML = LEGAL_DATA[currentIssueId].rights || '';
+        const plainRights = (tmp.textContent || tmp.innerText || '').slice(0, 600);
+        issueContext = `The user is viewing "${issueTitle}". Key UK law: ${plainRights}`;
+      } catch(e) {
+        issueContext = `The user is viewing "${LEGAL_DATA[currentIssueId].title || 'a legal issue'}".`;
+      }
+    }
 
     const systemPrompt = `You are LegalShield AI, a strictly UK legal guidance assistant.
 
