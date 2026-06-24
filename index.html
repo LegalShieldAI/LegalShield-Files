@@ -4395,7 +4395,7 @@ Today's date: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 
 
 Reply with ONLY the letter text, no preamble or explanation.`;
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  const response = await fetch('/functions/ai-chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -5220,7 +5220,6 @@ function ChatWidget({ currentIssueId }) {
     setMessages(newMessages);
     setInput('');
     setLoading(true);
-    setSessionCount(c => c + 1);
 
     // Build context about the current issue
     const issueContext = currentIssueId && LEGAL_DATA[currentIssueId]
@@ -5259,7 +5258,7 @@ If the user's message is not a UK legal question, do not answer it — redirect 
     ];
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('/functions/ai-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -5271,6 +5270,7 @@ If the user's message is not a UK legal question, do not answer it — redirect 
       const data = await response.json();
       const reply = data.content?.[0]?.text || 'Sorry, I could not generate a response. Please try again.';
       setMessages(prev => [...prev, { role: 'ai', text: reply }]);
+      setSessionCount(c => c + 1); // Only count successful messages
     } catch (err) {
       setMessages(prev => [...prev, {
         role: 'ai',
