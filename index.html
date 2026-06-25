@@ -5226,82 +5226,37 @@ function ChatWidget({ currentIssueId }) {
     setLoading(true);
 
     try {
-      // Step 1: Build safe issue context using only ASCII-safe strings
-      let issueTitle = '';
-      if (currentIssueId && LEGAL_DATA[currentIssueId]) {
-        issueTitle = (LEGAL_DATA[currentIssueId].title || '').replace(/[^\x20-\x7E]/g, '');
-      }
-      const issueContext = issueTitle
-        ? 'User is viewing: ' + issueTitle
-        : 'User is on the homepage';
-
-      // Step 2: Build system prompt using only safe content
-      const systemPrompt = [
-        'You are LegalShield AI, a UK legal guidance assistant.',
-        'ONLY answer UK law questions. For anything else say: I can only help with UK legal questions.',
-        'Never give specific legal advice. Recommend a solicitor for complex matters.',
-        'If someone is in danger, tell them to call 999.',
-        'Be concise, empathetic, plain English, under 200 words.',
-        'Context: ' + issueContext,
-      ].join(' ');
-
-      // Step 3: Build clean message history
-      const history = newMessages
-        .filter(m => m.role === 'user' || m.role === 'ai')
-        .map(m => ({
-          role: m.role === 'user' ? 'user' : 'assistant',
-          content: String(m.text || ''),
-        }));
-
-      // Ensure alternating roles starting with user
-      const cleanHistory = [];
-      let lastRole = null;
-      for (const msg of history) {
-        if (msg.role !== lastRole) {
-          cleanHistory.push(msg);
-          lastRole = msg.role;
-        }
-      }
-      if (!cleanHistory.length || cleanHistory[0].role !== 'user') {
-        cleanHistory.unshift({ role: 'user', content: String(text) });
-      }
-
-      const apiMessages = [
-        { role: 'user', content: String(systemPrompt) },
-        { role: 'assistant', content: 'Understood. I will only help with UK legal questions.' },
-        ...cleanHistory,
-      ];
-
-      // Step 4: Safely serialise
-      const bodyStr = JSON.stringify({
+      // Minimal payload — no issue context, no history, just the user message
+      const payload = {
         model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        messages: apiMessages,
-      });
+        max_tokens: 500,
+        messages: [
+          { role: 'user', content: 'You are a UK legal assistant. Answer briefly.' },
+          { role: 'assistant', content: 'Understood.' },
+          { role: 'user', content: text },
+        ],
+      };
 
-      // Step 5: Fetch
       const response = await fetch('/functions/ai-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: bodyStr,
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
+      const reply = data && data.content && data.content[0] && data.content[0].text
+        ? data.content[0].text
+        : 'Status: ' + response.status + ' — ' + JSON.stringify(data).slice(0, 200);
 
-      if (!response.ok) {
-        const errMsg = (data && (data.error || (data.detail && data.detail.error && data.detail.error.message))) || ('HTTP ' + response.status);
-        setMessages(prev => [...prev, { role: 'ai', text: 'Error ' + response.status + ': ' + errMsg }]);
-        return;
-      }
-
-      const reply = (data.content && data.content[0] && data.content[0].text) || 'Sorry, no response received. Please try again.';
       setMessages(prev => [...prev, { role: 'ai', text: reply }]);
       setSessionCount(c => c + 1);
 
     } catch (err) {
+      const msg = err && err.message ? err.message : 'unknown';
+      const stack = err && err.stack ? err.stack.slice(0, 300) : '';
       setMessages(prev => [...prev, {
         role: 'ai',
-        text: 'Debug: ' + (err && err.message ? err.message : String(err)),
+        text: 'ERR: ' + msg + (stack ? ' | ' + stack : ''),
       }]);
     } finally {
       setLoading(false);
