@@ -4371,7 +4371,7 @@ ${data.yourName}
 //  Personalises letters using the Claude API if user provides details.
 // ═══════════════════════════════════════════════════════════════════════
 
-async function generateAILetter(issueId, userData, answers) {
+  async function generateAILetter(issueId, userData, answers) {
   const issueLabels = { deposit: 'deposit not returned', repairs: 'repairs ignored', harassment: 'landlord harassment', eviction: 'illegal eviction' };
   const prompt = `You are a UK legal letter writing assistant specialising in tenant rights.
 
@@ -4395,9 +4395,14 @@ Today's date: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 
 
 Reply with ONLY the letter text, no preamble or explanation.`;
 
-  const response = await fetch('/functions/aichat', {
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': ANTHROPIC_API_KEY,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true',
+    },
     body: JSON.stringify({
       model: 'claude-sonnet-4-6',
       max_tokens: 1000,
@@ -4503,6 +4508,11 @@ function handleStripeCheckout(planName) {
 // ═══════════════════════════════════════════════════════════════════════
 
 const PRO_CODE = 'LEGALSHIELD2024';
+
+// ── ANTHROPIC API KEY ──────────────────────────────────────────────────
+// Replace the value below with your Anthropic API key from console.anthropic.com
+// To restrict usage to your domain only, set allowed origins in the Anthropic console.
+const ANTHROPIC_API_KEY = 'YOUR_ANTHROPIC_API_KEY_HERE';
 
 function checkProAccess() {
   // Check URL for pro code (set by Stripe success redirect)
@@ -5226,9 +5236,14 @@ function ChatWidget({ currentIssueId }) {
     setLoading(true);
 
     try {
-      const response = await fetch('/functions/aichat', {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
         body: JSON.stringify({
           model: 'claude-sonnet-4-6',
           max_tokens: 500,
