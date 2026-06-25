@@ -5269,8 +5269,10 @@ function ChatWidget({ currentIssueId }) {
       }
 
       if (!response.ok) {
-        const errMsg = (data && data.error) || ('HTTP ' + response.status);
-        setMessages(prev => [...prev, { role: 'ai', text: 'API error: ' + errMsg }]);
+        const errMsg = (data && data.error && data.error.message)
+          || (data && data.error && typeof data.error === 'string' && data.error)
+          || JSON.stringify(data);
+        setMessages(prev => [...prev, { role: 'ai', text: 'API error (' + response.status + '): ' + errMsg }]);
         return;
       }
 
