@@ -1,16 +1,13 @@
-// functions/ai-chat.js
+// functions/aichat.js
 // Cloudflare Pages Function — proxies requests to the Anthropic API.
-// The API key lives here server-side and never reaches the browser.
-//
-// Required environment variable (set in Cloudflare Pages dashboard):
-//   ANTHROPIC_API_KEY = sk-ant-...
+// Required env var: ANTHROPIC_API_KEY
 
 export async function onRequestPost(context) {
-  const env = context.env;
+  const apiKey = context.env.ANTHROPIC_API_KEY;
 
-  if (!env.ANTHROPIC_API_KEY) {
+  if (!apiKey) {
     return new Response(
-      JSON.stringify({ error: 'Server misconfiguration: ANTHROPIC_API_KEY is not set.' }),
+      JSON.stringify({ error: 'ANTHROPIC_API_KEY is not set in environment variables.' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
@@ -20,46 +17,33 @@ export async function onRequestPost(context) {
     body = await context.request.json();
   } catch {
     return new Response(
-      JSON.stringify({ error: 'Invalid JSON in request body.' }),
+      JSON.stringify({ error: 'Invalid JSON body.' }),
       { status: 400, headers: { 'Content-Type': 'application/json' } }
     );
   }
 
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: body.model || 'claude-sonnet-4-6',
-        max_tokens: body.max_tokens || 1000,
-        messages: body.messages,
-      }),
-    });
+  // Log key length to verify it was read correctly (never log the full key)
+  console.log('API key length:', apiKey.length, '| starts with:', apiKey.slice(0, 10));
 
-    const data = await response.json();
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey.trim(),
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: body.model || 'claude-sonnet-4-6',
+      max_tokens: body.max_tokens || 1000,
+      messages: body.messages,
+    }),
+  });
 
-    if (!response.ok) {
-      console.error('Anthropic API error:', data);
-      return new Response(
-        JSON.stringify({ error: 'Anthropic API error.', detail: data }),
-        { status: response.status, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
+  const data = await response.json();
 
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-  } catch (err) {
-    console.error('Proxy error:', err.message);
-    return new Response(
-      JSON.stringify({ error: 'Failed to reach Anthropic API.' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
-    );
-  }
+  // Return full Anthropic response including any error details
+  return new Response(JSON.stringify(data), {
+    status: response.status,
+    headers: { 'Content-Type': 'application/json' },
+  });
 }
