@@ -4395,7 +4395,7 @@ Today's date: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 
 
 Reply with ONLY the letter text, no preamble or explanation.`;
 
-  const response = await fetch('/functions/ai-chat', {
+  const response = await fetch('/functions/aichat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -5226,7 +5226,7 @@ function ChatWidget({ currentIssueId }) {
     setLoading(true);
 
     try {
-      const response = await fetch('/functions/ai-chat', {
+      const response = await fetch('/functions/aichat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
