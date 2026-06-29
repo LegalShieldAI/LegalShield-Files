@@ -4294,13 +4294,21 @@ function exportLetterPDF(letterText, issueTitle) {
 
 // ═══════════════════════════════════════════════════════════════════════
 //  STRIPE CHECKOUT (live)
-//  Redirects directly to a Stripe Payment Link — no server needed.
-//  To update the plan, replace the URL below with a new Payment Link
-//  from dashboard.stripe.com → Payment Links.
+//  Redirects to a Stripe Payment Link with a 7-day free trial.
+//  Card is collected upfront — £9.99/mo charged after trial unless cancelled.
 // ═══════════════════════════════════════════════════════════════════════
 
 function handleStripeCheckout(planName) {
   window.location.href = 'https://buy.stripe.com/bJecN72Qw1rH9Xt6xebjW00';
+}
+
+// Stripe Customer Portal — lets subscribers manage/cancel their subscription.
+// Replace this URL with your actual portal link from:
+// Stripe dashboard → Settings → Billing → Customer portal → Copy link
+const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/bJecN72Qw1rH9Xt6xebjW00';
+
+function openCustomerPortal() {
+  window.location.href = STRIPE_PORTAL_URL;
 }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -4348,15 +4356,18 @@ function ProGate({ onUpgrade }) {
     }}>
       <div style={{ fontSize: '2rem', marginBottom: '0.8rem' }}>🔒</div>
       <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', marginBottom: '0.4rem' }}>
-        Pro Feature
+        Try Pro Free for 7 Days
       </h3>
-      <p style={{ fontSize: '0.88rem', color: 'var(--muted)', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+      <p style={{ fontSize: '0.88rem', color: 'var(--muted)', marginBottom: '0.5rem', lineHeight: 1.6 }}>
         Letter generation and PDF download are included in <strong style={{ color: 'var(--amber)' }}>LegalShield Pro</strong>.
-        Upgrade for £9.99/mo to unlock personalised legal letters, AI enhancement, and PDF export.
+        Start your free 7-day trial today — no charge until day 8.
+      </p>
+      <p style={{ fontSize: '0.78rem', color: 'var(--slate-lt)', marginBottom: '1.5rem', lineHeight: 1.5 }}>
+        After your trial, Pro renews automatically at <strong style={{ color: 'var(--white)' }}>£9.99/month</strong>. Cancel anytime before day 8 and you won't be charged.
       </p>
       <div style={{ display: 'flex', gap: '0.8rem', justifyContent: 'center', flexWrap: 'wrap' }}>
         <button className="btn btn-primary btn-lg" onClick={onUpgrade}>
-          Upgrade to Pro — £9.99/mo
+          Start Free 7-Day Trial
         </button>
       </div>
       <p style={{ fontSize: '0.75rem', color: 'var(--slate-lt)', marginTop: '1rem' }}>
@@ -4372,6 +4383,11 @@ function ProGate({ onUpgrade }) {
             }
           }}
         >Enter access code</span>
+        {' · '}
+        <span
+          style={{ color: 'var(--amber)', cursor: 'pointer', textDecoration: 'underline' }}
+          onClick={openCustomerPortal}
+        >Manage subscription</span>
       </p>
     </div>
   );
@@ -4420,7 +4436,7 @@ function HomePage({ onStart }) {
             ✉ Generate a Letter
           </button>
         </div>
-        <div className="hero-badge">Free rights guidance · Letters & PDFs require Pro · No signup needed</div>
+        <div className="hero-badge">Free rights guidance · 7-day Pro trial · No signup needed</div>
       </div>
 
       <div className="dashboard">
@@ -4434,8 +4450,8 @@ function HomePage({ onStart }) {
           <div className="dash-card" onClick={() => onStart('letter')}>
             <div className="dash-card-icon">✉</div>
             <h3>Generate a Letter</h3>
-            <p>Produce a formal, AI-personalised legal letter ready to send. Download as PDF. <strong style={{color:'var(--amber)'}}>Requires Pro (£9.99/mo)</strong> — rights guidance is always free.</p>
-            <span className="arrow">Create letter →</span>
+            <p>Produce a formal, AI-personalised legal letter ready to send. Download as PDF. <strong style={{color:'var(--amber)'}}>7-day free trial, then £9.99/mo.</strong> Cancel anytime.</p>
+            <span className="arrow">Start free trial →</span>
           </div>
         </div>
       </div>
@@ -4484,10 +4500,11 @@ function HomePage({ onStart }) {
                 ))}
               </div>
               <div style={{ padding: '1.2rem 1.5rem', background: '#fffbf2' }}>
-                <p style={{ fontWeight: 700, color: 'var(--amber)', marginBottom: '0.8rem', fontSize: '0.9rem' }}>⭐ Pro — £9.99/mo</p>
-                {['AI-personalised legal letters', 'PDF download & export', 'All 45+ letter types', 'Unlimited use'].map(f => (
+                <p style={{ fontWeight: 700, color: 'var(--amber)', marginBottom: '0.8rem', fontSize: '0.9rem' }}>⭐ Pro — 7 days free, then £9.99/mo</p>
+                {['AI-personalised legal letters', 'PDF download & export', 'All 45+ letter types', 'Cancel anytime before day 8'].map(f => (
                   <p key={f} style={{ fontSize: '0.82rem', color: 'var(--slate)', marginBottom: '0.4rem' }}>✓ {f}</p>
                 ))}
+                <p style={{ fontSize: '0.72rem', color: 'var(--slate)', marginTop: '0.6rem', fontStyle: 'italic' }}>Renews automatically at £9.99/mo after trial.</p>
               </div>
             </div>
           </div>
@@ -4944,7 +4961,7 @@ function ResultsPage({ issueId, answers, userData, mode, onBack, onNewIssue }) {
           </button>
         ) : (
           <button className="btn btn-primary" onClick={() => handleStripeCheckout('pro_monthly')}>
-            🔒 Unlock Letter — £9.99/mo
+            🔒 Start Free 7-Day Trial
           </button>
         )}
       </div>
@@ -4962,21 +4979,29 @@ function StripeSection() {
     <div style={{ textAlign: 'center', padding: '1.5rem', background: 'rgba(46,204,138,0.08)', borderRadius: 12, marginTop: '2rem', border: '1px solid rgba(46,204,138,0.2)' }}>
       <span className="tag tag-success" style={{ fontSize: '0.85rem', padding: '0.3rem 0.9rem' }}>✓ LegalShield Pro — Active</span>
       <p style={{ fontSize: '0.82rem', color: 'var(--slate)', marginTop: '0.6rem' }}>You have full access to all letters, PDF downloads, and AI personalisation.</p>
+      <p style={{ marginTop: '0.6rem' }}>
+        <span style={{ fontSize: '0.78rem', color: 'var(--amber)', cursor: 'pointer', textDecoration: 'underline' }} onClick={openCustomerPortal}>
+          Manage or cancel subscription →
+        </span>
+      </p>
     </div>
   );
   return (
     <div className="stripe-section">
       <div className="stripe-badge">⭐ LegalShield Pro</div>
-      <h3>Need more support?</h3>
-      <p>Upgrade for unlimited letters, solicitor review, court form templates, and priority guidance.</p>
+      <h3>Try Pro free for 7 days</h3>
+      <p>Unlock personalised legal letters, PDF export, and AI enhancement. Your card is collected now but <strong style={{ color: 'var(--white)' }}>you won't be charged until day 8</strong>. Cancel anytime.</p>
       <div className="stripe-features">
-        {['Unlimited letters', 'Solicitor review', 'Court form templates', 'Priority support'].map(f => (
+        {['AI-personalised letters', 'PDF download', 'All 45+ letter types', 'Cancel anytime'].map(f => (
           <span className="stripe-feature" key={f}>✓ {f}</span>
         ))}
       </div>
       <button className="btn btn-primary btn-lg" onClick={() => handleStripeCheckout('pro_monthly')}>
-        Upgrade to Pro — £9.99/mo
+        Start Free 7-Day Trial — then £9.99/mo
       </button>
+      <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.45)', marginTop: '0.8rem' }}>
+        Renews automatically at £9.99/month after trial. Cancel before day 8 and pay nothing.
+      </p>
     </div>
   );
 }
@@ -5007,7 +5032,7 @@ function Footer() {
     <footer className="footer">
       <p><strong>LegalShield AI</strong> — Free UK legal rights guidance across 14 areas of law</p>
       <p style={{ marginTop: '0.5rem', color: 'var(--amber)', fontWeight: 600, fontSize: '0.82rem' }}>
-        Rights guidance is free · Letters & PDF export require LegalShield Pro (£9.99/mo) · Not a substitute for legal advice
+        Rights guidance is free · Pro: 7-day free trial then £9.99/mo, cancel anytime · Not a substitute for legal advice
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px,1fr))', gap: '1rem', margin: '1.2rem 0', textAlign: 'left', maxWidth: 900, marginLeft: 'auto', marginRight: 'auto' }}>
